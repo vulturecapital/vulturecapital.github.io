@@ -142,7 +142,7 @@ details summary{cursor:pointer;font-weight:650;color:var(--navy)}
 (function(){
   const $ = s => document.querySelector(s);
   const LS = 'vulture-rf-admin';
-  let D = null, SHA = null;
+  let D = null, PUB = null, SHA = null, pasteDirty = false, jsonDirty = false;
 
   const cfg = JSON.parse(localStorage.getItem(LS) || '{}');
   $('#owner').value = cfg.owner || 'vulturecapital';
@@ -171,7 +171,7 @@ details summary{cursor:pointer;font-weight:650;color:var(--navy)}
       if(r.status===401) throw new Error('Token inválido ou expirado.');
       if(r.status===404) throw new Error('Não encontrei dados.json nesse repositório/branch (ou o token não tem acesso a ele).');
       if(!r.ok) throw new Error('GitHub respondeu '+r.status);
-      const j = await r.json(); SHA = j.sha; D = JSON.parse(b64d(j.content));
+      const j = await r.json(); SHA = j.sha; D = JSON.parse(b64d(j.content)); PUB = JSON.parse(JSON.stringify(D));
       fill(); $('#editor').hidden = false; status('Dados carregados. Edite e clique em "Publicar no site".', 'ok');
     }catch(e){ status(e.message, 'err'); }
   }
@@ -250,7 +250,16 @@ details summary{cursor:pointer;font-weight:650;color:var(--navy)}
   }
 
   async function publish(){
-    const c = conf(); const d = collect();
+    const c = conf();
+    if(pasteDirty && $('#paste').value.trim()){
+      if(confirm('Você colou produtos em "Importar da planilha" mas não clicou em Importar. Importar agora e publicar?')){ importNow(); }
+    }
+    if(jsonDirty){
+      if(confirm('Você editou o JSON (Avançado) mas não clicou em "Aplicar JSON". Aplicar agora e publicar?')){ try{ D = JSON.parse($('#json').value); fill(); jsonDirty=false; }catch(e){ status('JSON inválido: '+e.message,'err'); return; } }
+    }
+    const d = collect();
+    const mudou = ['aplicacoes','alocacao','indicadores','comentario','resumo','contato','titulo','semana','aviso','fontes','focus'].filter(k=>JSON.stringify(d[k])!==JSON.stringify((PUB||{})[k]));
+    if(!mudou.length && !confirm('Nada foi alterado em relação ao que já está publicado (só o horário mudaria). Publicar mesmo assim?')) return;
     const bad = [0,1,2].filter(i=>d.alocacao.classes.reduce((a,x)=>a+x.pesos[i],0)!==100);
     if(bad.length && !confirm('A alocação de '+bad.map(i=>d.alocacao.perfis[i]).join(', ')+' não soma 100%. Publicar mesmo assim?')) return;
     d.atualizado_em = new Date().toISOString();
@@ -261,8 +270,9 @@ details summary{cursor:pointer;font-weight:650;color:var(--navy)}
       const r = await api(c,'dados.json',{method:'PUT',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
         body:JSON.stringify({message:'Atualiza recomendação ('+new Date().toLocaleString('pt-BR')+')',content:b64e(JSON.stringify(d,null,1)+'\n'),sha:SHA,branch:c.branch})});
       if(!r.ok){ const e=await r.json().catch(()=>({})); throw new Error('GitHub respondeu '+r.status+(e.message?': '+e.message:'')); }
-      const j = await r.json(); SHA = j.content.sha; D = d; $('#json').value = JSON.stringify(D,null,1);
-      status('Publicado ✓ – a página pública atualiza em cerca de 1 minuto.', 'ok');
+      const j = await r.json(); SHA = j.content.sha; D = d; PUB = JSON.parse(JSON.stringify(d)); $('#json').value = JSON.stringify(D,null,1);
+      const nomes={aplicacoes:'aplicações',alocacao:'alocação',indicadores:'indicadores',comentario:'comentário',resumo:'resumo do mercado',contato:'WhatsApp',titulo:'título',semana:'semana',aviso:'aviso legal',fontes:'fontes',focus:'Focus'};
+      status('Publicado ✓ '+(mudou.length?'Alterado: '+mudou.map(k=>nomes[k]).join(', ')+'. ':'(sem alterações de conteúdo). ')+'A página pública atualiza em cerca de 1 minuto.', 'ok');
     }catch(e){ status(e.message, 'err'); }
   }
 
@@ -271,9 +281,12 @@ details summary{cursor:pointer;font-weight:650;color:var(--navy)}
   $('#addCat').onclick = () => $('#cats').append(catNode({categoria:'',itens:[{}]}));
   $('#addCls').onclick = () => { $('#classes').append(clsNode({pesos:[0,0,0]})); totals(); };
   $('#addInd').onclick = () => $('#inds').append(indNode({direcao:'='}));
-  $('#btnImport').onclick = () => { const cats=importar($('#paste').value); if(!cats.length) return status('Nada para importar.','err'); $('#cats').replaceChildren(...cats.map(catNode)); status(cats.reduce((a,c)=>a+c.itens.length,0)+' aplicações importadas. Confira e publique.','ok'); };
+  function importNow(){ const cats=importar($('#paste').value); if(!cats.length){ status('Nada para importar.','err'); return false; } $('#cats').replaceChildren(...cats.map(catNode)); pasteDirty=false; status(cats.reduce((a,c)=>a+c.itens.length,0)+' aplicações importadas. Confira e publique.','ok'); return true; }
+  $('#btnImport').onclick = importNow;
+  $('#paste').addEventListener('input',()=>{ pasteDirty=true; });
+  $('#json').addEventListener('input',()=>{ jsonDirty=true; });
   $('#btnJsonOut').onclick = () => { $('#json').value = JSON.stringify(collect(),null,1); };
-  $('#btnJsonIn').onclick = () => { try{ D = JSON.parse($('#json').value); fill(); status('JSON aplicado ao formulário.','ok'); }catch(e){ status('JSON inválido: '+e.message,'err'); } };
+  $('#btnJsonIn').onclick = () => { try{ D = JSON.parse($('#json').value); fill(); jsonDirty=false; status('JSON aplicado ao formulário.','ok'); }catch(e){ status('JSON inválido: '+e.message,'err'); } };
   $('#btnPublish').onclick = publish;
   $('#btnDownload').onclick = () => { const d=collect(); d.atualizado_em=new Date().toISOString(); const a=el('a',{href:URL.createObjectURL(new Blob([JSON.stringify(d,null,1)],{type:'application/json'})),download:'dados.json'}); a.click(); };
   if(cfg.token && cfg.repo) load();
