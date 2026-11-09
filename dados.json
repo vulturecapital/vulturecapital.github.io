@@ -1,0 +1,250 @@
+{
+ "atualizado_em": "2026-11-09T10:00:00-03:00",
+ "semana": "02/11 a 06/11/2026",
+ "titulo": "Recomendação semanal – Renda Fixa",
+ "contato": {
+  "whatsapp": "",
+  "mensagem": "Olá! Vi a recomendação semanal de renda fixa e gostaria de conversar sobre a minha carteira."
+ },
+ "indicadores": [
+  {
+   "rotulo": "Selic",
+   "valor": "13,75%",
+   "detalhe": "Copom manteve em 04/11",
+   "variacao": "estável",
+   "direcao": "="
+  },
+  {
+   "rotulo": "Prefixado 3 anos",
+   "valor": "14,98%",
+   "detalhe": "ANBIMA – 756 dias úteis",
+   "variacao": "-0,32 p.p. na semana",
+   "direcao": "down"
+  },
+  {
+   "rotulo": "Juro real 3 anos",
+   "valor": "IPCA + 7,77%",
+   "detalhe": "ANBIMA – 756 dias úteis",
+   "variacao": "-0,22 p.p. na semana",
+   "direcao": "down"
+  },
+  {
+   "rotulo": "Inflação implícita 3 anos",
+   "valor": "6,69%",
+   "detalhe": "ANBIMA – 756 dias úteis",
+   "variacao": "-0,08 p.p. na semana",
+   "direcao": "down"
+  },
+  {
+   "rotulo": "Selic fim de 2027 (Focus)",
+   "valor": "12,50%",
+   "detalhe": "1º corte esperado em mar/27",
+   "variacao": "estável",
+   "direcao": "="
+  },
+  {
+   "rotulo": "IPCA 2027 (Focus)",
+   "valor": "4,90%",
+   "detalhe": "era 4,76% há 1 semana",
+   "variacao": "+0,14 p.p.",
+   "direcao": "up"
+  }
+ ],
+ "alocacao": {
+  "perfis": [
+   "Conservador",
+   "Moderado",
+   "Arrojado"
+  ],
+  "perfil_padrao": 1,
+  "classes": [
+   {
+    "classe": "Pós-fixado (CDI)",
+    "pesos": [
+     60,
+     40,
+     30
+    ],
+    "porque": "Selic em 13,75% por mais tempo: o CDI segue remunerando bem com baixo risco."
+   },
+   {
+    "classe": "Inflação (IPCA+) de 2 a 5 anos",
+    "pesos": [
+     20,
+     30,
+     30
+    ],
+    "porque": "Juro real perto de 7,8% e inflação implícita (6,69%) bem acima das projeções."
+   },
+   {
+    "classe": "Prefixado até 3 anos",
+    "pesos": [
+     10,
+     15,
+     15
+    ],
+    "porque": "Taxa perto de 15% paga prêmio sobre o CDI esperado."
+   },
+   {
+    "classe": "Longo prazo (tático)",
+    "pesos": [
+     0,
+     5,
+     10
+    ],
+    "porque": "Taxas historicamente altas, mas muito voláteis: entrar em parcelas."
+   },
+   {
+    "classe": "Renda fixa internacional (dólar)",
+    "pesos": [
+     10,
+     10,
+     15
+    ],
+    "porque": "Diversificação em moeda forte."
+   }
+  ]
+ },
+ "aplicacoes": [
+  {
+   "categoria": "Título bancário – liquidez diária",
+   "itens": [
+    {
+     "nome": "CDB XP - 02/11/2028",
+     "taxa": "100% CDI",
+     "detalhe": "Rating AAA (S&P)"
+    }
+   ]
+  },
+  {
+   "categoria": "Título bancário pós-fixado – sem liquidez (a partir de 2 anos)",
+   "itens": [
+    {
+     "nome": "CDB Cloudwalk Infinitepay - Nov/2028",
+     "taxa": "105,00% CDI",
+     "detalhe": "Rating AA (Fitch)"
+    }
+   ]
+  },
+  {
+   "categoria": "Título bancário prefixado – sem liquidez (a partir de 2 anos)",
+   "itens": [
+    {
+     "nome": "CDB Original - Nov/2029",
+     "taxa": "16,22%",
+     "detalhe": "Rating A (S&P)"
+    }
+   ]
+  },
+  {
+   "categoria": "Título bancário inflação + taxa – sem liquidez (a partir de 2 anos)",
+   "itens": [
+    {
+     "nome": "CDB Fibra - Jul/2029",
+     "taxa": "IPCA + 8,80%",
+     "detalhe": "Rating BBB+ (Fitch)"
+    }
+   ]
+  },
+  {
+   "categoria": "Renda fixa internacional – negociável no mercado secundário",
+   "itens": [
+    {
+     "nome": "Natura - 03/05/2028",
+     "taxa": "7,13% em dólar",
+     "detalhe": ""
+    },
+    {
+     "nome": "Brazil Sovereign - 18/03/2031",
+     "taxa": "5,67% em dólar",
+     "detalhe": ""
+    }
+   ]
+  },
+  {
+   "categoria": "Renda fixa de longo prazo – negociável no mercado secundário",
+   "itens": [
+    {
+     "nome": "LTN 2032",
+     "taxa": "15,63%",
+     "detalhe": ""
+    },
+    {
+     "nome": "NTN-B 2040",
+     "taxa": "IPCA + 7,69%",
+     "detalhe": ""
+    },
+    {
+     "nome": "NTN-B 2050",
+     "taxa": "IPCA + 7,44%",
+     "detalhe": ""
+    }
+   ]
+  }
+ ],
+ "comentario": "*Comentário:*\n\nNessa semana, seguimos indicando uma carteira diversificada entre títulos pós-fixados, prefixados e atrelados à inflação, com atenção redobrada à qualidade dos emissores.\n\nO Copom manteve a Selic em 13,75% a.a. e interrompeu o ciclo de cortes. No relatório Focus desta segunda-feira, a mediana da Selic para o fim de 2026 subiu de 13,50% para 13,75% ao ano, a de 2027 ficou em 12,50% e a de 2028 em 11,00%. Pelas projeções por reunião, o próximo corte ficou só para março de 2027. A XP vai além e projeta a Selic em 13,75% até o fim de 2027. Ou seja: o CDI deve continuar alto por mais tempo, e os pós-fixados seguem como base da carteira e da reserva de liquidez.\n\n*Onde vemos oportunidade:*\n\n▪️ *IPCA+ de 2 a 5 anos:* a curva da ANBIMA embute inflação de 6,69% ao ano para os próximos 3 anos, bem acima do que os economistas projetam (Focus: 4,90% em 2027 e 4,00% em 2028; XP: 5,5% em 2027). Com juro real perto de IPCA + 7,8%, se a inflação média ficar abaixo de 6,69%, o título atrelado à inflação rende mais que o prefixado de mesmo prazo.\n\n▪️ *Prefixados de até 3 anos:* a taxa próxima de 15% ao ano paga um bom prêmio sobre a trajetória de juros do Focus (CDI médio estimado perto de 12% no período) e fica acima do CDI mesmo no cenário da XP, de Selic parada em 13,75% até o fim de 2027.\n\n▪️ *Títulos longos (acima de 5 anos):* as taxas seguem historicamente altas, mas o preço oscila muito. Indicamos apenas como posição tática, entrando em parcelas, para quem aceita a marcação a mercado.\n\n▪️ *Crédito privado:* os spreads abriram pela segunda semana seguida. É hora de seletividade: preferir emissores de primeira linha e CDBs dentro da cobertura do FGC, sem esticar o risco em busca de taxa.\n\n*Sugestão de alocação (perfil moderado):* Pós-fixado 40% | IPCA+ de 2 a 5 anos 30% | Prefixado até 3 anos 15% | Longos (tático) 5% | Renda fixa internacional em dólar 10%.\n\nNos títulos sem liquidez diária, recomendo alocar um baixo percentual do seu patrimônio em cada emissor. No crédito privado, respeitar o limite de até 2,00% do seu patrimônio total e nos CDBs, respeitar o limite do FGC (R$ 250 mil) por emissor.\n\nCaso queiram revisar a carteira ou montar uma alocação tática, estou à disposição para conversar.",
+ "resumo": "*Resumo do mercado:*\n\nObservando a curva de juros futuros e a inflação implícita da ANBIMA (prazo de 3 anos), o mercado precifica um CDI médio em torno de 14,98% a.a. e inflação na faixa de 6,69% a.a. Na semana anterior, eram 15,30% e 6,77%.\n\n*Juros:* a curva de juros fechou na semana e devolveu parte da forte alta pós-eleição: no prazo de 3 anos, a taxa prefixada caiu 0,32 p.p. O alívio veio de fora, com a queda dos juros americanos e do petróleo e um Congresso americano mais dividido após as eleições de meio de mandato, o que reduz o espaço para novas expansões fiscais por lá. A renda fixa teve desempenho misto: prefixados e títulos de inflação curtos se recuperaram, enquanto os índices de prazo mais longo recuaram. No crédito privado, os spreads seguiram abrindo (isentos de 0,80 para 0,99 p.p.; debêntures CDI+ de 1,68% para 1,82%).\n\n*Copom e Focus:* o Banco Central manteve a Selic em 13,75% a.a., pausando após cinco cortes seguidos, diante das incertezas e das expectativas de inflação acima da meta (o próprio BC projeta IPCA de 5,6% em 2026 e 4,7% em 2027). No Focus, a Selic para o fim de 2026 subiu para 13,75% e o IPCA de 2027 passou de 4,76% para 4,90% (há um mês, era 4,30%). O PIB de 2027 caiu de 1,20% para 1,15%. A XP revisou seu cenário: Selic em 13,75% até o fim de 2027, IPCA de 5,2% em 2026 e 5,5% em 2027, e PIB de 1,5% e 0,3%.\n\n*Bolsa e câmbio:* o Ibovespa subiu 0,3% na semana, aos 168.498 pontos, sustentado por bancos e varejistas, enquanto a queda do petróleo pesou sobre as petroleiras. O real perdeu 1,4% frente ao dólar. Lá fora, as bolsas caíram (S&P 500 -2,7%; Nasdaq 100 -4,9%) com forte venda das ações de inteligência artificial e semicondutores, e o mercado passou a ver 77% de chance de alta de juros pelo Fed em dezembro. O Brent recuou 13,4%, para US$ 98,1 o barril, com a expectativa de uma saída diplomática para o conflito com o Irã.\n\n*Atividade:* o Caged registrou 121 mil vagas formais em setembro, abaixo do esperado, mais um sinal de desaceleração da economia.\n\n*Agenda da semana:* ata do Copom, IPCA de outubro, volume de serviços e vendas no varejo de setembro e IGP-DI de outubro. Nos EUA e na China, saem os índices de inflação ao consumidor e ao produtor.",
+ "focus": {
+  "data": "09/11/2026",
+  "linhas": [
+   [
+    "Selic",
+    2026,
+    13.25,
+    13.5,
+    13.75
+   ],
+   [
+    "Selic",
+    2027,
+    12.0,
+    12.5,
+    12.5
+   ],
+   [
+    "Selic",
+    2028,
+    10.5,
+    11.0,
+    11.0
+   ],
+   [
+    "IPCA",
+    2026,
+    5.22,
+    5.22,
+    5.22
+   ],
+   [
+    "IPCA",
+    2027,
+    4.3,
+    4.76,
+    4.9
+   ],
+   [
+    "IPCA",
+    2028,
+    3.79,
+    4.0,
+    4.0
+   ],
+   [
+    "PIB",
+    2026,
+    1.85,
+    1.76,
+    1.75
+   ],
+   [
+    "PIB",
+    2027,
+    1.4,
+    1.2,
+    1.15
+   ]
+  ]
+ },
+ "fontes": "ANBIMA (ETTJ 06/11/2026), Banco Central – Boletim Focus (09/11/2026), Copom, XP Research.",
+ "aviso": "Material informativo, de caráter geral, elaborado pela Vulture Capital, assessoria de investimentos credenciada à XP Investimentos. Não constitui oferta, nem recomendação individual: antes de investir, verifique a adequação ao seu perfil (suitability) com o seu assessor. Taxas indicativas, sujeitas a alteração e à disponibilidade. Rentabilidade passada não é garantia de rentabilidade futura. Investimentos em renda fixa não contam com garantia do FGC, exceto CDBs, LCIs e LCAs nos limites legais."
+}

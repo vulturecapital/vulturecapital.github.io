@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vulture Capital | Renda Fixa da Semana</title>
+<meta name="description" content="Resumo do mercado, comentário e sugestão de alocação em renda fixa da Vulture Capital.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Vulture Capital | Renda Fixa da Semana">
+<meta property="og:description" content="Resumo do mercado, comentário e sugestão de alocação em renda fixa, atualizados toda semana.">
+<meta property="og:image" content="https://vulturecapital.github.io/assets/og-image.png">
+<meta property="og:url" content="https://vulturecapital.github.io/">
+<meta property="og:locale" content="pt_BR">
+<meta name="theme-color" content="#14213d">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --navy:#14213d; --navy-2:#1f3864; --gold:#c9a227; --gold-soft:#f6efd6;
+  --ink:#1b1f2a; --muted:#5d6577; --line:#e3e6ee; --bg:#f4f5f8; --card:#fff;
+  --up:#1f3864; --down:#8a6d0b; --flat:#5d6577;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+header.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;padding:28px 0 64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.12em;font-size:13px;text-transform:uppercase;color:var(--gold)}
+.brand svg{width:28px;height:28px}
+.hero h1{font-size:clamp(24px,5.5vw,34px);line-height:1.15;margin:14px 0 6px;font-weight:750;letter-spacing:-.01em}
+.hero .sub{color:#c9d1e3;font-size:15px}
+.stamp{display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  padding:6px 12px;border-radius:999px;font-size:13px;color:#e8ecf5}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 4px rgba(61,220,132,.2)}
+main{margin-top:-44px;padding-bottom:40px}
+nav.jump{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}
+nav.jump::-webkit-scrollbar{display:none}
+nav.jump a{flex:0 0 auto;background:#fff;color:var(--navy);text-decoration:none;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;
+  box-shadow:0 1px 2px rgba(20,33,61,.08),0 4px 14px rgba(20,33,61,.06)}
+section.card{background:var(--card);border-radius:var(--radius);padding:20px 18px;margin:0 0 16px;
+  box-shadow:0 1px 2px rgba(20,33,61,.06),0 8px 24px rgba(20,33,61,.05);scroll-margin-top:12px}
+.card h2{font-size:18px;margin:0 0 4px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.card h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--gold)}
+.card .lead{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:640px){.kpis{grid-template-columns:repeat(3,1fr)}}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpi .l{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.kpi .v{font-size:clamp(17px,5.2vw,21px);white-space:nowrap;font-weight:750;color:var(--navy);margin:2px 0;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;color:var(--muted)}
+.kpi .chg{font-size:12px;font-weight:650}
+.chg.up{color:var(--up)} .chg.down{color:var(--down)} .chg.flat{color:var(--flat)}
+.tabs{display:flex;background:var(--bg);border-radius:10px;padding:4px;gap:4px;margin-bottom:14px}
+.tabs button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:8px;font-weight:650;font-size:14px;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(20,33,61,.12)}
+.alloc{display:flex;flex-direction:column;gap:12px}
+.arow .top{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;font-weight:600}
+.arow .pct{font-variant-numeric:tabular-nums;color:var(--navy);font-weight:750}
+.bar{height:10px;background:var(--bg);border-radius:6px;overflow:hidden;margin:6px 0 4px}
+.bar span{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--navy-2),#3a5a98);transition:width .45s ease}
+.arow:nth-child(2) .bar span{background:linear-gradient(90deg,#a8841a,var(--gold))}
+.arow:nth-child(3) .bar span{background:linear-gradient(90deg,#2f6f7e,#4f9aa9)}
+.arow:nth-child(4) .bar span{background:linear-gradient(90deg,#7d4f8f,#a77ab8)}
+.arow:nth-child(5) .bar span{background:linear-gradient(90deg,#4b6b3f,#77996a)}
+.arow .why{font-size:13px;color:var(--muted)}
+.prod-cat{margin:16px 0 8px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.prod-cat:first-of-type{margin-top:4px}
+.prod{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.prod .n{font-weight:650;font-size:15px}
+.prod .x{font-size:12.5px;color:var(--muted)}
+.prod .t{flex:0 0 auto;background:var(--gold-soft);color:#6b5205;font-weight:750;font-size:14px;padding:6px 10px;border-radius:8px;text-align:right;font-variant-numeric:tabular-nums}
+.txt p{margin:0 0 12px;font-size:15.5px}
+.txt p.bullet{padding-left:14px;border-left:3px solid var(--gold-soft)}
+.txt strong{color:var(--navy)}
+.txt h3{font-size:15px;color:var(--navy);margin:18px 0 8px}
+.more{border:0;background:none;color:var(--navy-2);font-weight:700;padding:0;cursor:pointer;font-size:14px}
+.clamp{max-height:420px;overflow:hidden;position:relative}
+.clamp::after{content:"";position:absolute;left:0;right:0;bottom:0;height:80px;background:linear-gradient(transparent,#fff)}
+.table-wrap{overflow-x:auto;margin:0 -4px}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--muted);font-weight:650;text-transform:uppercase;letter-spacing:.03em}
+td.now{font-weight:750;color:var(--navy)}
+@media(max-width:480px){.c4{display:none}}
+.cta[hidden]{display:none!important}
+.cta{position:sticky;bottom:12px;display:flex;justify-content:center;margin-top:8px;z-index:5}
+.cta a{display:inline-flex;align-items:center;gap:10px;background:#1fa855;color:#fff;text-decoration:none;font-weight:700;padding:13px 22px;border-radius:999px;
+  box-shadow:0 8px 24px rgba(31,168,85,.35)}
+.cta svg{width:20px;height:20px}
+.share{display:flex;gap:8px;flex-wrap:wrap}
+.share button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;font-weight:650;color:var(--navy);cursor:pointer;font-size:13.5px}
+footer{color:var(--muted);font-size:12px;padding:8px 0 90px}
+footer p{margin:0 0 8px}
+.err{background:#fff4f2;color:#7a271a;border:1px solid #fecdca;padding:14px;border-radius:12px}
+.skeleton{height:14px;background:linear-gradient(90deg,#eef0f5,#f7f8fb,#eef0f5);border-radius:6px;margin:8px 0;animation:sh 1.2s infinite}
+@keyframes sh{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
+@media print{.cta,nav.jump,.share{display:none}header.hero{padding-bottom:20px}main{margin-top:0}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="#c9a227" stroke-width="2"/><path d="M7 11l9 12 9-12" fill="none" stroke="#c9a227" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Vulture Capital
+    </div>
+    <h1 id="titulo">Renda Fixa da Semana</h1>
+    <div class="sub" id="semana">&nbsp;</div>
+    <div class="stamp"><span class="dot"></span><span id="atualizado">Carregando…</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="jump" aria-label="Seções">
+    <a href="#indicadores">Indicadores</a>
+    <a href="#alocacao">Alocação</a>
+    <a href="#aplicacoes">Aplicações</a>
+    <a href="#comentario">Comentário</a>
+    <a href="#resumo">Resumo do mercado</a>
+    <a href="#focus">Focus</a>
+  </nav>
+
+  <div id="app">
+    <section class="card"><div class="skeleton"></div><div class="skeleton" style="width:70%"></div><div class="skeleton" style="width:85%"></div></section>
+  </div>
+
+  <div class="cta" id="cta" hidden>
+    <a id="ctaLink" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 001.8-1.2c.2-.6.2-1.1.1-1.2l-.5-.3z"/></svg>
+      Falar com meu assessor
+    </a>
+  </div>
+
+  <footer>
+    <p id="fontes"></p>
+    <p id="aviso"></p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const pct = v => (v==null||v==='') ? '–' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+
+  // texto no formato WhatsApp (*negrito*, _itálico_, linhas) -> HTML
+  function wa(text){
+    const blocks = String(text||'').replace(/\r/g,'').split(/\n\s*\n/);
+    return blocks.map(b=>{
+      let h = esc(b.trim()).replace(/\*(.+?)\*/g,'<strong>$1</strong>').replace(/_(.+?)_/g,'<em>$1</em>').replace(/\n/g,'<br>');
+      if(/^<strong>[^<]+:<\/strong>$/.test(h)) return '<h3>'+h.replace(/<\/?strong>/g,'')+'</h3>';
+      const isBullet = /^(▪️|•|-)\s*/.test(b.trim());
+      if(isBullet) h = h.replace(/^(▪️|•|-)\s*/,'');
+      return h ? `<p class="${isBullet?'bullet':''}">${h}</p>` : '';
+    }).join('');
+  }
+  // remove o título "*Comentário:*" / "*Resumo do mercado:*" que vem da planilha
+  const semTitulo = t => String(t||'').replace(/^\s*\*[^*\n]{3,40}:\*\s*\n+/,'');
+
+  function render(d){
+    document.title = 'Vulture Capital | ' + (d.titulo || 'Renda Fixa da Semana');
+    $('#titulo').textContent = d.titulo || 'Renda Fixa da Semana';
+    $('#semana').textContent = d.semana ? 'Semana de ' + d.semana : '';
+    if(d.atualizado_em){
+      const dt = new Date(d.atualizado_em);
+      $('#atualizado').textContent = 'Atualizado em ' + dt.toLocaleDateString('pt-BR') + ' às ' + dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    }
+    let html = '';
+
+    // indicadores
+    if(d.indicadores?.length){
+      html += `<section class="card" id="indicadores"><h2>Indicadores da semana</h2><p class="lead">Juros, inflação e expectativas do mercado.</p><div class="kpis">`;
+      for(const k of d.indicadores){
+        const cls = k.direcao==='up'?'up':k.direcao==='down'?'down':'flat';
+        const arrow = k.direcao==='up'?'▲ ':k.direcao==='down'?'▼ ':'';
+        html += `<div class="kpi"><div class="l">${esc(k.rotulo)}</div><div class="v">${esc(k.valor)}</div>
+          ${k.variacao?`<div class="chg ${cls}">${arrow}${esc(k.variacao)}</div>`:''}<div class="d">${esc(k.detalhe)}</div></div>`;
+      }
+      html += `</div></section>`;
+    }
+
+    // alocação
+    const A = d.alocacao;
+    if(A?.classes?.length){
+      html += `<section class="card" id="alocacao"><h2>Sugestão de alocação</h2><p class="lead">Carteira de renda fixa por perfil. Toque no perfil para ver a sugestão.</p>
+        <div class="tabs" role="tablist">${A.perfis.map((p,i)=>`<button role="tab" data-i="${i}" aria-selected="${i===(A.perfil_padrao??1)}">${esc(p)}</button>`).join('')}</div>
+        <div class="alloc" id="allocList"></div></section>`;
+    }
+
+    // aplicações
+    if(d.aplicacoes?.length){
+      html += `<section class="card" id="aplicacoes"><h2>Aplicações da semana</h2><p class="lead">Taxas indicativas, sujeitas à disponibilidade. Consulte seu assessor.</p>`;
+      for(const c of d.aplicacoes){
+        if(!c.itens?.length) continue;
+        html += `<div class="prod-cat">${esc(c.categoria)}</div>`;
+        for(const it of c.itens){
+          html += `<div class="prod"><div><div class="n">${esc(it.nome)}</div>${it.detalhe?`<div class="x">${esc(it.detalhe)}</div>`:''}</div>${it.taxa?`<div class="t">${esc(it.taxa)}</div>`:''}</div>`;
+        }
+      }
+      html += `</section>`;
+    }
+
+    if(d.comentario) html += `<section class="card" id="comentario"><h2>Comentário</h2><div class="txt">${wa(semTitulo(d.comentario))}</div></section>`;
+    if(d.resumo) html += `<section class="card" id="resumo"><h2>Resumo do mercado</h2><div class="txt clamp" id="resumoTxt">${wa(semTitulo(d.resumo))}</div><button class="more" id="maisResumo">Ler resumo completo ▾</button></section>`;
+
+    // focus
+    if(d.focus?.linhas?.length){
+      html += `<section class="card" id="focus"><h2>Boletim Focus</h2><p class="lead">Mediana das projeções do mercado – Banco Central, ${esc(d.focus.data)}. Selic: taxa no fim de cada ano.</p>
+        <div class="table-wrap"><table><thead><tr><th>Indicador</th><th class="c4">Há 4 sem.</th><th>Há 1 sem.</th><th>Hoje</th><th>Semana</th></tr></thead><tbody>`;
+      for(const [ind,ano,h4,h1,hj] of d.focus.linhas){
+        const v = Math.round((hj-h1)*100)/100;
+        const s = v>0?`<span class="chg up">▲ ${pct(v).replace('%',' p.p.')}</span>`:v<0?`<span class="chg down">▼ ${pct(-v).replace('%',' p.p.')}</span>`:`<span class="chg flat">=</span>`;
+        html += `<tr><td>${esc(ind)} ${esc(ano)}</td><td class="c4">${pct(h4)}</td><td>${pct(h1)}</td><td class="now">${pct(hj)}</td><td>${s}</td></tr>`;
+      }
+      html += `</tbody></table></div></section>`;
+    }
+
+    html += `<section class="card"><h2>Compartilhar</h2><p class="lead">Envie esta página para quem também investe.</p><div class="share">
+      <button id="btnShare">Compartilhar link</button><button id="btnCopy">Copiar link</button></div></section>`;
+
+    $('#app').innerHTML = html;
+    $('#fontes').textContent = d.fontes ? 'Fontes: ' + d.fontes : '';
+    $('#aviso').textContent = d.aviso || '';
+
+    // interações
+    if(A?.classes?.length){
+      const draw = i => {
+        $('#allocList').innerHTML = A.classes.map(c=>`<div class="arow"><div class="top"><span>${esc(c.classe)}</span><span class="pct">${c.pesos[i]}%</span></div>
+          <div class="bar"><span style="width:0%" data-w="${c.pesos[i]}"></span></div><div class="why">${esc(c.porque)}</div></div>`).join('');
+        requestAnimationFrame(()=>document.querySelectorAll('#allocList .bar span').forEach(s=>s.style.width=s.dataset.w+'%'));
+        document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', String(+b.dataset.i===i)));
+      };
+      document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>draw(+b.dataset.i)));
+      draw(A.perfil_padrao ?? 1);
+    }
+    const mr = $('#maisResumo');
+    if(mr){
+      const t = $('#resumoTxt');
+      if(t.scrollHeight <= 440){ t.classList.remove('clamp'); mr.remove(); }
+      else mr.addEventListener('click',()=>{ t.classList.toggle('clamp'); mr.textContent = t.classList.contains('clamp') ? 'Ler resumo completo ▾' : 'Mostrar menos ▴'; });
+    }
+    const url = location.href.split('#')[0];
+    $('#btnShare').addEventListener('click',()=>{
+      if(navigator.share) navigator.share({title:document.title,url}).catch(()=>{});
+      else window.open('https://wa.me/?text='+encodeURIComponent(document.title+' '+url),'_blank');
+    });
+    $('#btnCopy').addEventListener('click',()=>{ navigator.clipboard?.writeText(url).then(()=>{ $('#btnCopy').textContent='Link copiado ✓'; }); });
+
+    const num = (d.contato?.whatsapp||'').replace(/\D/g,'');
+    if(num){
+      $('#ctaLink').href = 'https://wa.me/'+num+'?text='+encodeURIComponent(d.contato.mensagem||'');
+      $('#cta').hidden = false;
+    }
+    if(location.hash){ const el = document.querySelector(location.hash); el && el.scrollIntoView(); }
+  }
+
+  fetch('dados.json?v=' + Date.now(), {cache:'no-store'})
+    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(render)
+    .catch(() => { $('#app').innerHTML = '<div class="err">Não foi possível carregar a recomendação agora. Tente novamente em instantes.</div>'; $('#atualizado').textContent=''; });
+})();
+</script>
+</body>
+</html>

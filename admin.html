@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Administração | Renda Fixa da Semana</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+:root{--navy:#14213d;--navy-2:#1f3864;--gold:#c9a227;--line:#dfe3ec;--bg:#f4f5f8;--muted:#5d6577;--ok:#0f7b4a;--bad:#b42318}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:#1b1f2a;font-size:14.5px}
+header{background:var(--navy);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+header b{font-size:16px} header .sp{flex:1}
+header a{color:#c9d1e3;font-size:13px}
+.wrap{max-width:920px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:12px;padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(20,33,61,.06),0 6px 18px rgba(20,33,61,.05)}
+h2{font-size:16px;color:var(--navy);margin:0 0 10px}
+.hint{color:var(--muted);font-size:12.5px;margin:-4px 0 10px}
+label{display:block;font-size:12px;font-weight:650;color:var(--muted);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.03em}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font:inherit;background:#fff}
+textarea{min-height:110px;resize:vertical;line-height:1.45}
+textarea.big{min-height:300px}
+.row{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+.row3{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
+@media(max-width:620px){.row,.row3{grid-template-columns:1fr}}
+button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-weight:650;color:var(--navy);cursor:pointer}
+button.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+button.gold{background:var(--gold);color:#1b1f2a;border-color:var(--gold)}
+button.ghost{border:0;background:none;color:var(--bad);padding:6px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.item{display:grid;grid-template-columns:2fr 1fr 1.4fr auto;gap:6px;margin-bottom:6px;align-items:center}
+.ind{display:grid;grid-template-columns:1.3fr 1fr 1.3fr 1.2fr .8fr auto;gap:6px;margin-bottom:6px}
+.cls{display:grid;grid-template-columns:1.6fr .5fr .5fr .5fr 2.2fr auto;gap:6px;margin-bottom:6px;align-items:center}
+@media(max-width:720px){.item,.ind,.cls{grid-template-columns:1fr 1fr}}
+.cat{border:1px dashed var(--line);border-radius:10px;padding:10px;margin-bottom:10px}
+.cat .head{display:flex;gap:6px;margin-bottom:8px}
+.tot{font-weight:700;font-variant-numeric:tabular-nums}
+.tot.bad{color:var(--bad)} .tot.ok{color:var(--ok)}
+#status{font-size:13px;padding:8px 12px;border-radius:8px;display:none}
+#status.ok{display:block;background:#ecfdf3;color:var(--ok)} #status.err{display:block;background:#fff4f2;color:var(--bad)} #status.info{display:block;background:#eef4ff;color:var(--navy-2)}
+details summary{cursor:pointer;font-weight:650;color:var(--navy)}
+.sticky{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:14px 0 10px}
+</style>
+</head>
+<body>
+<header>
+  <b>Renda Fixa da Semana · Administração</b><span class="sp"></span>
+  <a href="./" target="_blank">Ver página pública ↗</a>
+</header>
+<div class="wrap">
+
+  <div class="card" id="cfgCard">
+    <h2>1. Conexão com o GitHub</h2>
+    <p class="hint">O token fica salvo só neste navegador. Use um token "fine-grained" com permissão <b>Contents: Read and write</b> apenas neste repositório.</p>
+    <div class="row3">
+      <div><label>Usuário / organização</label><input id="owner" placeholder="vulturecapital"></div>
+      <div><label>Repositório</label><input id="repo" placeholder="vulturecapital.github.io"></div>
+      <div><label>Branch</label><input id="branch" placeholder="main"></div>
+    </div>
+    <label>Token do GitHub</label><input id="token" type="password" placeholder="github_pat_…">
+    <div class="bar" style="margin-top:10px">
+      <button class="primary" id="btnLoad">Conectar e carregar</button>
+      <button id="btnForget">Esquecer token</button>
+    </div>
+  </div>
+
+  <div id="status"></div>
+
+  <div id="editor" hidden>
+    <div class="card">
+      <h2>2. Cabeçalho</h2>
+      <div class="row">
+        <div><label>Título</label><input id="titulo"></div>
+        <div><label>Semana de referência</label><input id="semana" placeholder="02/11 a 06/11/2026"></div>
+      </div>
+      <div class="row">
+        <div><label>WhatsApp do botão "Falar com meu assessor" (com DDI e DDD)</label><input id="wpp" placeholder="5511999999999"></div>
+        <div><label>Mensagem inicial do WhatsApp</label><input id="wppMsg"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Aplicações da semana</h2>
+      <p class="hint">Edite à mão ou cole o bloco de produtos da planilha (células B3 a B29) e clique em "Importar da planilha".</p>
+      <div id="cats"></div>
+      <div class="bar">
+        <button id="addCat">+ Categoria</button>
+        <details style="flex:1"><summary>Importar da planilha</summary>
+          <textarea id="paste" placeholder="*TÍTULO BANCÁRIO - LIQUIDEZ DIÁRIA*&#10;CDB XP - 02/11/2028 - *100% CDI*, Rating AAA (S&amp;P)"></textarea>
+          <div class="bar" style="margin-top:6px"><button class="gold" id="btnImport">Importar (substitui a lista)</button></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. Sugestão de alocação (%)</h2>
+      <p class="hint">Cada perfil precisa somar 100%.</p>
+      <div class="cls" style="font-size:12px;color:var(--muted);font-weight:650"><span>Classe</span><span id="p0">Cons.</span><span id="p1">Mod.</span><span id="p2">Arroj.</span><span>Por quê</span><span></span></div>
+      <div id="classes"></div>
+      <div class="cls"><span><b>Total</b></span><span class="tot" id="t0"></span><span class="tot" id="t1"></span><span class="tot" id="t2"></span><span></span><span></span></div>
+      <div class="bar"><button id="addCls">+ Classe</button>
+        <label style="margin:0 0 0 auto;text-transform:none">Perfil aberto por padrão</label>
+        <select id="perfilPadrao" style="width:auto"><option value="0">Conservador</option><option value="1">Moderado</option><option value="2">Arrojado</option></select></div>
+    </div>
+
+    <div class="card">
+      <h2>5. Indicadores</h2>
+      <p class="hint">Direção: up (▲ subiu), down (▼ caiu) ou = (estável).</p>
+      <div id="inds"></div>
+      <button id="addInd">+ Indicador</button>
+    </div>
+
+    <div class="card">
+      <h2>6. Textos (formato WhatsApp: *negrito*)</h2>
+      <label>Comentário</label><textarea class="big" id="comentario"></textarea>
+      <label>Resumo do mercado</label><textarea class="big" id="resumo"></textarea>
+      <div class="row">
+        <div><label>Fontes</label><input id="fontes"></div>
+        <div><label>Data do Focus</label><input id="focusData"></div>
+      </div>
+      <label>Aviso legal (rodapé)</label><textarea id="aviso"></textarea>
+    </div>
+
+    <div class="card">
+      <details><summary>Avançado – editar o JSON completo</summary>
+        <p class="hint">Útil para a tabela do Focus. Clique em "Aplicar JSON" antes de publicar.</p>
+        <textarea class="big" id="json" spellcheck="false" style="font-family:ui-monospace,Consolas,monospace;font-size:12.5px"></textarea>
+        <div class="bar" style="margin-top:6px"><button id="btnJsonOut">Atualizar JSON a partir do formulário</button><button class="gold" id="btnJsonIn">Aplicar JSON</button></div>
+      </details>
+    </div>
+
+    <div class="sticky"><div class="bar">
+      <button class="primary" id="btnPublish">Publicar no site</button>
+      <button id="btnDownload">Baixar dados.json</button>
+      <span class="hint" style="margin:0">O site atualiza em cerca de 1 minuto após publicar.</span>
+    </div></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const LS = 'vulture-rf-admin';
+  let D = null, SHA = null;
+
+  const cfg = JSON.parse(localStorage.getItem(LS) || '{}');
+  $('#owner').value = cfg.owner || 'vulturecapital';
+  $('#repo').value = cfg.repo || 'vulturecapital.github.io';
+  $('#branch').value = cfg.branch || 'main';
+  $('#token').value = cfg.token || '';
+  if(!$('#repo').value){ // tenta deduzir do endereço do GitHub Pages: usuario.github.io/repo/admin.html
+    const m = location.hostname.match(/^([^.]+)\.github\.io$/); const p = location.pathname.split('/').filter(Boolean);
+    if(m){ $('#owner').value = m[1]; if(p.length>1) $('#repo').value = p[0]; }
+  }
+
+  const status = (msg, kind='info') => { const s=$('#status'); s.className=kind; s.textContent=msg; s.style.display='block'; };
+  const b64d = b => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,'')), c => c.charCodeAt(0)));
+  const b64e = s => { const bytes = new TextEncoder().encode(s); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); };
+  const conf = () => ({owner:$('#owner').value.trim(), repo:$('#repo').value.trim(), branch:$('#branch').value.trim()||'main', token:$('#token').value.trim()});
+  const api = (c, path, opt={}) => fetch(`https://api.github.com/repos/${c.owner}/${c.repo}/contents/${path}`+(opt.method?'':`?ref=${encodeURIComponent(c.branch)}`),
+     Object.assign({headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}}, opt));
+
+  async function load(){
+    const c = conf();
+    if(!c.owner||!c.repo||!c.token){ status('Preencha usuário, repositório e token.', 'err'); return; }
+    localStorage.setItem(LS, JSON.stringify(c));
+    status('Carregando dados.json do GitHub…');
+    try{
+      const r = await api(c, 'dados.json');
+      if(r.status===401) throw new Error('Token inválido ou expirado.');
+      if(r.status===404) throw new Error('Não encontrei dados.json nesse repositório/branch (ou o token não tem acesso a ele).');
+      if(!r.ok) throw new Error('GitHub respondeu '+r.status);
+      const j = await r.json(); SHA = j.sha; D = JSON.parse(b64d(j.content));
+      fill(); $('#editor').hidden = false; status('Dados carregados. Edite e clique em "Publicar no site".', 'ok');
+    }catch(e){ status(e.message, 'err'); }
+  }
+
+  // ---------- formulário <-> dados
+  function el(tag, attrs={}, kids=[]){ const e=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>{ if(k==='on') Object.entries(v).forEach(([ev,f])=>e.addEventListener(ev,f)); else if(k in e) e[k]=v; else e.setAttribute(k,v); }); kids.forEach(k=>e.append(k)); return e; }
+  const inp = (v, ph='', cls='') => el('input',{value:v??'',placeholder:ph,className:cls});
+
+  function catNode(c){
+    const box = el('div',{className:'cat'});
+    const name = inp(c.categoria,'Categoria','cname');
+    const items = el('div');
+    const addItem = it => {
+      const row = el('div',{className:'item'},[inp(it.nome,'Nome / vencimento','n'), inp(it.taxa,'Taxa','t'), inp(it.detalhe,'Rating / detalhe','x'),
+        el('button',{className:'ghost',textContent:'✕',title:'Remover',on:{click:()=>row.remove()}})]);
+      items.append(row);
+    };
+    (c.itens||[]).forEach(addItem);
+    box.append(el('div',{className:'head'},[name,
+      el('button',{textContent:'↑',title:'Subir',on:{click:()=>box.previousElementSibling && box.parentNode.insertBefore(box, box.previousElementSibling)}}),
+      el('button',{className:'ghost',textContent:'✕',title:'Remover categoria',on:{click:()=>confirm('Remover a categoria inteira?') && box.remove()}})]),
+      items, el('button',{textContent:'+ Aplicação',on:{click:()=>addItem({})}}));
+    return box;
+  }
+  function clsNode(c){
+    const row = el('div',{className:'cls'},[inp(c.classe,'Classe','c'), ...[0,1,2].map(i=>{ const x=inp(c.pesos?.[i]??0,'%','w'); x.type='number'; x.min=0; x.max=100; x.addEventListener('input',totals); return x; }),
+      inp(c.porque,'Por quê','p'), el('button',{className:'ghost',textContent:'✕',on:{click:()=>{row.remove();totals();}}})]);
+    return row;
+  }
+  function indNode(k){
+    const row = el('div',{className:'ind'},[inp(k.rotulo,'Rótulo','r'), inp(k.valor,'Valor','v'), inp(k.detalhe,'Detalhe','d'), inp(k.variacao,'Variação','va'), inp(k.direcao,'up/down/=','di'),
+      el('button',{className:'ghost',textContent:'✕',on:{click:()=>row.remove()}})]);
+    return row;
+  }
+  function totals(){
+    [0,1,2].forEach(i=>{ const s=[...document.querySelectorAll('#classes .cls')].reduce((a,r)=>a+(+r.querySelectorAll('.w')[i].value||0),0);
+      const t=$('#t'+i); t.textContent=s+'%'; t.className='tot '+(s===100?'ok':'bad'); });
+  }
+  function fill(){
+    $('#titulo').value = D.titulo||''; $('#semana').value = D.semana||'';
+    $('#wpp').value = D.contato?.whatsapp||''; $('#wppMsg').value = D.contato?.mensagem||'';
+    $('#cats').replaceChildren(...(D.aplicacoes||[]).map(catNode));
+    const A = D.alocacao||{perfis:['Conservador','Moderado','Arrojado'],classes:[]};
+    A.perfis.forEach((p,i)=>{ $('#p'+i).textContent=p; });
+    $('#classes').replaceChildren(...A.classes.map(clsNode)); $('#perfilPadrao').value = A.perfil_padrao ?? 1; totals();
+    $('#inds').replaceChildren(...(D.indicadores||[]).map(indNode));
+    $('#comentario').value = D.comentario||''; $('#resumo').value = D.resumo||'';
+    $('#fontes').value = D.fontes||''; $('#aviso').value = D.aviso||''; $('#focusData').value = D.focus?.data||'';
+    $('#json').value = JSON.stringify(D,null,1);
+  }
+  function collect(){
+    const d = Object.assign({}, D);
+    d.titulo = $('#titulo').value.trim(); d.semana = $('#semana').value.trim();
+    d.contato = {whatsapp:$('#wpp').value.trim(), mensagem:$('#wppMsg').value.trim()};
+    d.aplicacoes = [...document.querySelectorAll('#cats .cat')].map(b=>({categoria:b.querySelector('.cname').value.trim(),
+      itens:[...b.querySelectorAll('.item')].map(r=>({nome:r.querySelector('.n').value.trim(),taxa:r.querySelector('.t').value.trim(),detalhe:r.querySelector('.x').value.trim()})).filter(i=>i.nome)}));
+    d.alocacao = Object.assign({}, D.alocacao||{perfis:['Conservador','Moderado','Arrojado']}, {perfil_padrao:+$('#perfilPadrao').value,
+      classes:[...document.querySelectorAll('#classes .cls')].map(r=>({classe:r.querySelector('.c').value.trim(),pesos:[...r.querySelectorAll('.w')].map(x=>+x.value||0),porque:r.querySelector('.p').value.trim()})).filter(c=>c.classe)});
+    d.indicadores = [...document.querySelectorAll('#inds .ind')].map(r=>({rotulo:r.querySelector('.r').value.trim(),valor:r.querySelector('.v').value.trim(),detalhe:r.querySelector('.d').value.trim(),variacao:r.querySelector('.va').value.trim(),direcao:r.querySelector('.di').value.trim()})).filter(k=>k.rotulo);
+    d.comentario = $('#comentario').value; d.resumo = $('#resumo').value;
+    d.fontes = $('#fontes').value.trim(); d.aviso = $('#aviso').value.trim();
+    d.focus = Object.assign({}, D.focus||{linhas:[]}, {data:$('#focusData').value.trim()});
+    return d;
+  }
+
+  // importar bloco da planilha: linhas "*CATEGORIA*" e "Nome - *taxa*, detalhe"
+  function importar(txt){
+    const cats=[]; let cur=null;
+    txt.replace(/\r/g,'').split('\n').map(s=>s.replace(/^"|"$/g,'').trim()).filter(Boolean).forEach(l=>{
+      if(/^\*[^*]+\*$/.test(l)){ cur={categoria:l.replace(/\*/g,'').trim(),itens:[]}; cats.push(cur); return; }
+      if(!cur){ cur={categoria:'Aplicações',itens:[]}; cats.push(cur); }
+      const m = l.match(/^(.*?)\s*-\s*\*(.+?)\*\s*,?\s*(.*)$/);
+      cur.itens.push(m ? {nome:m[1].replace(/\s+/g,' ').trim(),taxa:m[2].trim(),detalhe:m[3].trim()} : {nome:l,taxa:'',detalhe:''});
+    });
+    return cats;
+  }
+
+  async function publish(){
+    const c = conf(); const d = collect();
+    const bad = [0,1,2].filter(i=>d.alocacao.classes.reduce((a,x)=>a+x.pesos[i],0)!==100);
+    if(bad.length && !confirm('A alocação de '+bad.map(i=>d.alocacao.perfis[i]).join(', ')+' não soma 100%. Publicar mesmo assim?')) return;
+    d.atualizado_em = new Date().toISOString();
+    status('Publicando…');
+    try{
+      // pega o sha mais recente para não sobrescrever uma atualização feita por outra pessoa
+      const cur = await api(c,'dados.json'); if(cur.ok){ const j=await cur.json(); if(j.sha!==SHA && !confirm('O arquivo foi alterado no GitHub depois que você carregou (por exemplo, a atualização semanal do resumo). Publicar por cima mesmo assim? Clique em Cancelar para recarregar.')){ load(); return; } SHA=j.sha; }
+      const r = await api(c,'dados.json',{method:'PUT',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+        body:JSON.stringify({message:'Atualiza recomendação ('+new Date().toLocaleString('pt-BR')+')',content:b64e(JSON.stringify(d,null,1)+'\n'),sha:SHA,branch:c.branch})});
+      if(!r.ok){ const e=await r.json().catch(()=>({})); throw new Error('GitHub respondeu '+r.status+(e.message?': '+e.message:'')); }
+      const j = await r.json(); SHA = j.content.sha; D = d; $('#json').value = JSON.stringify(D,null,1);
+      status('Publicado ✓ – a página pública atualiza em cerca de 1 minuto.', 'ok');
+    }catch(e){ status(e.message, 'err'); }
+  }
+
+  $('#btnLoad').onclick = load;
+  $('#btnForget').onclick = () => { $('#token').value=''; const c=conf(); delete c.token; localStorage.setItem(LS, JSON.stringify(c)); status('Token removido deste navegador.','info'); };
+  $('#addCat').onclick = () => $('#cats').append(catNode({categoria:'',itens:[{}]}));
+  $('#addCls').onclick = () => { $('#classes').append(clsNode({pesos:[0,0,0]})); totals(); };
+  $('#addInd').onclick = () => $('#inds').append(indNode({direcao:'='}));
+  $('#btnImport').onclick = () => { const cats=importar($('#paste').value); if(!cats.length) return status('Nada para importar.','err'); $('#cats').replaceChildren(...cats.map(catNode)); status(cats.reduce((a,c)=>a+c.itens.length,0)+' aplicações importadas. Confira e publique.','ok'); };
+  $('#btnJsonOut').onclick = () => { $('#json').value = JSON.stringify(collect(),null,1); };
+  $('#btnJsonIn').onclick = () => { try{ D = JSON.parse($('#json').value); fill(); status('JSON aplicado ao formulário.','ok'); }catch(e){ status('JSON inválido: '+e.message,'err'); } };
+  $('#btnPublish').onclick = publish;
+  $('#btnDownload').onclick = () => { const d=collect(); d.atualizado_em=new Date().toISOString(); const a=el('a',{href:URL.createObjectURL(new Blob([JSON.stringify(d,null,1)],{type:'application/json'})),download:'dados.json'}); a.click(); };
+  if(cfg.token && cfg.repo) load();
+})();
+</script>
+</body>
+</html>
