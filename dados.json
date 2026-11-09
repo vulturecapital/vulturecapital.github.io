@@ -1,5 +1,5 @@
 {
- "atualizado_em": "2026-11-09T14:12:42.100Z",
+ "atualizado_em": "2026-11-09T14:15:52.651Z",
  "semana": "02/11 a 06/11/2026",
  "titulo": "Recomendação semanal – Renda Fixa",
  "contato": {
@@ -131,7 +131,7 @@
    "itens": [
     {
      "nome": "CDB Original - Nov/2029",
-     "taxa": "16,22%",
+     "taxa": "15,66%",
      "detalhe": "Rating A (S&P)"
     }
    ]
@@ -140,7 +140,7 @@
    "categoria": "Título bancário inflação + taxa – sem liquidez (a partir de 2 anos)",
    "itens": [
     {
-     "nome": "CDB Pine - Jul/2029",
+     "nome": "CDB Pine - Nov/2029",
      "taxa": "IPCA + 7,95%",
      "detalhe": "Rating A+ (S&P)"
     }
