@@ -7,10 +7,10 @@
 <title>Administração | Renda Fixa da Semana</title>
 <link rel="icon" href="assets/favicon.png" type="image/png">
 <style>
-:root{--navy:#003a96;--navy-2:#1a00fe;--gold:#1a00fe;--line:#dfe3ec;--bg:#f4f5f8;--muted:#5d6577;--ok:#0f7b4a;--bad:#b42318}
+:root{--navy:#14213d;--navy-2:#1f3864;--gold:#c9a227;--line:#dfe3ec;--bg:#f4f5f8;--muted:#5d6577;--ok:#0f7b4a;--bad:#b42318}
 *{box-sizing:border-box}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:#1b1f2a;font-size:14.5px}
-header{background:linear-gradient(150deg,#1a00fe,#003a96);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+header{background:var(--navy);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
 header b{font-size:16px} header .sp{flex:1}
 header a{color:#c9d1e3;font-size:13px}
 .wrap{max-width:920px;margin:0 auto;padding:16px}
@@ -26,7 +26,7 @@ textarea.big{min-height:300px}
 @media(max-width:620px){.row,.row3{grid-template-columns:1fr}}
 button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-weight:650;color:var(--navy);cursor:pointer}
 button.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
-button.gold{background:#ecebff;color:#1a00fe;border-color:#c9c4ff}
+button.gold{background:var(--gold);color:#1b1f2a;border-color:var(--gold)}
 button.ghost{border:0;background:none;color:var(--bad);padding:6px}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .item{display:grid;grid-template-columns:2fr 1fr 1.4fr auto;gap:6px;margin-bottom:6px;align-items:center}
@@ -45,7 +45,7 @@ details summary{cursor:pointer;font-weight:650;color:var(--navy)}
 </head>
 <body>
 <header>
-  <img src="assets/logo-white.png" alt="Vulture" style="height:26px"><b>Renda Fixa da Semana · Administração</b><span class="sp"></span>
+  <img src="assets/logo-vulture-branco.png" alt="Vulture" style="height:30px"><span style="width:1px;height:26px;background:rgba(255,255,255,.4)"></span><img src="assets/logo-xp-negativo.png" alt="XP" style="height:30px"><b>Renda Fixa da Semana · Administração</b><span class="sp"></span>
   <a href="./" target="_blank">Ver página pública ↗</a>
 </header>
 <div class="wrap">
