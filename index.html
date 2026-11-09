@@ -93,14 +93,12 @@ td.now{font-weight:750;color:var(--navy)}
 .cta a{display:inline-flex;align-items:center;gap:10px;background:#1fa855;color:#fff;text-decoration:none;font-weight:700;padding:13px 22px;border-radius:999px;
   box-shadow:0 8px 24px rgba(31,168,85,.35)}
 .cta svg{width:20px;height:20px}
-.share{display:flex;gap:8px;flex-wrap:wrap}
-.share button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;font-weight:650;color:var(--navy);cursor:pointer;font-size:13.5px}
 footer{color:var(--muted);font-size:12px;padding:8px 0 90px}
 footer p{margin:0 0 8px}
 .err{background:#fff4f2;color:#7a271a;border:1px solid #fecdca;padding:14px;border-radius:12px}
 .skeleton{height:14px;background:linear-gradient(90deg,#eef0f5,#f7f8fb,#eef0f5);border-radius:6px;margin:8px 0;animation:sh 1.2s infinite}
 @keyframes sh{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
-@media print{.cta,nav.jump,.share{display:none}header.hero{padding-bottom:20px}main{margin-top:0}}
+@media print{.cta,nav.jump{display:none}header.hero{padding-bottom:20px}main{margin-top:0}}
 </style>
 </head>
 <body>
@@ -218,8 +216,6 @@ footer p{margin:0 0 8px}
       html += `</tbody></table></div></section>`;
     }
 
-    html += `<section class="card"><h2>Compartilhar</h2><p class="lead">Envie esta página para quem também investe.</p><div class="share">
-      <button id="btnShare">Compartilhar link</button><button id="btnCopy">Copiar link</button></div></section>`;
 
     $('#app').innerHTML = html;
     $('#fontes').textContent = d.fontes ? 'Fontes: ' + d.fontes : '';
@@ -242,13 +238,6 @@ footer p{margin:0 0 8px}
       if(t.scrollHeight <= 440){ t.classList.remove('clamp'); mr.remove(); }
       else mr.addEventListener('click',()=>{ t.classList.toggle('clamp'); mr.textContent = t.classList.contains('clamp') ? 'Ler resumo completo ▾' : 'Mostrar menos ▴'; });
     }
-    const url = location.href.split('#')[0];
-    $('#btnShare').addEventListener('click',()=>{
-      if(navigator.share) navigator.share({title:document.title,url}).catch(()=>{});
-      else window.open('https://wa.me/?text='+encodeURIComponent(document.title+' '+url),'_blank');
-    });
-    $('#btnCopy').addEventListener('click',()=>{ navigator.clipboard?.writeText(url).then(()=>{ $('#btnCopy').textContent='Link copiado ✓'; }); });
-
     const num = (d.contato?.whatsapp||'').replace(/\D/g,'');
     if(num){
       $('#ctaLink').href = 'https://wa.me/'+num+'?text='+encodeURIComponent(d.contato.mensagem||'');
