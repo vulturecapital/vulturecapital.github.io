@@ -8,6 +8,7 @@ Página pública (celular primeiro) com indicadores, sugestão de alocação por
 | `admin.html` | Tela de administração: edita aplicações, alocação, indicadores e textos e publica no GitHub |
 | `dados.json` | Conteúdo da página |
 | `fundos.html` | Carteira recomendada de fundos por perfil (Conservador, Moderado, Agressivo) |
+| `previdencia.html` / `previdencia.json` | Carteira recomendada de previdência (PGBL/VGBL) por perfil |
 | `fundos.json` | Conteúdo da carteira de fundos: fundos, métricas, pesos por perfil e substitutos para não qualificado |
 | `assets/` | Ícone e imagem de pré-visualização do link no WhatsApp |
 
@@ -31,3 +32,4 @@ Se as duas edições acontecerem ao mesmo tempo, a tela de administração avisa
 ## Carteira de fundos
 - Endereço: **https://vulturecapital.github.io/fundos.html** (perfis direto pelo link: `#conservador`, `#moderado`, `#agressivo`).
 - Conteúdo em `fundos.json`, gerado pelo Claude a partir do HUB XP e das cotas da CVM. Atualização: rodar de novo a seleção e substituir o arquivo.
+- Previdência: **https://vulturecapital.github.io/previdencia.html** (mesmos perfis por link). Conteúdo em `previdencia.json`.
