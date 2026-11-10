@@ -7,6 +7,8 @@ Página pública (celular primeiro) com indicadores, sugestão de alocação por
 | `index.html` | Página que o cliente abre pelo link do WhatsApp |
 | `admin.html` | Tela de administração: edita aplicações, alocação, indicadores e textos e publica no GitHub |
 | `dados.json` | Conteúdo da página |
+| `fundos.html` | Carteira recomendada de fundos por perfil (Conservador, Moderado, Agressivo) |
+| `fundos.json` | Conteúdo da carteira de fundos: fundos, métricas, pesos por perfil e substitutos para não qualificado |
 | `assets/` | Ícone e imagem de pré-visualização do link no WhatsApp |
 
 ## Colocar no ar (uma vez)
@@ -25,3 +27,7 @@ GitHub → **Settings → Developer settings → Personal access tokens → Fine
 - **Resumo do mercado, comentário, indicadores e Focus (Claude):** atualizados no `dados.json` a cada semana, junto com a aba *Resumo do Mercado* da planilha.
 
 Se as duas edições acontecerem ao mesmo tempo, a tela de administração avisa antes de sobrescrever.
+
+## Carteira de fundos
+- Endereço: **https://vulturecapital.github.io/fundos.html** (perfis direto pelo link: `#conservador`, `#moderado`, `#agressivo`).
+- Conteúdo em `fundos.json`, gerado pelo Claude a partir do HUB XP e das cotas da CVM. Atualização: rodar de novo a seleção e substituir o arquivo.
