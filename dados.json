@@ -1,5 +1,5 @@
 {
- "atualizado_em": "2026-11-09T14:17:07.349Z",
+ "atualizado_em": "2026-11-10T18:45:22.362Z",
  "semana": "02/11 a 06/11/2026",
  "titulo": "Recomendação semanal – Renda Fixa",
  "contato": {
@@ -151,12 +151,12 @@
    "itens": [
     {
      "nome": "Natura - 03/05/2028",
-     "taxa": "7,13% em dólar",
+     "taxa": "7,33% em dólar",
      "detalhe": ""
     },
     {
      "nome": "Brazil Sovereign - 18/03/2031",
-     "taxa": "5,67% em dólar",
+     "taxa": "5,58% em dólar",
      "detalhe": ""
     }
    ]
@@ -166,12 +166,12 @@
    "itens": [
     {
      "nome": "LTN 2032",
-     "taxa": "15,63%",
+     "taxa": "15,15%",
      "detalhe": ""
     },
     {
      "nome": "NTN-B 2040",
-     "taxa": "IPCA + 7,69%",
+     "taxa": "IPCA + 7,46%",
      "detalhe": ""
     },
     {
