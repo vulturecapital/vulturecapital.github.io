@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Vulture Capital | Carteira Recomendada de Fundos">
-<meta property="og:description" content="Fundos selecionados por perfil: conservador, moderado e agressivo. Escolhidos pelo índice de Sharpe e pela consistência dos gestores.">
+<meta property="og:description" content="Fundos selecionados por perfil: conservador, moderado e agressivo. Todos abertos a investidores em geral, escolhidos pela qualidade nos últimos 3 anos.">
 <meta property="og:image" content="https://vulturecapital.github.io/assets/og-image.png">
 <meta property="og:url" content="https://vulturecapital.github.io/fundos.html">
 <meta property="og:locale" content="pt_BR">
@@ -118,7 +118,7 @@ footer p{margin:0 0 8px}
   <div class="wrap">
     <div class="brand"><img src="assets/logo-vulture-xp-branco.png?v=4" width="883" height="384" alt="Vulture Investimentos | XP Investimentos"></div>
     <h1 id="titulo">Carteira Recomendada de Fundos</h1>
-    <div class="sub">Fundos abertos na XP, escolhidos por uma nota que combina o índice de Sharpe (retorno sobre o CDI por unidade de risco), o prazo de resgate e a consistência dos gestores.</div>
+    <div class="sub">Fundos abertos na XP para investidores em geral, escolhidos pela qualidade nos últimos 3 anos: rentabilidade, consistência, risco e prazo de resgate.</div>
     <div class="stamp"><span class="dot"></span><span id="atualizado">Carregando…</span></div>
     <nav class="site" aria-label="Páginas do site"><a href="./">Renda Fixa</a><a href="fundos.html" aria-current="page">Fundos</a><a href="previdencia.html">Previdência</a></nav>
   </div>
@@ -216,7 +216,7 @@ function render(){
    <div class="chart">${chart(perfil)}</div>
    <p class="small">Simulação com os pesos atuais e rebalanceamento mensal, de ${esc(D.janela_carteira)}. Rentabilidade líquida de taxas e bruta de IR.</p>
   </section>`;
-  h+=`<section class="card" id="fundos"><h2>Fundos do perfil ${perfil}</h2><p class="lead">Retorno, volatilidade e Sharpe na janela indicada em "Histórico" (5 anos: nov/2021 a out/2026; 3 anos: nov/2023 a out/2026). "Anos acima do CDI" conta 2022 a 2026 (2026 até outubro).</p>`;
+  h+=`<section class="card" id="fundos"><h2>Fundos do perfil ${perfil}</h2><p class="lead">Retorno, volatilidade e Sharpe dos últimos 3 anos (nov/2023 a out/2026) para todos os fundos. "Histórico" indica há quanto tempo o fundo (ou o master que ele replica) tem cotas. "Anos acima do CDI" conta 2022 a 2026 (2026 até outubro).</p>`;
   blocos.forEach(([b,desc])=>{
     h+=`<div class="block-h"><h3>${b}</h3><span class="p">${bw[b]}%</span></div><p class="block-d">${desc}</p>`;
     Object.keys(w).filter(c=>F[c].bloco===b).sort((a,c)=>w[c]-w[a]).forEach(c=>{
@@ -234,11 +234,15 @@ function render(){
   });
   const sub=D.substitutos[perfil];
   if(sub) h+=`<div class="subst"><strong>Investidores não qualificados:</strong> Troque os fundos exclusivos para investidor qualificado por estas alternativas abertas a todos, com o mesmo peso:<ul>${sub.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
+  const qo=(D.opcionais_qualificados||{})[perfil];
+  if(qo&&qo.length) h+=`<div class="subst"><strong>Investidores qualificados (opcional):</strong> Quem é investidor qualificado pode trocar estes fundos por alternativas exclusivas que tiveram desempenho melhor, com o mesmo peso:<ul>${qo.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong> <small>(${n(F[b].isento?F[b].pct_cdi_bruto:F[b].pct_cdi,0)}% do CDI em 3 anos; resgate ${prazo(F[b].cotizacao)})</small></li>`).join('')}</ul></div>`;
   h+=`</section>
   <section class="card txt" id="metodo"><h2>Como escolhemos</h2>
    <p>Partimos de todos os fundos abertos para captação na XP (592 fundos, sem FIIs e FIPs), mais os FIDCs abertos com pelo menos 3 anos de histórico. Para cada um calculamos, com as cotas diárias da CVM (nos FIDCs, as cotas mensais), retorno, volatilidade, pior queda e o índice de Sharpe, que mede quanto o fundo rende acima do CDI para cada unidade de risco.</p>
-   <h3>Consistência</h3><p>Só entram fundos com pelo menos 3 anos de histórico e patrimônio acima de R$ 50 milhões; fundos com 3 anos e com 5 anos ou mais concorrem nas mesmas condições. Também exigimos que o fundo tenha rendido acima do CDI em pelo menos metade dos anos-calendário (exceto ações e internacional). Fundos novos que replicam um fundo master foram avaliados pelo histórico do master.</p>
-   <h3>Nota de seleção</h3><p>Entre os aprovados de cada categoria, os fundos são ordenados por uma nota que dá o maior peso ao Sharpe e também considera o prazo de resgate (quanto mais curto, melhor). Cada critério é comparado dentro da própria categoria, para que um fundo de caixa não concorra com um de ações. Evitamos repetir gestoras ou estratégias na mesma categoria. Quando um fundo de resgate bem mais curto fica perto do escolhido (rentabilidade até 0,5 ponto percentual ao ano menor e Sharpe no mínimo 90% do dele), ficamos com o de resgate mais curto.</p>
+   <h3>Quem pode entrar</h3><p>Fundos com pelo menos 3 anos de histórico, patrimônio acima de R$ 50 milhões e retorno acima do CDI nos últimos 3 anos. Quando o fundo tem 5 anos ou mais, ele também não pode ter ficado abaixo do CDI no período longo (exceto ações e internacional). Fundos novos que replicam um fundo master foram avaliados pelo histórico do master.</p>
+   <h3>Como comparamos</h3><p>Todos os fundos são comparados na mesma janela de 3 anos e só com fundos da mesma categoria. Em caixa, crédito e incentivados, olhamos o % do CDI, a frequência de meses acima do CDI e o prazo de resgate. Em crédito high yield e FIDCs, o % do CDI, a pior queda e, com mais peso, a liquidez. Em multimercados, ações e internacional, o índice de Sharpe e a pior queda.</p>
+   <h3>Escolha final e estabilidade</h3><p>Entre fundos de qualidade praticamente igual (até 10% abaixo do melhor da categoria), a escolha considera o fundo que já estava na carteira, a diversificação e as condições comerciais na XP. Um fundo da carteira só é trocado quando sai desse grupo. Só usamos um segundo fundo da mesma gestora se o total dela ficar em até 15% da carteira, e não repetimos fundos que seguem o mesmo índice. A revisão é trimestral.</p>
+   <h3>Investidores qualificados</h3><p>As carteiras usam apenas fundos abertos a todos os investidores. Para quem é qualificado, indicamos trocas opcionais por fundos exclusivos que tiveram desempenho claramente melhor na mesma categoria.</p>
    <h3>O que ficou de fora</h3><p>Fundos prefixados, de inflação e de debêntures sem hedge: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. Para exposição à inflação, preferimos títulos públicos ou bancários diretos (veja a Renda Fixa da Semana).</p>
   </section>`;
   $('#app').innerHTML=h;

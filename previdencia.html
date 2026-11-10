@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Vulture Capital | Carteira Recomendada de Previdência">
-<meta property="og:description" content="Planos de previdência (PGBL e VGBL) selecionados por perfil: conservador, moderado e agressivo. Escolhidos pelo índice de Sharpe e pela consistência dos gestores.">
+<meta property="og:description" content="Planos de previdência (PGBL e VGBL) selecionados por perfil: conservador, moderado e agressivo. Escolhidos pela qualidade nos últimos 3 anos.">
 <meta property="og:image" content="https://vulturecapital.github.io/assets/og-image.png">
 <meta property="og:url" content="https://vulturecapital.github.io/previdencia.html">
 <meta property="og:locale" content="pt_BR">
@@ -118,7 +118,7 @@ footer p{margin:0 0 8px}
   <div class="wrap">
     <div class="brand"><img src="assets/logo-vulture-xp-branco.png?v=4" width="883" height="384" alt="Vulture Investimentos | XP Investimentos"></div>
     <h1 id="titulo">Carteira Recomendada de Previdência</h1>
-    <div class="sub">Planos PGBL e VGBL da XP Seguros abertos para contratação, escolhidos pelo índice de Sharpe (retorno sobre o CDI por unidade de risco) e pela consistência dos gestores.</div>
+    <div class="sub">Planos PGBL e VGBL da XP Seguros abertos para contratação, escolhidos pela qualidade nos últimos 3 anos: rentabilidade, consistência, risco e prazo de resgate.</div>
     <div class="stamp"><span class="dot"></span><span id="atualizado">Carregando…</span></div>
     <nav class="site" aria-label="Páginas do site"><a href="./">Renda Fixa</a><a href="fundos.html">Fundos</a><a href="previdencia.html" aria-current="page">Previdência</a></nav>
   </div>
@@ -215,7 +215,7 @@ function render(){
    <div class="chart">${chart(perfil)}</div>
    <p class="small">Simulação com os pesos atuais e rebalanceamento mensal, de ${esc(D.janela_carteira)}. Rentabilidade líquida de taxas e bruta de IR.</p>
   </section>`;
-  h+=`<section class="card" id="fundos"><h2>Planos do perfil ${perfil}</h2><p class="lead">Retorno, volatilidade e Sharpe na janela indicada em "Histórico" (5 anos: nov/2021 a out/2026; 3 anos: nov/2023 a out/2026), já líquidos das taxas do plano. Quando o plano é recente, usamos o histórico do fundo master e descontamos a diferença de taxas medida no período em que os dois existem. "Anos acima do CDI" conta 2022 a 2026 (2026 até outubro).</p>`;
+  h+=`<section class="card" id="fundos"><h2>Planos do perfil ${perfil}</h2><p class="lead">Retorno, volatilidade e Sharpe dos últimos 3 anos (nov/2023 a out/2026) para todos os planos, já líquidos das taxas do plano. "Histórico" indica há quanto tempo o plano (ou o master) tem cotas. Quando o plano é recente, usamos o histórico do fundo master e descontamos a diferença de taxas medida no período em que os dois existem. "Anos acima do CDI" conta 2022 a 2026 (2026 até outubro).</p>`;
   blocos.forEach(([b,desc])=>{
     h+=`<div class="block-h"><h3>${b}</h3><span class="p">${bw[b]}%</span></div><p class="block-d">${desc}</p>`;
     Object.keys(w).filter(c=>F[c].bloco===b).sort((a,c)=>w[c]-w[a]).forEach(c=>{
@@ -236,8 +236,9 @@ function render(){
   h+=`</section>
   <section class="card txt" id="metodo"><h2>Como escolhemos</h2>
    <p>Partimos de todos os planos de previdência abertos para contratação na XP (195 planos da XP Seguros). Para cada um calculamos, com as cotas diárias da CVM, retorno, volatilidade, pior queda e o índice de Sharpe, que mede quanto o plano rende acima do CDI para cada unidade de risco.</p>
-   <h3>Consistência e custo</h3><p>Só entram planos com pelo menos 3 anos de histórico; planos com 3 anos e com 5 anos ou mais concorrem nas mesmas condições. Muitos planos foram relançados há pouco tempo: nesses casos usamos o histórico do fundo master e descontamos a diferença de taxa medida entre o plano e o master. Assim o retorno mostrado é o que o participante teria recebido.</p>
-   <h3>Nota de seleção</h3><p>Entre os aprovados de cada categoria, os planos são ordenados por uma nota que dá o maior peso ao Sharpe e também considera o prazo de resgate (quanto mais curto, melhor), sempre comparando planos da mesma categoria. Quando um plano de resgate bem mais curto fica perto do escolhido (rentabilidade até 0,5 ponto percentual ao ano menor e Sharpe no mínimo 90% do dele), ficamos com o de resgate mais curto.</p>
+   <h3>Quem pode entrar</h3><p>Planos com pelo menos 3 anos de histórico e retorno acima do CDI nos últimos 3 anos; quando há 5 anos ou mais de histórico, o plano também não pode ter ficado abaixo do CDI no período longo (exceto renda variável e internacional). Muitos planos foram relançados há pouco tempo: nesses casos usamos o histórico do fundo master e descontamos a diferença de taxa medida entre o plano e o master. Assim o retorno mostrado é o que o participante teria recebido.</p>
+   <h3>Como comparamos</h3><p>Todos os planos são comparados na mesma janela de 3 anos e só com planos da mesma categoria. Em caixa e crédito, olhamos o % do CDI, a frequência de meses acima do CDI e o prazo de resgate; em crédito high yield, o % do CDI, a pior queda e, com mais peso, a liquidez; em multimercados, renda variável e internacional, o índice de Sharpe e a pior queda.</p>
+   <h3>Escolha final e estabilidade</h3><p>Entre planos de qualidade praticamente igual (até 10% abaixo do melhor da categoria), a escolha considera o plano que já estava na carteira, a diversificação e as condições comerciais na XP. Um plano da carteira só é trocado quando sai desse grupo. Só usamos um segundo plano da mesma gestora se o total dela ficar em até 15% da carteira, e a revisão é trimestral. Na previdência quase todos os planos de crédito high yield, renda variável e internacional são para investidor qualificado; para os demais, indicamos as trocas no quadro abaixo da carteira.</p>
    <h3>O que ficou de fora</h3><p>Planos de renda fixa prefixada e de inflação: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. A maioria dos planos de ações também ficou abaixo do CDI no período; só os dois long biased da carteira tiveram retorno ajustado ao risco positivo.</p>
    <h3>PGBL ou VGBL e tributação</h3><p>Todos os planos estão disponíveis em PGBL e VGBL. PGBL costuma ser melhor para quem declara IR no modelo completo (permite deduzir até 12% da renda bruta tributável); VGBL para os demais. Na tabela regressiva, o IR cai de 35% para 10% após dez anos. Confirme a escolha com seu assessor.</p>
   </section>`;
