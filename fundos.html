@@ -118,7 +118,7 @@ footer p{margin:0 0 8px}
   <div class="wrap">
     <div class="brand"><img src="assets/logo-vulture-xp-branco.png?v=4" width="883" height="384" alt="Vulture Investimentos | XP Investimentos"></div>
     <h1 id="titulo">Carteira Recomendada de Fundos</h1>
-    <div class="sub">Fundos abertos na XP, escolhidos pelo índice de Sharpe (retorno sobre o CDI por unidade de risco) e pela consistência dos gestores.</div>
+    <div class="sub">Fundos abertos na XP, escolhidos por uma nota que combina o índice de Sharpe (retorno sobre o CDI por unidade de risco), o prazo de resgate e a consistência dos gestores.</div>
     <div class="stamp"><span class="dot"></span><span id="atualizado">Carregando…</span></div>
     <nav class="site" aria-label="Páginas do site"><a href="./">Renda Fixa</a><a href="fundos.html" aria-current="page">Fundos</a><a href="previdencia.html">Previdência</a></nav>
   </div>
@@ -224,7 +224,7 @@ function render(){
       h+=`<article class="fund"><div class="top"><div><div class="n">${esc(f.nome)}</div><div class="g">${esc(f.gestora)} · CNPJ ${cnpj(c)}</div></div><div class="w">${w[c]}%</div></div>
        <div class="tags">${f.publico==='Qualificado'?'<span class="tag q">Investidor qualificado</span>':'<span class="tag todos">Todos os investidores</span>'}${f.isento?'<span class="tag isento">Isento de IR</span>':''}<span class="tag">Histórico: ${f.janela}</span></div>
        <dl class="facts">
-        <div><dt>Liquidez</dt><dd>${prazo(f.cotizacao)}<small>cotização; pagamento +${prazo(f.liquidacao).replace('D+','')}</small></dd></div>
+        <div><dt>Liquidez</dt><dd>${prazo(f.cotizacao)}<small>${f.liquidez_obs?esc(f.liquidez_obs):`cotização; pagamento +${prazo(f.liquidacao).replace('D+','')}`}</small></dd></div>
         <div><dt>Aplicação inicial</dt><dd>${brl(f.aplic_min)}</dd></div>
         <div><dt>Retorno ao ano</dt><dd>${n(f.ann)}%<small>${n(pc,0)}% do CDI${f.isento?' (bruto)':''}</small></dd></div>
         <div><dt>Volatilidade · Sharpe</dt><dd>${n(f.vol)}% · ${n(sh)}${f.base_sharpe==='mensal'?'*':''}<small>Anos acima do CDI: ${anos(f)}</small></dd></div>
@@ -237,7 +237,8 @@ function render(){
   h+=`</section>
   <section class="card txt" id="metodo"><h2>Como escolhemos</h2>
    <p>Partimos de todos os fundos abertos para captação na XP (592 fundos, sem FIIs e FIPs), mais os FIDCs abertos com pelo menos 3 anos de histórico. Para cada um calculamos, com as cotas diárias da CVM (nos FIDCs, as cotas mensais), retorno, volatilidade, pior queda e o índice de Sharpe, que mede quanto o fundo rende acima do CDI para cada unidade de risco.</p>
-   <h3>Consistência</h3><p>Só entram fundos com pelo menos 3 anos de histórico, com preferência por 5 anos ou mais. Também olhamos em quantos anos-calendário o fundo rendeu acima do CDI. Fundos novos que replicam um fundo master foram avaliados pelo histórico do master.</p>
+   <h3>Consistência</h3><p>Só entram fundos com pelo menos 3 anos de histórico e patrimônio acima de R$ 50 milhões; fundos com 3 anos e com 5 anos ou mais concorrem nas mesmas condições. Também exigimos que o fundo tenha rendido acima do CDI em pelo menos metade dos anos-calendário (exceto ações e internacional). Fundos novos que replicam um fundo master foram avaliados pelo histórico do master.</p>
+   <h3>Nota de seleção</h3><p>Entre os aprovados de cada categoria, os fundos são ordenados por uma nota que dá o maior peso ao Sharpe e também considera o prazo de resgate (quanto mais curto, melhor). Cada critério é comparado dentro da própria categoria, para que um fundo de caixa não concorra com um de ações. Evitamos repetir gestoras ou estratégias na mesma categoria.</p>
    <h3>O que ficou de fora</h3><p>Fundos prefixados, de inflação e de debêntures sem hedge: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. Para exposição à inflação, preferimos títulos públicos ou bancários diretos (veja a Renda Fixa da Semana).</p>
   </section>`;
   $('#app').innerHTML=h;

@@ -1,7 +1,7 @@
 {
  "titulo": "Carteira Recomendada de Previdência",
  "data_base": "30/10/2026",
- "atualizado_em": "09/11/2026",
+ "atualizado_em": "10/11/2026",
  "janela_carteira": "nov/2023 a out/2026",
  "funds": [
   {
@@ -183,42 +183,6 @@
     "2026": 11.7
    },
    "comentario": "Carteira diversificada de crédito high grade (debêntures, cotas seniores de FIDCs, CRIs, CRAs, LFs e CDBs de grandes bancos), indexada ao CDI. Objetivo de CDI + 1,0% a 1,5% ao ano."
-  },
-  {
-   "cnpj": "52955482000137",
-   "nome": "Root HY XP Seg Prev FIC FIRF CP",
-   "gestora": "Root Capital",
-   "bloco": "Crédito High Yield",
-   "grupo": "Renda Fixa",
-   "publico": "Qualificado",
-   "cotizacao": "D+131 du",
-   "liquidacao": "D+1 du",
-   "aplic_min": 100,
-   "tx_adm": 1.45,
-   "tx_perf": 20,
-   "max_rv": 0,
-   "inicio_plano": "2024-12-18",
-   "historico": "3 anos (fundo master, com as taxas do plano descontadas)",
-   "ann": 13.98,
-   "vol": 0.63,
-   "sharpe": 1.62,
-   "mdd": -0.34,
-   "pct_cdi": 109.0,
-   "anos": {
-    "2022": null,
-    "2023": null,
-    "2024": 12.8,
-    "2025": 14.76,
-    "2026": 10.86
-   },
-   "cdi_anos": {
-    "2022": 12.37,
-    "2023": 13.05,
-    "2024": 10.87,
-    "2025": 14.31,
-    "2026": 11.7
-   },
-   "comentario": "Crédito high yield, crédito estruturado e situações especiais, sem foco setorial e com limites por emissor e setor. Busca retorno bem acima do CDI no longo prazo."
   },
   {
    "cnpj": "44815039000132",
@@ -471,6 +435,114 @@
     "2026": 11.7
    },
    "comentario": "Combina 40% em bolsa americana e 60% em renda fixa pós-fixada. Diversifica o plano com exposição ao exterior e oscilação moderada."
+  },
+  {
+   "cnpj": "43636010000120",
+   "nome": "XP Corporate Top CP XP Seg Prev FIC FIM",
+   "gestora": "XP Asset",
+   "bloco": "Crédito Privado",
+   "grupo": "Multimercado",
+   "publico": "Qualificado",
+   "cotizacao": "D+6 du",
+   "liquidacao": "D+1 du",
+   "aplic_min": 100,
+   "tx_adm": 0.8,
+   "tx_perf": 20,
+   "max_rv": 0,
+   "inicio_plano": "2022-12-28",
+   "historico": "3 anos",
+   "ann": 13.46,
+   "vol": 0.58,
+   "sharpe": 0.76,
+   "mdd": -0.4,
+   "pct_cdi": 104.0,
+   "anos": {
+    "2022": null,
+    "2023": 13.47,
+    "2024": 12.06,
+    "2025": 14.53,
+    "2026": 11.5
+   },
+   "cdi_anos": {
+    "2022": 12.37,
+    "2023": 13.05,
+    "2024": 10.87,
+    "2025": 14.31,
+    "2026": 11.7
+   },
+   "comentario": "Crédito privado corporativo gerido pela XP Asset: debêntures e outros títulos de empresas com boa qualidade de crédito, buscando superar o CDI com oscilação baixa. Resgate em cerca de uma semana."
+  },
+  {
+   "cnpj": "51675926000118",
+   "nome": "Brave Prev XP Seguros FIC FIRF CP",
+   "gestora": "Brave Asset",
+   "bloco": "Crédito Privado",
+   "grupo": "Renda Fixa",
+   "publico": "Qualificado",
+   "cotizacao": "D+20 du",
+   "liquidacao": "D+1 du",
+   "aplic_min": 100,
+   "tx_adm": 0.8,
+   "tx_perf": 15,
+   "max_rv": 0,
+   "inicio_plano": "2023-12-07",
+   "historico": "3 anos (fundo master, com as taxas do plano descontadas)",
+   "ann": 13.36,
+   "vol": 0.15,
+   "sharpe": 2.7,
+   "mdd": -0.04,
+   "pct_cdi": 103.0,
+   "anos": {
+    "2022": null,
+    "2023": null,
+    "2024": 11.42,
+    "2025": 14.7,
+    "2026": 11.69
+   },
+   "cdi_anos": {
+    "2022": 12.37,
+    "2023": 13.05,
+    "2024": 10.87,
+    "2025": 14.31,
+    "2026": 11.7
+   },
+   "comentario": "Versão previdenciária da estratégia de crédito da Brave: títulos de crédito privado de emissores selecionados, buscando superar o CDI com baixa oscilação. Histórico avaliado pelo fundo master, com as taxas do plano descontadas."
+  },
+  {
+   "cnpj": "60749195000107",
+   "nome": "Augme XP Seg Prev HY FIF Multimercado CP",
+   "gestora": "Augme Capital",
+   "bloco": "Crédito High Yield",
+   "grupo": "Multimercado",
+   "publico": "Qualificado",
+   "cotizacao": "D+130 du",
+   "liquidacao": "D+1 du",
+   "aplic_min": 100,
+   "tx_adm": 1.5,
+   "tx_perf": 20,
+   "max_rv": 0,
+   "inicio_plano": "2025-08-06",
+   "historico": "5 anos (fundo master, com as taxas do plano descontadas)",
+   "ann": 13.87,
+   "vol": 1.57,
+   "sharpe": 0.71,
+   "mdd": -1.18,
+   "pct_cdi": 111.0,
+   "anos": {
+    "2022": 15.5,
+    "2023": 10.01,
+    "2024": 14.03,
+    "2025": 15.26,
+    "2026": 10.96
+   },
+   "cdi_anos": {
+    "2022": 12.37,
+    "2023": 13.05,
+    "2024": 10.87,
+    "2025": 14.31,
+    "2026": 11.7
+   },
+   "comentario": "Crédito high yield da Augme: emissões de empresas médias e operações estruturadas, com prêmio maior sobre o CDI. Resgate longo (D+130 úteis). Histórico avaliado pelo fundo master, com as taxas do plano descontadas."
   }
  ],
  "pesos": {
@@ -484,26 +556,26 @@
   "Moderado": {
    "58543779000171": 10,
    "62213987000180": 5,
-   "52986170000190": 10,
-   "32319225000100": 10,
    "44230868000153": 10,
-   "52955482000137": 5,
+   "43636010000120": 10,
+   "51675926000118": 10,
    "44815039000132": 10,
+   "60749195000107": 5,
+   "30998045000168": 10,
    "42535297000130": 10,
    "40679129000192": 5,
-   "30998045000168": 10,
    "40526764000130": 10,
    "41610532000128": 5
   },
   "Agressivo": {
    "58543779000171": 5,
    "44230868000153": 10,
-   "52986170000190": 5,
-   "52955482000137": 5,
+   "43636010000120": 5,
    "44815039000132": 10,
+   "60749195000107": 5,
+   "30998045000168": 10,
    "42535297000130": 10,
    "40679129000192": 10,
-   "30998045000168": 10,
    "40526764000130": 20,
    "40781467000130": 5,
    "41610532000128": 10
@@ -559,99 +631,99 @@
    ]
   },
   "Moderado": {
-   "ann": 15.19,
+   "ann": 15.11,
    "cdi": 12.96,
-   "pct_cdi": 120.0,
+   "pct_cdi": 119.0,
    "vol": 1.51,
-   "sharpe": 1.35,
+   "sharpe": 1.31,
    "mdd": 0.0,
    "meses_acima_cdi": 67.0,
    "serie": [
     1.0,
-    1.0164,
-    1.0309,
-    1.0363,
-    1.0477,
-    1.0607,
-    1.0637,
-    1.0718,
-    1.0826,
-    1.0938,
-    1.1065,
-    1.1146,
-    1.1269,
-    1.1403,
-    1.1503,
-    1.1647,
-    1.1748,
-    1.1845,
-    1.2117,
-    1.2346,
-    1.2526,
-    1.2634,
-    1.2857,
-    1.3043,
-    1.3222,
-    1.3374,
-    1.3545,
-    1.3749,
-    1.387,
-    1.3903,
-    1.4151,
-    1.4376,
-    1.4556,
-    1.4693,
-    1.4883,
-    1.514,
-    1.5285
+    1.0156,
+    1.0297,
+    1.0348,
+    1.046,
+    1.0587,
+    1.0617,
+    1.0696,
+    1.0802,
+    1.091,
+    1.1035,
+    1.1114,
+    1.1238,
+    1.1374,
+    1.1478,
+    1.1621,
+    1.172,
+    1.1817,
+    1.2095,
+    1.2325,
+    1.2503,
+    1.2611,
+    1.2836,
+    1.3017,
+    1.3199,
+    1.335,
+    1.3517,
+    1.372,
+    1.3843,
+    1.3883,
+    1.413,
+    1.4352,
+    1.4531,
+    1.4664,
+    1.4855,
+    1.5104,
+    1.5254
    ]
   },
   "Agressivo": {
-   "ann": 16.23,
+   "ann": 16.21,
    "cdi": 12.96,
    "pct_cdi": 129.0,
-   "vol": 2.94,
+   "vol": 2.92,
    "sharpe": 1.01,
-   "mdd": -0.58,
-   "meses_acima_cdi": 64.0,
+   "mdd": -0.57,
+   "meses_acima_cdi": 67.0,
    "serie": [
     1.0,
-    1.0271,
-    1.0465,
-    1.0461,
-    1.0588,
-    1.0735,
-    1.0673,
-    1.0743,
-    1.0858,
-    1.1,
-    1.1142,
-    1.1178,
-    1.1297,
-    1.1439,
-    1.1525,
-    1.1713,
-    1.179,
-    1.1905,
-    1.2302,
+    1.0265,
+    1.0453,
+    1.0449,
+    1.0577,
+    1.0724,
+    1.0663,
+    1.0732,
+    1.0847,
+    1.099,
+    1.1131,
+    1.1167,
+    1.1288,
+    1.1431,
+    1.1519,
+    1.1708,
+    1.1785,
+    1.1899,
+    1.23,
     1.2627,
-    1.2832,
+    1.2831,
     1.2877,
-    1.3191,
-    1.3411,
-    1.3626,
-    1.3824,
-    1.4015,
-    1.4303,
-    1.4435,
-    1.4378,
-    1.4668,
-    1.4824,
-    1.4977,
-    1.5121,
-    1.534,
-    1.5682,
-    1.57
+    1.3193,
+    1.3408,
+    1.3624,
+    1.3823,
+    1.401,
+    1.43,
+    1.4432,
+    1.4379,
+    1.4671,
+    1.4829,
+    1.4982,
+    1.5122,
+    1.5344,
+    1.5675,
+    1.5696
    ]
   },
   "CDI_serie": [
@@ -698,14 +770,22 @@
   "Moderado": [
    [
     "44230868000153",
+    "52986170000190"
+   ],
+   [
+    "43636010000120",
     "32319225000100"
    ],
    [
-    "52955482000137",
+    "51675926000118",
     "52986170000190"
    ],
    [
     "44815039000132",
+    "32319225000100"
+   ],
+   [
+    "60749195000107",
     "52986170000190"
    ],
    [
@@ -720,15 +800,19 @@
   "Agressivo": [
    [
     "44230868000153",
-    "32319225000100"
+    "52986170000190"
    ],
    [
-    "52955482000137",
-    "52986170000190"
+    "43636010000120",
+    "32319225000100"
    ],
    [
     "44815039000132",
     "52986170000190"
+   ],
+   [
+    "60749195000107",
+    "32319225000100"
    ],
    [
     "40526764000130",
@@ -740,7 +824,7 @@
    ],
    [
     "41610532000128",
-    "42535297000130"
+    "30998045000168"
    ]
   ]
  }
