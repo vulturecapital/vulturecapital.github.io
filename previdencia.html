@@ -62,6 +62,7 @@ section.card{background:var(--card);border-radius:var(--radius);padding:20px 18p
 .kpi .l{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
 .kpi .v{font-size:clamp(18px,5.2vw,22px);white-space:nowrap;font-weight:750;color:var(--navy);margin:2px 0;font-variant-numeric:tabular-nums}
 .kpi .v.gold{color:#8a6d0b}
+.kpi .v.neg{color:var(--bad)}
 .kpi .d{font-size:12px;color:var(--muted)}
 .stack{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:16px 0 10px}
 .stack span{display:block;height:100%}
@@ -202,7 +203,7 @@ function render(){
     <div class="kpi"><div class="l">Retorno ao ano</div><div class="v">${n(P.ann)}%</div><div class="d">últimos 3 anos</div></div>
     <div class="kpi"><div class="l">Em % do CDI</div><div class="v gold">${n(P.pct_cdi,0)}%</div><div class="d">CDI: ${n(P.cdi)}% ao ano</div></div>
     <div class="kpi"><div class="l">Volatilidade</div><div class="v">${n(P.vol)}%</div><div class="d">ao ano</div></div>
-    <div class="kpi"><div class="l">Pior queda</div><div class="v">${n(P.mdd)}%</div><div class="d">medida mês a mês</div></div>
+    <div class="kpi"><div class="l">Pior queda</div><div class="v${P.mdd<0?' neg':''}">${n(P.mdd)}%</div><div class="d">medida mês a mês</div></div>
     <div class="kpi"><div class="l">Meses acima do CDI</div><div class="v">${n(P.meses_acima_cdi,0)}%</div><div class="d">de 36 meses</div></div>
     <div class="kpi"><div class="l">Planos</div><div class="v">${Object.keys(w).length}</div><div class="d">${nq?nq+'% só para qualificado':'todos para investidores em geral'}</div></div>
    </div>
