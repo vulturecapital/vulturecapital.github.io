@@ -52,6 +52,7 @@ section.card{background:var(--card);border-radius:var(--radius);padding:20px 18p
 .card h2{font-size:18px;margin:0 0 4px;color:var(--navy);display:flex;align-items:center;gap:8px}
 .card h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--gold)}
 .card .lead{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+.tabs.pub button{font-size:13px;padding:7px 6px}
 .tabs{display:flex;background:var(--bg);border-radius:10px;padding:4px;gap:4px;margin-bottom:14px}
 .tabs button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:8px;font-weight:650;font-size:14px;color:var(--muted);cursor:pointer}
 .tabs button[aria-selected="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(20,33,61,.12)}
@@ -167,15 +168,15 @@ const n=(v,d=2)=>v==null||isNaN(v)?'–':Number(v).toLocaleString('pt-BR',{minim
 const brl=v=>'R$ '+Number(v).toLocaleString('pt-BR',{maximumFractionDigits:0});
 const cnpj=c=>c.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
 const prazo=s=>s.replace(' du',' úteis').replace(' dc',' corridos');
-let D,F={},perfil='Moderado';
+let D,F={},perfil='Moderado',pub='geral';
 
 function anos(f){
   const ys=['2022','2023','2024','2025','2026']; let ok=0,t=0;
   const b=ys.map(y=>{const r=f.anos[y]; if(r==null) return '<b></b>'; t++; const c=f.cdi_anos[y]; const y1=r>=c; if(y1) ok++; return `<b class="${y1?'y':'n'}" title="${y}: ${n(r)}% (CDI ${n(f.cdi_anos[y])}%)"></b>`;}).join('');
   return `${ok} de ${t}<span class="yrs" aria-hidden="true">${b}</span>`;
 }
-function chart(p){
-  const s=D.carteira[p].serie.map(v=>(v-1)*100), c=D.carteira.CDI_serie.map(v=>(v-1)*100);
+function chart(P,p){
+  const s=P.serie.map(v=>(v-1)*100), c=D.carteira.CDI_serie.map(v=>(v-1)*100);
   const sm=window.innerWidth<640; const W=sm?380:560,H=sm?250:230,L=36,R=sm?104:132,T=12,B=24,k=s.length;
   const max=Math.ceil(Math.max(...s,...c)/10)*10,min=0;
   const x=i=>L+(W-L-R)*i/(k-1), y=v=>T+(H-T-B)*(1-(v-min)/(max-min));
@@ -194,12 +195,15 @@ function chart(p){
    <text x="${tx}" y="${b+4}" style="fill:#8a6d0b;font-size:12px">+${n(lc,1)}% CDI</text></svg>`;
 }
 function render(){
-  const P=D.carteira[perfil], w=D.pesos[perfil];
+  const Q=D.qualificado||{}, hasQ=!!(Q.pesos&&Q.pesos[perfil]), isQ=hasQ&&pub==='qualificado';
+  const P=isQ?Q.carteira[perfil]:D.carteira[perfil], w=isQ?Q.pesos[perfil]:D.pesos[perfil];
+  const trocas=(Q.trocas||{})[perfil]||[], veio={}; trocas.forEach(([a,b])=>veio[b]=(veio[b]?veio[b]+', ':'')+F[a].nome);
   const bw={}; Object.entries(w).forEach(([c,x])=>bw[F[c].bloco]=(bw[F[c].bloco]||0)+x);
   const blocos=BLOCOS.filter(b=>bw[b[0]]);
   const nq=Object.keys(w).filter(c=>F[c].publico==='Qualificado').reduce((s,c)=>s+w[c],0);
   let h=`<section class="card" id="carteira"><h2>Carteira por perfil</h2><p class="lead">Escolha o perfil para ver a alocação e os planos.</p>
    <div class="tabs" role="tablist">${PERFIS.map(p=>`<button role="tab" data-p="${p}" aria-selected="${p===perfil}">${p}</button>`).join('')}</div>
+   ${hasQ?`<div class="tabs pub" role="tablist" aria-label="Tipo de investidor">${[['geral','Investidor em geral'],['qualificado','Investidor qualificado']].map(([k,l])=>`<button role="tab" data-pub="${k}" aria-selected="${(isQ?'qualificado':'geral')===k}">${l}</button>`).join('')}</div>`:''}
    <p style="margin:0 0 14px;font-size:14.5px">${DESC[perfil]}</p>
    <div class="kpis">
     <div class="kpi"><div class="l">Retorno ao ano</div><div class="v">${n(P.ann)}%</div><div class="d">últimos 3 anos</div></div>
@@ -212,7 +216,7 @@ function render(){
    <div class="stack" role="img" aria-label="${blocos.map(b=>b[0]+' '+bw[b[0]]+'%').join(', ')}">${blocos.map(b=>`<span style="width:${bw[b[0]]}%;background:${b[2]}"></span>`).join('')}</div>
    <div class="legend">${blocos.map(b=>`<span><i style="background:${b[2]}"></i>${b[0]} ${bw[b[0]]}%</span>`).join('')}</div>
    <h3 style="font-size:15px;color:var(--navy);margin:20px 0 6px">Rentabilidade acumulada desde nov/2023</h3>
-   <div class="chart">${chart(perfil)}</div>
+   <div class="chart">${chart(P,perfil)}</div>
    <p class="small">Simulação com os pesos atuais e rebalanceamento mensal, de ${esc(D.janela_carteira)}. Rentabilidade líquida de taxas e bruta de IR.</p>
   </section>`;
   h+=`<section class="card" id="fundos"><h2>Planos do perfil ${perfil}</h2><p class="lead">Retorno, volatilidade e Sharpe dos últimos 3 anos (nov/2023 a out/2026) para todos os planos, já líquidos das taxas do plano. "Histórico" indica há quanto tempo o plano (ou o master) tem cotas. Quando o plano é recente, usamos o histórico do fundo master e descontamos a diferença de taxas medida no período em que os dois existem. "Anos acima do CDI" conta 2022 a 2026 (2026 até outubro).</p>`;
@@ -221,7 +225,7 @@ function render(){
     Object.keys(w).filter(c=>F[c].bloco===b).sort((a,c)=>w[c]-w[a]).forEach(c=>{
       const f=F[c], pc=f.pct_cdi, sh=f.sharpe;
       h+=`<article class="fund"><div class="top"><div><div class="n">${esc(f.nome)}</div><div class="g">${esc(f.gestora)} · CNPJ ${cnpj(c)} · taxa de adm. ${n(f.tx_adm)}% a.a.${f.tx_perf?' + '+f.tx_perf+'% de performance':''}${f.max_rv?' · até '+f.max_rv+'% em renda variável':''}</div></div><div class="w">${w[c]}%</div></div>
-       <div class="tags">${f.publico==='Qualificado'?'<span class="tag q">Investidor qualificado</span>':'<span class="tag todos">Todos os investidores</span>'}<span class="tag">Histórico: ${esc(f.historico)}</span></div>
+       <div class="tags">${f.publico==='Qualificado'?'<span class="tag q">Investidor qualificado</span>':'<span class="tag todos">Todos os investidores</span>'}${isQ&&veio[c]?`<span class="tag">No lugar de ${esc(veio[c])}</span>`:''}<span class="tag">Histórico: ${esc(f.historico)}</span></div>
        <dl class="facts">
         <div><dt>Resgate</dt><dd>${prazo(f.cotizacao)}<small>cotização; pagamento +${prazo(f.liquidacao).replace('D+','')}</small></dd></div>
         <div><dt>Aplicação inicial</dt><dd>${brl(f.aplic_min)}</dd></div>
@@ -231,23 +235,26 @@ function render(){
        <p class="com"><strong>Comentários:</strong> ${esc(f.comentario)}</p></article>`;
     });
   });
-  const sub=D.substitutos[perfil];
-  if(sub) h+=`<div class="subst"><strong>Investidores não qualificados:</strong> Troque os planos exclusivos para investidor qualificado por estas alternativas abertas a todos, com o mesmo peso:<ul>${sub.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
+  if(hasQ&&trocas.length) h+=isQ
+    ?`<div class="subst"><strong>Carteira para investidor qualificado:</strong> em relação à carteira para investidores em geral, estes planos entram no lugar dos planos abertos, com o mesmo peso:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`
+    :`<div class="subst"><strong>Investidores qualificados:</strong> toque em "Investidor qualificado", acima, para ver a carteira com planos exclusivos. As trocas são:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
   h+=`</section>
   <section class="card txt" id="metodo"><h2>Como escolhemos</h2>
    <p>Partimos de todos os planos de previdência abertos para contratação na XP (195 planos da XP Seguros). Para cada um calculamos, com as cotas diárias da CVM, retorno, volatilidade, pior queda e o índice de Sharpe, que mede quanto o plano rende acima do CDI para cada unidade de risco.</p>
    <h3>Quem pode entrar</h3><p>Planos com pelo menos 3 anos de histórico e retorno acima do CDI nos últimos 3 anos; quando há 5 anos ou mais de histórico, o plano também não pode ter ficado abaixo do CDI no período longo (exceto renda variável e internacional). Muitos planos foram relançados há pouco tempo: nesses casos usamos o histórico do fundo master e descontamos a diferença de taxa medida entre o plano e o master. Assim o retorno mostrado é o que o participante teria recebido.</p>
    <h3>Como comparamos</h3><p>Todos os planos são comparados na mesma janela de 3 anos e só com planos da mesma categoria. Em caixa e crédito, olhamos o % do CDI, a frequência de meses acima do CDI e o prazo de resgate; em crédito high yield, o % do CDI, a pior queda e, com mais peso, a liquidez; em multimercados, renda variável e internacional, o índice de Sharpe e a pior queda.</p>
-   <h3>Escolha final e estabilidade</h3><p>Entre planos de qualidade praticamente igual (até 10% abaixo do melhor da categoria), a escolha considera o plano que já estava na carteira, a diversificação e as condições comerciais na XP. Um plano da carteira só é trocado quando sai desse grupo. Só usamos um segundo plano da mesma gestora se o total dela ficar em até 15% da carteira, e a revisão é trimestral. Na previdência quase todos os planos de crédito high yield, renda variável e internacional são para investidor qualificado; para os demais, indicamos as trocas no quadro abaixo da carteira.</p>
+   <h3>Escolha final e estabilidade</h3><p>Entre planos de qualidade praticamente igual (até 10% abaixo do melhor da categoria), a escolha considera o plano que já estava na carteira, a diversificação e as condições comerciais na XP. Um plano da carteira só é trocado quando sai desse grupo. Só usamos um segundo plano da mesma gestora se o total dela ficar em até 15% da carteira, e a revisão é trimestral. Na previdência quase todos os planos de crédito high yield, renda variável e internacional são para investidor qualificado. A carteira padrão usa só planos abertos a todos; no botão "Investidor qualificado" aparece a versão com esses planos, que foi a selecionada pelos critérios acima.</p>
    <h3>O que ficou de fora</h3><p>Planos de renda fixa prefixada e de inflação: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. A maioria dos planos de ações também ficou abaixo do CDI no período; só os dois long biased da carteira tiveram retorno ajustado ao risco positivo.</p>
    <h3>PGBL ou VGBL e tributação</h3><p>Todos os planos estão disponíveis em PGBL e VGBL. PGBL costuma ser melhor para quem declara IR no modelo completo (permite deduzir até 12% da renda bruta tributável); VGBL para os demais. Na tabela regressiva, o IR cai de 35% para 10% após dez anos. Confirme a escolha com seu assessor.</p>
   </section>`;
   $('#app').innerHTML=h;
-  document.querySelectorAll('.tabs button').forEach(bt=>bt.addEventListener('click',()=>{perfil=bt.dataset.p; try{history.replaceState(null,'','#'+perfil.toLowerCase());}catch(e){} render(); $('#carteira').scrollIntoView({block:'start'});}));
+  const hs=()=>{try{history.replaceState(null,'','#'+perfil.toLowerCase()+(pub==='qualificado'?'-qualificado':''));}catch(e){}};
+  document.querySelectorAll('.tabs button[data-p]').forEach(bt=>bt.addEventListener('click',()=>{perfil=bt.dataset.p; hs(); render(); $('#carteira').scrollIntoView({block:'start'});}));
+  document.querySelectorAll('.tabs button[data-pub]').forEach(bt=>bt.addEventListener('click',()=>{pub=bt.dataset.pub; hs(); render(); $('#carteira').scrollIntoView({block:'start'});}));
 }
 let __rz,__sm=window.innerWidth<640; window.addEventListener('resize',()=>{clearTimeout(__rz); __rz=setTimeout(()=>{const sm=window.innerWidth<640; if(D&&sm!==__sm){__sm=sm; render();}},200);});
 function init(){
-  const h=(location.hash||'').slice(1).toLowerCase(); const m=PERFIS.find(p=>p.toLowerCase()===h); if(m) perfil=m;
+  let h=(location.hash||'').slice(1).toLowerCase(); if(h.endsWith('-qualificado')){pub='qualificado'; h=h.replace('-qualificado','');} const m=PERFIS.find(p=>p.toLowerCase()===h); if(m) perfil=m;
   fetch('previdencia.json?v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok) throw new Error(r.status); return r.json();}).then(d=>{
     D=d; d.funds.forEach(f=>F[f.cnpj]=f);
     $('#atualizado').textContent='Dados até '+d.data_base+' · atualizado em '+d.atualizado_em;

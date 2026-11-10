@@ -52,6 +52,7 @@ section.card{background:var(--card);border-radius:var(--radius);padding:20px 18p
 .card h2{font-size:18px;margin:0 0 4px;color:var(--navy);display:flex;align-items:center;gap:8px}
 .card h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--gold)}
 .card .lead{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+.tabs.pub button{font-size:13px;padding:7px 6px}
 .tabs{display:flex;background:var(--bg);border-radius:10px;padding:4px;gap:4px;margin-bottom:14px}
 .tabs button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:8px;font-weight:650;font-size:14px;color:var(--muted);cursor:pointer}
 .tabs button[aria-selected="true"]{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(20,33,61,.12)}
@@ -168,15 +169,15 @@ const n=(v,d=2)=>v==null||isNaN(v)?'–':Number(v).toLocaleString('pt-BR',{minim
 const brl=v=>'R$ '+Number(v).toLocaleString('pt-BR',{maximumFractionDigits:0});
 const cnpj=c=>c.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
 const prazo=s=>s.replace(' du',' úteis').replace(' dc',' corridos');
-let D,F={},perfil='Moderado';
+let D,F={},perfil='Moderado',pub='geral';
 
 function anos(f){
   const ys=['2022','2023','2024','2025','2026']; let ok=0,t=0;
   const b=ys.map(y=>{const r=f.anos[y]; if(r==null) return '<b></b>'; t++; const c=f.isento?f.cdi_anos[y]*0.85:f.cdi_anos[y]; const y1=r>=c; if(y1) ok++; return `<b class="${y1?'y':'n'}" title="${y}: ${n(r)}% (CDI ${n(f.cdi_anos[y])}%)"></b>`;}).join('');
   return `${ok} de ${t}<span class="yrs" aria-hidden="true">${b}</span>`;
 }
-function chart(p){
-  const s=D.carteira[p].serie.map(v=>(v-1)*100), c=D.carteira.CDI_serie.map(v=>(v-1)*100);
+function chart(P,p){
+  const s=P.serie.map(v=>(v-1)*100), c=D.carteira.CDI_serie.map(v=>(v-1)*100);
   const sm=window.innerWidth<640; const W=sm?380:560,H=sm?250:230,L=36,R=sm?104:132,T=12,B=24,k=s.length;
   const max=Math.ceil(Math.max(...s,...c)/10)*10,min=0;
   const x=i=>L+(W-L-R)*i/(k-1), y=v=>T+(H-T-B)*(1-(v-min)/(max-min));
@@ -195,12 +196,15 @@ function chart(p){
    <text x="${tx}" y="${b+4}" style="fill:#8a6d0b;font-size:12px">+${n(lc,1)}% CDI</text></svg>`;
 }
 function render(){
-  const P=D.carteira[perfil], w=D.pesos[perfil];
+  const Q=D.qualificado||{}, hasQ=!!(Q.pesos&&Q.pesos[perfil]), isQ=hasQ&&pub==='qualificado';
+  const P=isQ?Q.carteira[perfil]:D.carteira[perfil], w=isQ?Q.pesos[perfil]:D.pesos[perfil];
+  const trocas=(Q.trocas||{})[perfil]||[], veio={}; trocas.forEach(([a,b])=>veio[b]=a);
   const bw={}; Object.entries(w).forEach(([c,x])=>bw[F[c].bloco]=(bw[F[c].bloco]||0)+x);
   const blocos=BLOCOS.filter(b=>bw[b[0]]);
   const nq=Object.keys(w).filter(c=>F[c].publico==='Qualificado').reduce((s,c)=>s+w[c],0);
   let h=`<section class="card" id="carteira"><h2>Carteira por perfil</h2><p class="lead">Escolha o perfil para ver a alocação e os fundos.</p>
    <div class="tabs" role="tablist">${PERFIS.map(p=>`<button role="tab" data-p="${p}" aria-selected="${p===perfil}">${p}</button>`).join('')}</div>
+   ${hasQ?`<div class="tabs pub" role="tablist" aria-label="Tipo de investidor">${[['geral','Investidor em geral'],['qualificado','Investidor qualificado']].map(([k,l])=>`<button role="tab" data-pub="${k}" aria-selected="${(isQ?'qualificado':'geral')===k}">${l}</button>`).join('')}</div>`:''}
    <p style="margin:0 0 14px;font-size:14.5px">${DESC[perfil]}</p>
    <div class="kpis">
     <div class="kpi"><div class="l">Retorno ao ano</div><div class="v">${n(P.ann)}%</div><div class="d">últimos 3 anos</div></div>
@@ -213,7 +217,7 @@ function render(){
    <div class="stack" role="img" aria-label="${blocos.map(b=>b[0]+' '+bw[b[0]]+'%').join(', ')}">${blocos.map(b=>`<span style="width:${bw[b[0]]}%;background:${b[2]}"></span>`).join('')}</div>
    <div class="legend">${blocos.map(b=>`<span><i style="background:${b[2]}"></i>${b[0]} ${bw[b[0]]}%</span>`).join('')}</div>
    <h3 style="font-size:15px;color:var(--navy);margin:20px 0 6px">Rentabilidade acumulada desde nov/2023</h3>
-   <div class="chart">${chart(perfil)}</div>
+   <div class="chart">${chart(P,perfil)}</div>
    <p class="small">Simulação com os pesos atuais e rebalanceamento mensal, de ${esc(D.janela_carteira)}. Rentabilidade líquida de taxas e bruta de IR.</p>
   </section>`;
   h+=`<section class="card" id="fundos"><h2>Fundos do perfil ${perfil}</h2><p class="lead">Retorno, volatilidade e Sharpe dos últimos 3 anos (nov/2023 a out/2026) para todos os fundos. "Histórico" indica há quanto tempo o fundo (ou o master que ele replica) tem cotas. "Anos acima do CDI" conta 2022 a 2026 (2026 até outubro).</p>`;
@@ -222,7 +226,7 @@ function render(){
     Object.keys(w).filter(c=>F[c].bloco===b).sort((a,c)=>w[c]-w[a]).forEach(c=>{
       const f=F[c], pc=f.isento?f.pct_cdi_bruto:f.pct_cdi, sh=f.isento?f.sharpe_isento:f.sharpe;
       h+=`<article class="fund"><div class="top"><div><div class="n">${esc(f.nome)}</div><div class="g">${esc(f.gestora)} · CNPJ ${cnpj(c)}</div></div><div class="w">${w[c]}%</div></div>
-       <div class="tags">${f.publico==='Qualificado'?'<span class="tag q">Investidor qualificado</span>':'<span class="tag todos">Todos os investidores</span>'}${f.isento?'<span class="tag isento">Isento de IR</span>':''}<span class="tag">Histórico: ${f.janela}</span></div>
+       <div class="tags">${f.publico==='Qualificado'?'<span class="tag q">Investidor qualificado</span>':'<span class="tag todos">Todos os investidores</span>'}${f.isento?'<span class="tag isento">Isento de IR</span>':''}${isQ&&veio[c]?`<span class="tag">No lugar de ${esc(F[veio[c]].nome)}</span>`:''}<span class="tag">Histórico: ${f.janela}</span></div>
        <dl class="facts">
         <div><dt>Liquidez</dt><dd>${prazo(f.cotizacao)}<small>${f.liquidez_obs?esc(f.liquidez_obs):`cotização; pagamento +${prazo(f.liquidacao).replace('D+','')}`}</small></dd></div>
         <div><dt>Aplicação inicial</dt><dd>${brl(f.aplic_min)}</dd></div>
@@ -232,10 +236,9 @@ function render(){
        <p class="com"><strong>Comentários:</strong> ${esc(f.comentario)}</p></article>`;
     });
   });
-  const sub=D.substitutos[perfil];
-  if(sub) h+=`<div class="subst"><strong>Investidores não qualificados:</strong> Troque os fundos exclusivos para investidor qualificado por estas alternativas abertas a todos, com o mesmo peso:<ul>${sub.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
-  const qo=(D.opcionais_qualificados||{})[perfil];
-  if(qo&&qo.length) h+=`<div class="subst"><strong>Investidores qualificados (opcional):</strong> Quem é investidor qualificado pode trocar estes fundos por alternativas exclusivas que tiveram desempenho melhor, com o mesmo peso:<ul>${qo.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong> <small>(${n(F[b].isento?F[b].pct_cdi_bruto:F[b].pct_cdi,0)}% do CDI em 3 anos; resgate ${prazo(F[b].cotizacao)})</small></li>`).join('')}</ul></div>`;
+  if(hasQ&&trocas.length) h+=isQ
+    ?`<div class="subst"><strong>Carteira para investidor qualificado:</strong> em relação à carteira para investidores em geral, estes fundos foram trocados por alternativas exclusivas, com o mesmo peso:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`
+    :`<div class="subst"><strong>Investidores qualificados:</strong> toque em "Investidor qualificado", acima, para ver a carteira com fundos exclusivos. As trocas são:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
   h+=`</section>
   <section class="card txt" id="metodo"><h2>Como escolhemos</h2>
    <p>Partimos de todos os fundos abertos para captação na XP (592 fundos, sem FIIs e FIPs), mais os FIDCs abertos com pelo menos 3 anos de histórico. Para cada um calculamos, com as cotas diárias da CVM (nos FIDCs, as cotas mensais), retorno, volatilidade, pior queda e o índice de Sharpe, que mede quanto o fundo rende acima do CDI para cada unidade de risco.</p>
@@ -246,11 +249,13 @@ function render(){
    <h3>O que ficou de fora</h3><p>Fundos prefixados, de inflação e de debêntures sem hedge: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. Para exposição à inflação, preferimos títulos públicos ou bancários diretos (veja a Renda Fixa da Semana).</p>
   </section>`;
   $('#app').innerHTML=h;
-  document.querySelectorAll('.tabs button').forEach(bt=>bt.addEventListener('click',()=>{perfil=bt.dataset.p; try{history.replaceState(null,'','#'+perfil.toLowerCase());}catch(e){} render(); $('#carteira').scrollIntoView({block:'start'});}));
+  const hs=()=>{try{history.replaceState(null,'','#'+perfil.toLowerCase()+(pub==='qualificado'?'-qualificado':''));}catch(e){}};
+  document.querySelectorAll('.tabs button[data-p]').forEach(bt=>bt.addEventListener('click',()=>{perfil=bt.dataset.p; hs(); render(); $('#carteira').scrollIntoView({block:'start'});}));
+  document.querySelectorAll('.tabs button[data-pub]').forEach(bt=>bt.addEventListener('click',()=>{pub=bt.dataset.pub; hs(); render(); $('#carteira').scrollIntoView({block:'start'});}));
 }
 let __rz,__sm=window.innerWidth<640; window.addEventListener('resize',()=>{clearTimeout(__rz); __rz=setTimeout(()=>{const sm=window.innerWidth<640; if(D&&sm!==__sm){__sm=sm; render();}},200);});
 function init(){
-  const h=(location.hash||'').slice(1).toLowerCase(); const m=PERFIS.find(p=>p.toLowerCase()===h); if(m) perfil=m;
+  let h=(location.hash||'').slice(1).toLowerCase(); if(h.endsWith('-qualificado')){pub='qualificado'; h=h.replace('-qualificado','');} const m=PERFIS.find(p=>p.toLowerCase()===h); if(m) perfil=m;
   fetch('fundos.json?v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok) throw new Error(r.status); return r.json();}).then(d=>{
     D=d; d.funds.forEach(f=>F[f.cnpj]=f);
     $('#atualizado').textContent='Dados até '+d.data_base+' · atualizado em '+d.atualizado_em;
