@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Vulture Capital | Carteira Recomendada de Fundos">
-<meta property="og:description" content="Fundos selecionados por perfil (conservador, moderado e agressivo), com versões para investidor em geral e qualificado, escolhidos pela qualidade nos últimos 3 anos.">
+<meta property="og:description" content="Fundos selecionados por perfil (conservador, moderado e agressivo), com versões para investidor geral e qualificado, escolhidos pela qualidade nos últimos 3 anos.">
 <meta property="og:image" content="https://vulturecapital.github.io/assets/og-image.png">
 <meta property="og:url" content="https://vulturecapital.github.io/fundos.html">
 <meta property="og:locale" content="pt_BR">
@@ -119,7 +119,7 @@ footer p{margin:0 0 8px}
   <div class="wrap">
     <div class="brand"><img src="assets/logo-vulture-xp-branco.png?v=4" width="883" height="384" alt="Vulture Capital | XP Investimentos"></div>
     <h1 id="titulo">Carteira Recomendada de Fundos</h1>
-    <div class="sub">Fundos abertos na XP, escolhidos pela qualidade nos últimos 3 anos: rentabilidade, consistência, risco e prazo de resgate. Com versões para investidor em geral e para investidor qualificado.</div>
+    <div class="sub">Fundos abertos na XP, escolhidos pela qualidade nos últimos 3 anos: rentabilidade, consistência, risco e prazo de resgate. Com versões para investidor geral e para investidor qualificado.</div>
     <div class="stamp"><span class="dot"></span><span id="atualizado">Carregando…</span></div>
     <nav class="site" aria-label="Páginas do site"><a href="./">Renda Fixa</a><a href="fundos.html" aria-current="page">Fundos</a><a href="previdencia.html">Previdência</a></nav>
   </div>
@@ -160,7 +160,7 @@ const BLOCOS=[
  ['Multimercado','Gestores com estratégias que não dependem só do juro: macro, long short e baixa volatilidade.','#2f6f7e'],
  ['Renda Variável','Ações brasileiras com gestão ativa (incluindo long biased), para horizonte longo.','#7d4f8f'],
  ['Internacional','Bolsa americana e global, por meio de fundos aplicados em reais.','#4b6b3f']];
-const DESC={Conservador:'Para quem prioriza não perder dinheiro e ter liquidez: renda fixa pós-fixada, crédito de alta qualidade e um multimercado de baixíssima volatilidade. Todos os fundos aceitam investidores em geral.',
+const DESC={Conservador:'Para quem prioriza não perder dinheiro e ter liquidez: renda fixa pós-fixada, crédito de alta qualidade e um multimercado de baixíssima volatilidade. Todos os fundos são abertos ao investidor geral.',
  Moderado:'Base em crédito pós-fixado, com uma parcela em multimercados, bolsa e exterior para buscar retorno acima do CDI ao longo dos anos.',
  Agressivo:'Aceita oscilações maiores no curto prazo: mais multimercados, ações e exterior.'};
 const $=s=>document.querySelector(s);
@@ -204,7 +204,7 @@ function render(){
   const nq=Object.keys(w).filter(c=>F[c].publico==='Qualificado').reduce((s,c)=>s+w[c],0);
   let h=`<section class="card" id="carteira"><h2>Carteira por perfil</h2><p class="lead">Escolha o perfil para ver a alocação e os fundos.</p>
    <div class="tabs" role="tablist">${PERFIS.map(p=>`<button role="tab" data-p="${p}" aria-selected="${p===perfil}">${p}</button>`).join('')}</div>
-   ${hasQ?`<div class="tabs pub" role="tablist" aria-label="Tipo de investidor">${[['geral','Investidor em geral'],['qualificado','Investidor qualificado']].map(([k,l])=>`<button role="tab" data-pub="${k}" aria-selected="${(isQ?'qualificado':'geral')===k}">${l}</button>`).join('')}</div>`:''}
+   ${hasQ?`<div class="tabs pub" role="tablist" aria-label="Tipo de investidor">${[['geral','Investidor geral'],['qualificado','Investidor qualificado']].map(([k,l])=>`<button role="tab" data-pub="${k}" aria-selected="${(isQ?'qualificado':'geral')===k}">${l}</button>`).join('')}</div>`:''}
    <p style="margin:0 0 14px;font-size:14.5px">${DESC[perfil]}</p>
    <div class="kpis">
     <div class="kpi"><div class="l">Retorno ao ano</div><div class="v">${n(P.ann)}%</div><div class="d">últimos 3 anos</div></div>
@@ -212,7 +212,7 @@ function render(){
     <div class="kpi"><div class="l">Volatilidade</div><div class="v">${n(P.vol)}%</div><div class="d">ao ano</div></div>
     <div class="kpi"><div class="l">Pior queda</div><div class="v${P.mdd<0?' neg':''}">${n(P.mdd)}%</div><div class="d">medida mês a mês</div></div>
     <div class="kpi"><div class="l">Meses acima do CDI</div><div class="v">${n(P.meses_acima_cdi,0)}%</div><div class="d">de 36 meses</div></div>
-    <div class="kpi"><div class="l">Fundos</div><div class="v">${Object.keys(w).length}</div><div class="d">${nq?nq+'% só para qualificado':'todos para investidores em geral'}</div></div>
+    <div class="kpi"><div class="l">Fundos</div><div class="v">${Object.keys(w).length}</div><div class="d">${nq?nq+'% só para qualificado':'todos abertos ao investidor geral'}</div></div>
    </div>
    <div class="stack" role="img" aria-label="${blocos.map(b=>b[0]+' '+bw[b[0]]+'%').join(', ')}">${blocos.map(b=>`<span style="width:${bw[b[0]]}%;background:${b[2]}"></span>`).join('')}</div>
    <div class="legend">${blocos.map(b=>`<span><i style="background:${b[2]}"></i>${b[0]} ${bw[b[0]]}%</span>`).join('')}</div>
@@ -237,14 +237,14 @@ function render(){
     });
   });
   if(hasQ&&trocas.length) h+=isQ
-    ?`<div class="subst"><strong>Carteira para investidor qualificado:</strong> em relação à carteira para investidores em geral, estes fundos foram trocados por alternativas exclusivas, com o mesmo peso:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`
+    ?`<div class="subst"><strong>Carteira para investidor qualificado:</strong> em relação à carteira para investidor geral, estes fundos foram trocados por alternativas exclusivas, com o mesmo peso:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`
     :`<div class="subst"><strong>Investidores qualificados:</strong> selecione "Investidor qualificado", acima, para ver a carteira com fundos exclusivos. As trocas são:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
   h+=`</section>
   <section class="card txt" id="metodo"><h2>Como escolhemos</h2>
    <p>Partimos de todos os fundos abertos para captação na XP (592 fundos, sem FIIs e FIPs), mais os FIDCs abertos com pelo menos 3 anos de histórico. Para cada um calculamos, com as cotas diárias da CVM (nos FIDCs, as cotas mensais), retorno, volatilidade, pior queda e o índice de Sharpe, que mede quanto o fundo rende acima do CDI para cada unidade de risco.</p>
    <h3>Quem pode entrar</h3><p>Fundos com pelo menos 3 anos de histórico, patrimônio acima de R$ 50 milhões e retorno acima do CDI nos últimos 3 anos. Quando o fundo tem 5 anos ou mais, ele também não pode ter ficado abaixo do CDI no período longo (exceto ações e internacional). Fundos novos que replicam um fundo master foram avaliados pelo histórico do master.</p>
    <h3>Como comparamos</h3><p>Todos os fundos são comparados na mesma janela de 3 anos e só com fundos da mesma categoria. Em caixa, crédito e incentivados, olhamos o % do CDI, a frequência de meses acima do CDI e o prazo de resgate. Em crédito high yield e FIDCs, o % do CDI, a pior queda e, com mais peso, a liquidez. Em multimercados, ações e internacional, o índice de Sharpe e a pior queda.</p>
-   <h3>Escolha final e estabilidade</h3><p>Entre fundos de qualidade praticamente igual (até 10% abaixo do melhor da categoria), a escolha considera o fundo que já estava na carteira, a diversificação e as condições comerciais na XP. Um fundo da carteira só é trocado quando sai desse grupo. Só usamos um segundo fundo da mesma gestora se o total dela ficar em até 15% da carteira, e não repetimos fundos que seguem o mesmo índice. A revisão é trimestral.</p>
+   <h3>Escolha final e estabilidade</h3><p>Entre fundos de qualidade praticamente igual (até 10% abaixo do melhor da categoria), a escolha considera o fundo que já estava na carteira e a diversificação. Um fundo da carteira só é trocado quando sai desse grupo. Só usamos um segundo fundo da mesma gestora se o total dela ficar em até 15% da carteira, e não repetimos fundos que seguem o mesmo índice. A revisão é trimestral.</p>
    <h3>Investidores qualificados</h3><p>A carteira padrão usa apenas fundos abertos a todos os investidores. No botão "Investidor qualificado" aparece a versão com fundos exclusivos, que só entram quando superam com folga, pelos mesmos critérios, o fundo aberto que substituem; os que não superam ficam de fora e o resto da carteira não muda.</p>
    <h3>O que ficou de fora</h3><p>Fundos prefixados, de inflação e de debêntures sem hedge: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. Para exposição à inflação, preferimos títulos públicos ou bancários diretos (veja a Renda Fixa da Semana).</p>
   </section>`;
