@@ -117,9 +117,9 @@ footer p{margin:0 0 8px}
 <body>
 <header class="hero">
   <div class="wrap">
-    <div class="brand"><img src="assets/logo-vulture-xp-branco.png?v=4" width="883" height="384" alt="Vulture Investimentos | XP Investimentos"></div>
+    <div class="brand"><img src="assets/logo-vulture-xp-branco.png?v=4" width="883" height="384" alt="Vulture Capital | XP Investimentos"></div>
     <h1 id="titulo">Carteira Recomendada de Previdência</h1>
-    <div class="sub">Planos PGBL e VGBL da XP Seguros abertos para contratação, escolhidos pela qualidade nos últimos 3 anos: rentabilidade, consistência, risco e prazo de resgate.</div>
+    <div class="sub">Planos PGBL e VGBL da XP Seguros abertos para contratação, escolhidos pela qualidade nos últimos 3 anos: rentabilidade, consistência, risco e prazo de resgate. Com versões para investidor em geral e para investidor qualificado.</div>
     <div class="stamp"><span class="dot"></span><span id="atualizado">Carregando…</span></div>
     <nav class="site" aria-label="Páginas do site"><a href="./">Renda Fixa</a><a href="fundos.html">Fundos</a><a href="previdencia.html" aria-current="page">Previdência</a></nav>
   </div>
@@ -144,8 +144,8 @@ footer p{margin:0 0 8px}
   </div>
 
   <footer>
-    <p><strong>Fontes:</strong> XP, área de Previdência (planos abertos, prazos, aplicação mínima, público-alvo e taxas); CVM, informe diário de cotas (nov/2021 a out/2026) e composição de carteira; Banco Central, série do CDI; lâminas dos planos. Sharpe calculado com retornos diários em excesso ao CDI, anualizado.</p>
-    <p>Material informativo da Vulture Investimentos, escritório credenciado à XP Investimentos. Rentabilidade passada não é garantia de rentabilidade futura. Planos de previdência e seus fundos não contam com garantia do administrador, do gestor ou do Fundo Garantidor de Créditos (FGC). Leia a lâmina e o regulamento antes de contratar e confirme a adequação ao seu perfil (suitability) com seu assessor.</p>
+    <p><strong>Fontes:</strong> XP, área de Previdência (planos abertos, prazos, aplicação mínima, público-alvo e taxas); CVM, informe diário de cotas (nov/2021 a out/2026) e composição de carteira; Banco Central, série do CDI; lâminas dos planos. Sharpe calculado com retornos mensais em excesso ao CDI, anualizado.</p>
+    <p>Material informativo da Vulture Capital, assessoria de investimentos credenciada à XP Investimentos. Rentabilidade passada não é garantia de rentabilidade futura. Planos de previdência e seus fundos não contam com garantia do administrador, do gestor ou do Fundo Garantidor de Créditos (FGC). Leia a lâmina e o regulamento antes de contratar e confirme a adequação ao seu perfil (suitability) com seu assessor.</p>
   </footer>
 </main>
 
@@ -160,7 +160,7 @@ const BLOCOS=[
  ['Multimercado com Renda Variável','Multimercados com a maior parte em ações (long biased). Para horizonte longo.','#7d4f8f'],
  ['Multimercado Internacional','Exposição à bolsa americana combinada com renda fixa pós-fixada.','#4b6b3f']];
 const DESC={Conservador:'Para quem prioriza estabilidade: renda fixa pós-fixada, crédito de alta qualidade e um multimercado de volatilidade baixa. Todos os planos aceitam investidores em geral.',
- Moderado:'Base em renda fixa e crédito, com multimercados macro, um long biased e exterior para buscar retorno acima do CDI no longo prazo.',
+ Moderado:'Base em renda fixa e crédito, com multimercados macro (e, na versão para qualificado, crédito high yield e exterior) para buscar retorno acima do CDI no longo prazo.',
  Agressivo:'Mais multimercados e renda variável, aceitando oscilações maiores em troca de retorno potencial maior ao longo dos anos.'};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -237,14 +237,14 @@ function render(){
   });
   if(hasQ&&trocas.length) h+=isQ
     ?`<div class="subst"><strong>Carteira para investidor qualificado:</strong> em relação à carteira para investidores em geral, estes planos entram no lugar dos planos abertos, com o mesmo peso:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`
-    :`<div class="subst"><strong>Investidores qualificados:</strong> toque em "Investidor qualificado", acima, para ver a carteira com planos exclusivos. As trocas são:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
+    :`<div class="subst"><strong>Investidores qualificados:</strong> selecione "Investidor qualificado", acima, para ver a carteira com planos exclusivos. As trocas são:<ul>${trocas.map(([a,b])=>`<li>${esc(F[a].nome)} → <strong>${esc(F[b].nome)}</strong></li>`).join('')}</ul></div>`;
   h+=`</section>
   <section class="card txt" id="metodo"><h2>Como escolhemos</h2>
    <p>Partimos de todos os planos de previdência abertos para contratação na XP (195 planos da XP Seguros). Para cada um calculamos, com as cotas diárias da CVM, retorno, volatilidade, pior queda e o índice de Sharpe, que mede quanto o plano rende acima do CDI para cada unidade de risco.</p>
    <h3>Quem pode entrar</h3><p>Planos com pelo menos 3 anos de histórico e retorno acima do CDI nos últimos 3 anos; quando há 5 anos ou mais de histórico, o plano também não pode ter ficado abaixo do CDI no período longo (exceto renda variável e internacional). Muitos planos foram relançados há pouco tempo: nesses casos usamos o histórico do fundo master e descontamos a diferença de taxa medida entre o plano e o master. Assim o retorno mostrado é o que o participante teria recebido.</p>
    <h3>Como comparamos</h3><p>Todos os planos são comparados na mesma janela de 3 anos e só com planos da mesma categoria. Em caixa e crédito, olhamos o % do CDI, a frequência de meses acima do CDI e o prazo de resgate; em crédito high yield, o % do CDI, a pior queda e, com mais peso, a liquidez; em multimercados, renda variável e internacional, o índice de Sharpe e a pior queda.</p>
    <h3>Escolha final e estabilidade</h3><p>Entre planos de qualidade praticamente igual (até 10% abaixo do melhor da categoria), a escolha considera o plano que já estava na carteira, a diversificação e as condições comerciais na XP. Um plano da carteira só é trocado quando sai desse grupo. Só usamos um segundo plano da mesma gestora se o total dela ficar em até 15% da carteira, e nenhum plano passa de 25%. A revisão é trimestral. Na previdência quase todos os planos de crédito high yield, renda variável e internacional são para investidor qualificado. A carteira padrão usa só planos abertos a todos; no botão "Investidor qualificado" aparece a versão com os planos exclusivos que superaram com folga, pelos mesmos critérios, o plano aberto que substituem. Os que não superam ficam de fora.</p>
-   <h3>O que ficou de fora</h3><p>Planos de renda fixa prefixada e de inflação: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. A maioria dos planos de ações também ficou abaixo do CDI no período; só os dois long biased da carteira tiveram retorno ajustado ao risco positivo.</p>
+   <h3>O que ficou de fora</h3><p>Planos de renda fixa prefixada e de inflação: nos últimos 5 anos nenhum superou o CDI com regularidade e com volatilidade aceitável. A maioria dos planos de ações também ficou abaixo do CDI no período; os poucos que passaram nos filtros (long biased) são só para investidor qualificado e não superaram com folga os multimercados abertos a todos.</p>
    <h3>PGBL ou VGBL e tributação</h3><p>Todos os planos estão disponíveis em PGBL e VGBL. PGBL costuma ser melhor para quem declara IR no modelo completo (permite deduzir até 12% da renda bruta tributável); VGBL para os demais. Na tabela regressiva, o IR cai de 35% para 10% após dez anos. Confirme a escolha com seu assessor.</p>
   </section>`;
   $('#app').innerHTML=h;
