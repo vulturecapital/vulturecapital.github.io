@@ -1,5 +1,5 @@
 {
- "atualizado_em": "2026-11-16T12:00:40Z",
+ "atualizado_em": "2026-11-16T13:41:56.991Z",
  "semana": "09/11 a 13/11/2026",
  "titulo": "Recomendação semanal – Renda Fixa",
  "contato": {
@@ -110,7 +110,7 @@
    "categoria": "Título bancário – liquidez diária",
    "itens": [
     {
-     "nome": "CDB XP - 08/11/2028",
+     "nome": "CDB XP - 15/11/2028",
      "taxa": "100% CDI",
      "detalhe": "Rating AAA (S&P)"
     }
@@ -120,9 +120,9 @@
    "categoria": "Título bancário pós-fixado – sem liquidez (a partir de 2 anos)",
    "itens": [
     {
-     "nome": "CDB Cloudwalk Infinitepay - Nov/2028",
-     "taxa": "105,00% CDI",
-     "detalhe": "Rating AA (Fitch)"
+     "nome": "CDB ORIGINAL - NOV/2029",
+     "taxa": "106,00% CDI",
+     "detalhe": "Rating A (S&P)"
     }
    ]
   },
@@ -131,8 +131,13 @@
    "itens": [
     {
      "nome": "CDB Original - Nov/2029",
-     "taxa": "15,66%",
+     "taxa": "15,76%",
      "detalhe": "Rating A (S&P)"
+    },
+    {
+     "nome": "CDB CLOUDWALK INFINITEPAY - Nov/2029",
+     "taxa": "15,61%",
+     "detalhe": "AA (Fitch)"
     }
    ]
   },
@@ -140,8 +145,8 @@
    "categoria": "Título bancário inflação + taxa – sem liquidez (a partir de 2 anos)",
    "itens": [
     {
-     "nome": "CDB Pine - Nov/2029",
-     "taxa": "IPCA + 7,95%",
+     "nome": "CDB PINE - NOV/2028",
+     "taxa": "IPCA + 7,60%",
      "detalhe": "Rating A+ (S&P)"
     }
    ]
@@ -151,13 +156,13 @@
    "itens": [
     {
      "nome": "Natura - 03/05/2028",
-     "taxa": "7,33% em dólar",
-     "detalhe": ""
+     "taxa": "7,65% em dólar",
+     "detalhe": "Ba2 / BB (Moodys)"
     },
     {
      "nome": "Brazil Sovereign - 18/03/2031",
-     "taxa": "5,58% em dólar",
-     "detalhe": ""
+     "taxa": "5,57% em dólar",
+     "detalhe": "BB (S&P)"
     }
    ]
   },
@@ -166,17 +171,17 @@
    "itens": [
     {
      "nome": "LTN 2032",
-     "taxa": "15,15%",
+     "taxa": "15,23%",
      "detalhe": ""
     },
     {
      "nome": "NTN-B 2040",
-     "taxa": "IPCA + 7,46%",
+     "taxa": "IPCA + 7,49%",
      "detalhe": ""
     },
     {
      "nome": "NTN-B 2050",
-     "taxa": "IPCA + 7,44%",
+     "taxa": "IPCA + 7,49%",
      "detalhe": ""
     }
    ]
@@ -197,7 +202,7 @@
    [
     "Selic",
     2027,
-    12.0,
+    12,
     12.5,
     12.75
    ],
@@ -205,8 +210,8 @@
     "Selic",
     2028,
     10.5,
-    11.0,
-    11.0
+    11,
+    11
    ],
    [
     "IPCA",
@@ -220,14 +225,14 @@
     2027,
     4.32,
     4.9,
-    5.0
+    5
    ],
    [
     "IPCA",
     2028,
     3.75,
-    4.0,
-    4.0
+    4,
+    4
    ],
    [
     "PIB",
