@@ -1,0 +1,174 @@
+{
+ "semana": "09/11 a 13/11/2026",
+ "atualizado_em": "2026-11-16T13:41:56.991Z",
+ "indicadores": [
+  {
+   "rotulo": "Selic",
+   "valor": "13,75%",
+   "detalhe": "Definida pelo Copom em 04/11/2026",
+   "variacao": "estável",
+   "direcao": "="
+  },
+  {
+   "rotulo": "Taxa prefixada 3 anos",
+   "valor": "15,02%",
+   "detalhe": "ANBIMA – 756 dias úteis",
+   "variacao": "+0,04 p.p. na semana",
+   "direcao": "up"
+  },
+  {
+   "rotulo": "Juro real 3 anos",
+   "valor": "IPCA + 7,66%",
+   "detalhe": "ANBIMA – 756 dias úteis",
+   "variacao": "-0,10 p.p. na semana",
+   "direcao": "down"
+  },
+  {
+   "rotulo": "Inflação implícita 3 anos",
+   "valor": "6,83%",
+   "detalhe": "ANBIMA – 756 dias úteis",
+   "variacao": "+0,14 p.p. na semana",
+   "direcao": "up"
+  },
+  {
+   "rotulo": "IPCA de outubro",
+   "valor": "0,14%",
+   "detalhe": "IBGE – variação mensal",
+   "variacao": "",
+   "direcao": "="
+  },
+  {
+   "rotulo": "Selic fim de 2027 (Focus)",
+   "valor": "12,75%",
+   "detalhe": "Mediana; era 12,50% há 1 semana",
+   "variacao": "+0,25 p.p.",
+   "direcao": "up"
+  }
+ ],
+ "curva": {
+  "data": "13/11/2026",
+  "prazos": [
+   "1 ano",
+   "2 anos",
+   "3 anos",
+   "4 anos",
+   "5 anos",
+   "10 anos"
+  ],
+  "linhas": [
+   [
+    "Prefixada",
+    [
+     14.12,
+     14.68,
+     15.02,
+     15.21,
+     15.3,
+     15.3
+    ]
+   ],
+   [
+    "Juro real (IPCA+)",
+    [
+     6.03,
+     7.34,
+     7.66,
+     7.74,
+     7.75,
+     7.68
+    ]
+   ],
+   [
+    "Inflação implícita",
+    [
+     7.63,
+     6.83,
+     6.83,
+     6.93,
+     7.01,
+     7.08
+    ]
+   ]
+  ]
+ },
+ "focus": {
+  "data": "16/11/2026",
+  "linhas": [
+   [
+    "Selic",
+    2026,
+    13.25,
+    13.75,
+    13.75
+   ],
+   [
+    "Selic",
+    2027,
+    12,
+    12.5,
+    12.75
+   ],
+   [
+    "Selic",
+    2028,
+    10.5,
+    11,
+    11
+   ],
+   [
+    "IPCA",
+    2026,
+    5.22,
+    5.22,
+    5.11
+   ],
+   [
+    "IPCA",
+    2027,
+    4.32,
+    4.9,
+    5
+   ],
+   [
+    "IPCA",
+    2028,
+    3.75,
+    4,
+    4
+   ],
+   [
+    "PIB",
+    2026,
+    1.83,
+    1.75,
+    1.72
+   ],
+   [
+    "PIB",
+    2027,
+    1.32,
+    1.15,
+    1.02
+   ]
+  ]
+ },
+ "relatorios": [
+  {
+   "titulo": "A Semana na Renda Fixa (09/11 a 13/11/2026) – XP Research",
+   "url": "https://conteudos.xpi.com.br/renda-fixa/relatorios/a-semana-na-renda-fixa-09-11-26-a-13-11-26/"
+  },
+  {
+   "titulo": "Relatórios de Renda Fixa – XP Research",
+   "url": "https://conteudos.xpi.com.br/renda-fixa/"
+  },
+  {
+   "titulo": "Boletim Focus – Banco Central",
+   "url": "https://www.bcb.gov.br/publicacoes/focus"
+  },
+  {
+   "titulo": "Curva de juros (ETTJ) – ANBIMA",
+   "url": "https://www.anbima.com.br/informacoes/est-termo/CZ.asp"
+  }
+ ],
+ "fontes": "ANBIMA (ETTJ de 13/11/2026), Banco Central – Boletim Focus (16/11/2026), IBGE (IPCA de outubro/2026)."
+}
