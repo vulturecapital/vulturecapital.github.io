@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1a00fe">
+<link rel="icon" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta property="og:title" content="Simulador de benefício fiscal PGBL | Vulture Capital">
+<meta property="og:description" content="Veja quanto você pode economizar de imposto aplicando em previdência PGBL.">
+<meta property="og:image" content="https://vulturecapital.github.io/assets/og-image.png">
+<title>Simulador PGBL | Vulture Capital</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: claro, didático, para o cliente final
+   IDEA: um extrato de imposto lado a lado, sem PGBL e com PGBL
+   PICTURE: o valor da economia em destaque e duas barras de imposto comparadas
+   COLOUR and TYPE: azul Vulture #1a00fe, verde para economia, Figtree
+   LAYOUT: perguntas à esquerda, resultado à direita; empilha no celular */
+:root{color-scheme:light dark;--bg:light-dark(#f3f3f8,#0d0d18);--ink:light-dark(#14142b,#ececf5);--mut:light-dark(#5b5b72,#a7a7bf);--card:light-dark(#fff,#171728);--line:light-dark(#dcdcea,#2b2b44);--soft:light-dark(#ecebff,#1d1b3d);--blue:#1a00fe;--blueInk:light-dark(#1a00fe,#9d93ff);--green:light-dark(#0b7a3b,#4ade80)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,Arial,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,4vw,48px) max(5vw,16px);max-width:1120px;margin:0 auto}
+.logo{background:#fff;border-radius:12px;padding:8px 12px;display:inline-flex;margin-bottom:20px}.logo img{height:30px;display:block}
+h1{font-size:clamp(28px,4.6vw,44px);line-height:1.05;margin:0 0 8px;text-wrap:balance}
+h2{font-size:20px;margin:0 0 12px}
+.lead{color:var(--mut);margin:0 0 24px;max-width:64ch}
+.work{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:20px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+.q{margin:0 0 18px}.q>label,.q>p.l{display:block;font-weight:600;font-size:15px;margin:0 0 6px}
+.hint{font-size:13px;color:var(--mut);margin:5px 0 0}
+.yn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.yn button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;font:600 15px Figtree,Arial,sans-serif;min-height:44px;cursor:pointer}
+.yn button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+input,select{width:100%;font:16px Figtree,Arial,sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-height:46px}
+input[type=range]{padding:0;min-height:32px;accent-color:var(--blue);background:none;border:0}
+input:focus,select:focus,button:focus-visible,summary:focus-visible{outline:3px solid #8f80ff;outline-offset:1px}
+details summary{cursor:pointer;font-weight:600;font-size:15px;min-height:44px;display:flex;align-items:center;color:var(--blueInk)}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.big{font-size:clamp(34px,5vw,48px);font-weight:800;line-height:1.05;color:var(--green);white-space:nowrap}
+.sub{color:var(--mut);margin:4px 0 18px}
+.bars{display:grid;gap:12px;margin:0 0 18px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:baseline}
+.bar b{white-space:nowrap}.track{grid-column:1/3;height:14px;border-radius:9px;background:var(--line);overflow:hidden}.track i{display:block;height:100%;border-radius:9px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.fact{background:var(--soft);border-radius:12px;padding:10px 12px}.fact small{display:block;color:var(--mut);font-size:13px}.fact b{font-size:18px;white-space:nowrap}
+.msg{border-radius:12px;padding:14px;background:var(--soft);font-size:15px}
+.warn{background:light-dark(#fff4e5,#2a2010)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 0}td{padding:6px 0;border-top:1px solid var(--line)}td:last-child{text-align:right;font-weight:700}
+.cta{display:inline-flex;align-items:center;justify-content:center;background:var(--blue);color:#fff;border-radius:12px;padding:12px 18px;font:700 16px Figtree,Arial,sans-serif;text-decoration:none;min-height:48px;margin-top:16px}
+.fine{font-size:12px;color:var(--mut);margin-top:24px;max-width:110ch}
+@media(max-width:780px){.work{grid-template-columns:minmax(0,1fr)}}
+</style></head><body>
+<main class="band">
+<span class="logo"><img src="logo.png" alt="Vulture Capital e XP"></span>
+<h1>Quanto você pode economizar de imposto com PGBL?</h1>
+<p class="lead">Responda algumas perguntas e veja uma estimativa do imposto que deixa de pagar (ou volta como restituição) aplicando em previdência PGBL. A conta usa as regras do Imposto de Renda de 2026, que vão na declaração de 2027.</p>
+<div class="work">
+<form class="card" id="f" autocomplete="off">
+ <div class="q"><p class="l">1. Você tem renda tributável?</p><div class="yn" data-k="trib"><button type="button" data-v="1" aria-pressed="true">Sim</button><button type="button" data-v="0">Não</button></div><p class="hint">Salário, pró-labore, aluguel, aposentadoria do INSS ou trabalho autônomo. Dividendos não contam.</p></div>
+ <div class="q"><p class="l">2. Você contribui para o INSS ou regime próprio (servidor público)?</p><div class="yn" data-k="inss"><button type="button" data-v="1" aria-pressed="true">Sim</button><button type="button" data-v="0">Não</button></div></div>
+ <div class="q"><label for="tipo">3. Como você recebe?</label><select id="tipo"><option value="clt">Salário com carteira assinada (CLT)</option><option value="outro">Pró-labore, autônomo ou servidor</option></select></div>
+ <div class="q"><label for="sal">4. Renda bruta mensal (R$)</label><input id="sal" inputmode="numeric" placeholder="Ex.: 15.000"><p class="hint">Antes dos descontos. Não inclua o 13º, que é tributado à parte.</p></div>
+ <div class="q" id="inssQ" hidden><label for="inssv">Quanto você paga de INSS ou previdência oficial por mês (R$)</label><input id="inssv" inputmode="numeric" placeholder="Ex.: 932"></div>
+ <details class="q"><summary>Tem outras rendas ou despesas dedutíveis? (opcional)</summary>
+  <div class="q"><label for="out">Outras rendas tributáveis no ano, como aluguel (R$)</label><input id="out" inputmode="numeric" placeholder="0"></div>
+  <div class="row2"><div class="q"><label for="dep">Dependentes</label><input id="dep" inputmode="numeric" placeholder="0"></div><div class="q"><label for="sau">Saúde no ano (R$)</label><input id="sau" inputmode="numeric" placeholder="0"></div></div>
+  <div class="q"><label for="edu">Educação no ano, sua e dos dependentes (R$)</label><input id="edu" inputmode="numeric" placeholder="0"><p class="hint">Escola e faculdade. Limite de R$ 3.561,50 por pessoa.</p></div>
+ </details>
+ <div class="q"><label for="pct">Quanto da renda aplicar em PGBL: <span id="pctv">12%</span></label><input type="range" id="pct" min="1" max="12" value="12"><p class="hint">O máximo dedutível é 12% da renda bruta tributável do ano.</p></div>
+</form>
+<section class="card" id="res" aria-live="polite"></section>
+</div>
+<p class="fine">Simulação ilustrativa, com base na tabela progressiva anual do IRPF do ano-calendário 2026, no redutor da Lei 15.270/2025, na tabela do INSS 2026 e no desconto simplificado de R$ 16.754,34. Não considera o 13º salário, a tributação mínima de altas rendas nem outras particularidades da sua declaração. O benefício só vale na declaração completa e para quem contribui ao INSS ou regime próprio. Não é recomendação nem promessa de resultado: confirme com seu assessor e seu contador. A Vulture Capital AI Ltda é uma empresa de Assessoria de Investimento devidamente registrada na Comissão de Valores Mobiliários na forma da Resolução CVM 178/23, credenciada à XP Investimentos CCTVM S/A. Na forma da legislação da CVM, o Assessor de Investimentos não pode administrar ou gerir o patrimônio de investidores. Rentabilidade passada não é garantia de rentabilidade futura. Para reclamações, favor contatar a Ouvidoria da XP Investimentos no telefone nº 0800 722 3730.</p>
+</main>
+<script>
+{
+const $=id=>document.getElementById(id);
+const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const num=s=>{const d=String(s||'').split(',')[0].replace(/\D/g,'');return d?+d:0};
+const ASS={a34323:["Ailton Alves Evangelista","5537999222220"],a26043:["Bruno Sé Braga","5561981346025"],a28241:["Daniel Zawader","5511981525270"],a36987:["Éderson Oliveira Teixeira","5561981021699"],a40171:["Evandro Eid Filho","5517981245021"],a38728:["Fausto Vargas Boldrini","5511975926945"],a43877:["Fernando Simon Tempel","5511997657136"],a32870:["Ivan Marra Silveira","5561991500434"],a74490:["Marc Landesmann Frey","5511986245020"],a27602:["Marina Maria Elias Luz","5511975754719"]};
+/* Regras 2026 */
+const TAB=[[29145.60,0,0],[33919.80,.075,2185.92],[45012.60,.15,4729.91],[55976.16,.225,8105.85],[Infinity,.275,10904.66]];
+const SIMP=16754.34,DEP=2275.08,EDU=3561.50;
+const ir=b=>{const f=TAB.find(t=>b<=t[0]);return Math.max(0,b*f[1]-f[2])};
+const red=(R,t)=>R<=60000?Math.min(t,2694.15):R<=88200?Math.min(t,Math.max(0,8429.73-0.095575*R)):0;
+const inssM=s=>{const c=Math.min(s,8475.55);if(c<=1621)return c*.075;if(c<=2902.84)return c*.09-24.32;if(c<=4354.27)return c*.12-111.40;return c*.14-198.49};
+const st={trib:1,inss:1};
+const calc=()=>{
+ const sal=num($('sal').value),R=sal*12+num($('out').value),tipo=$('tipo').value;
+ const inss=(tipo==='clt'?inssM(sal):num($('inssv').value))*12;
+ const dep=num($('dep').value),ded0=inss+dep*DEP+num($('sau').value)+Math.min(num($('edu').value),EDU*(1+dep));
+ const pg=R*(+$('pct').value)/100;
+ const tax=b=>{const t=ir(Math.max(0,b));return t-red(R,t)};
+ const simp=tax(R-Math.min(R*.2,SIMP)),comp0=tax(R-ded0),comp1=tax(R-ded0-pg);
+ const sem=Math.min(simp,comp0),com=Math.min(simp,comp1);
+ return{R,sal,pg,sem,com,eco:sem-com,usaComp:comp1<simp,modelo0:comp0<simp?'completa':'simplificada'};
+};
+const wa=()=>{const k=location.hash.slice(1).toLowerCase(),a=ASS[k];return a};
+const draw=()=>{
+ $('pctv').textContent=$('pct').value+'%';
+ $('inssQ').hidden=$('tipo').value==='clt';
+ const r=$('res'),a=wa(),who=a?a[0].split(' ')[0]:'seu assessor';
+ const cta=(t)=>{const txt=encodeURIComponent(t);return a?`<a class="cta" href="https://wa.me/${a[1]}?text=${txt}" target="_blank" rel="noopener">Falar com ${esc(a[0])} no WhatsApp</a>`:''};
+ if(!st.trib){r.innerHTML=`<h2>Sem renda tributável, não há benefício</h2><p class="msg">O PGBL reduz o imposto sobre a renda tributável. Sem ela, não há imposto a deduzir. Para quem não aproveita a dedução, o VGBL costuma ser a previdência mais indicada: converse com ${esc(who)}.</p>${cta('Olá! Fiz a simulação de PGBL e queria entender a melhor previdência para mim.')}`;return}
+ if(!st.inss){r.innerHTML=`<h2>Para deduzir, é preciso contribuir ao INSS</h2><p class="msg">A dedução do PGBL só vale para quem contribui ao INSS ou a regime próprio de previdência. Converse com ${esc(who)} sobre as alternativas.</p>${cta('Olá! Fiz a simulação de PGBL e queria entender minhas opções.')}`;return}
+ const c=calc();
+ if(!c.sal){r.innerHTML='<h2>Seu resultado aparece aqui</h2><p class="msg">Informe sua renda bruta mensal para ver a estimativa.</p>';return}
+ if(c.sem<=0){r.innerHTML=`<h2>Você já não paga imposto de renda</h2><p class="msg">Com essa renda, o imposto anual já fica zerado pelas regras de 2026 (isenção até R$ 5 mil por mês e redução até R$ 7.350). O PGBL não traz economia de imposto nesse caso.</p>${cta('Olá! Fiz a simulação de PGBL e queria conversar sobre previdência.')}`;return}
+ const pct=c.eco/c.pg*100,mx=Math.max(c.sem,1);
+ r.innerHTML=`<h2>Sua economia estimada de imposto</h2>
+ <div class="big">${brl(c.eco)}</div><p class="sub">por ano, aplicando ${brl(c.pg)} em PGBL (${brl(c.pg/12)} por mês). É como se ${pct.toLocaleString('pt-BR',{maximumFractionDigits:1})}% do que você aplica voltasse em imposto.</p>
+ <div class="bars"><div class="bar"><span>Imposto do ano sem PGBL</span><b>${brl(c.sem)}</b><span class="track"><i style="width:${c.sem/mx*100}%;background:var(--mut)"></i></span></div>
+ <div class="bar"><span>Imposto do ano com PGBL</span><b>${brl(c.com)}</b><span class="track"><i style="width:${c.com/mx*100}%;background:var(--blue)"></i></span></div></div>
+ <div class="facts"><div class="fact"><small>Renda tributável no ano</small><b>${brl(c.R)}</b></div><div class="fact"><small>Aplicação em PGBL</small><b>${brl(c.pg)}</b></div></div>
+ ${c.usaComp?'':`<p class="msg warn">Com esse valor de aplicação, a declaração simplificada ainda compensa mais, então o PGBL não gera economia. Aumente o percentual ou informe suas despesas dedutíveis.</p>`}
+ <div class="msg"><b>Como isso chega no seu bolso:</b> você declara pelo modelo <b>completo</b> e a economia aparece na declaração de 2027 como <b>restituição maior ou imposto menor</b>.
+ <br><br><b>E no futuro?</b> O imposto não some: ele é pago no resgate, sobre o valor total. Mas, na tabela regressiva, a alíquota cai com o tempo e chega a <b>10% depois de 10 anos</b>. Hoje você deixa de pagar cerca de ${pct.toLocaleString('pt-BR',{maximumFractionDigits:1})}% sobre o que aplica; lá na frente, pode pagar 10%. E, enquanto isso, o imposto que ficaria com a Receita continua rendendo para você.
+ <table><tr><td>Até 2 anos</td><td>35%</td></tr><tr><td>2 a 4 anos</td><td>30%</td></tr><tr><td>4 a 6 anos</td><td>25%</td></tr><tr><td>6 a 8 anos</td><td>20%</td></tr><tr><td>8 a 10 anos</td><td>15%</td></tr><tr><td>Acima de 10 anos</td><td>10%</td></tr></table></div>
+ ${cta(`Olá! Fiz a simulação de PGBL: economia estimada de ${brl(c.eco)} por ano aplicando ${brl(c.pg)}. Quero saber mais.`)}`;
+};
+const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+document.querySelectorAll('.yn').forEach(g=>g.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st[g.dataset.k]=+b.dataset.v;g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()}));
+$('f').addEventListener('input',draw);$('f').addEventListener('submit',e=>e.preventDefault());
+['sal','inssv','out','sau','edu'].forEach(id=>$(id).addEventListener('blur',()=>{const v=num($(id).value);if(v)$(id).value=v.toLocaleString('pt-BR')}));
+addEventListener('hashchange',draw);draw();
+}
+</script></body></html>
