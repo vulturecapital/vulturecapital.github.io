@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#1a00fe">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="icon" href="../assets/favicon.png">
+<meta name="apple-mobile-web-app-title" content="Assistente Vulture">
+<title>Assistente do Assessor Vulture</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: balcão de trabalho do escritório, direto e calmo
+   IDEA: a mesa do assessor, com um plano de investimento saindo da impressora
+   PICTURE: o plano do cliente, com a barra de alocação em cores e as classes, ao vivo
+   COLOUR and TYPE: azul Vulture #1a00fe, branco, verde/amarelo/laranja das classes; Figtree
+   LAYOUT: menu "como posso te ajudar" no topo; formulário à esquerda, plano à direita, empilha no celular */
+:root{color-scheme:light dark;--bg:light-dark(#f3f3f8,#0d0d18);--ink:light-dark(#14142b,#ececf5);--mut:light-dark(#5b5b72,#a7a7bf);--card:light-dark(#fff,#171728);--line:light-dark(#dcdcea,#2b2b44);--soft:light-dark(#ecebff,#1d1b3d);--blue:#1a00fe;--blueInk:light-dark(#1a00fe,#9d93ff)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,Arial,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,4vw,48px) max(5vw,16px);max-width:1180px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.logo{background:#fff;border-radius:12px;padding:8px 12px;display:inline-flex;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.logo img{height:30px;display:block}
+.back{background:none;border:0;color:var(--blueInk);font:600 15px Figtree,Arial,sans-serif;cursor:pointer;min-height:44px;padding:0 4px}
+h1{font-size:clamp(30px,5vw,46px);line-height:1.05;margin:0 0 8px;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:22px;line-height:1.2;margin:0 0 4px}
+.lead{color:var(--mut);margin:0 0 24px;max-width:62ch}
+.menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.tile{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;color:var(--ink);font:inherit;cursor:pointer;min-height:120px}
+.tile b{font-size:18px}.tile span{color:var(--mut);font-size:15px}
+.tile.main{background:var(--blue);border-color:var(--blue);color:#fff;grid-column:span 2}
+.tile.main span{color:#dcd8ff}
+.tile[disabled]{cursor:default;opacity:.72}
+.tag{align-self:flex-start;font-size:13px;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--soft);color:var(--blueInk)}
+.tile.main .tag{background:rgba(255,255,255,.18);color:#fff}
+.work{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:20px;align-items:start}
+form,.plan{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+label{display:block;font-weight:600;font-size:15px;margin:0 0 6px}
+.f{margin:0 0 16px}.hint{font-size:13px;color:var(--mut);margin-top:5px}
+input,select,textarea{width:100%;font:16px Figtree,Arial,sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-height:46px}
+textarea{min-height:70px;resize:vertical}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid #8f80ff;outline-offset:1px}
+.lh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.lh label{flex:1}
+.qm{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--blue);background:var(--soft);color:var(--blueInk);font:800 15px Figtree,Arial,sans-serif;cursor:pointer}
+.help{background:var(--soft);border-radius:12px;padding:12px 14px;margin:0 0 10px;font-size:14px}.help p{margin:0 0 8px}.help ol{margin:0 0 8px;padding-left:20px}.help li{margin-bottom:6px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.seg button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;font:600 15px Figtree,Arial,sans-serif;min-height:44px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--blue);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:700 16px Figtree,Arial,sans-serif;cursor:pointer;min-height:48px}
+.btn.ghost{background:var(--soft);color:var(--blueInk)}
+.btn.ok{background:#0b7a3b}.btn.err{background:#9b1c1c}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.empty{color:var(--mut);display:grid;place-items:center;text-align:center;min-height:300px;border:2px dashed var(--line);border-radius:14px;padding:20px}
+.who{color:var(--mut);margin:0 0 14px}
+.total{font-size:clamp(28px,4vw,38px);font-weight:800;line-height:1.1;color:var(--blueInk);white-space:nowrap}
+.bar{display:flex;height:22px;border-radius:999px;overflow:hidden;margin:16px 0 18px;background:var(--line)}
+.bar i{display:block;height:100%}
+.rows{list-style:none;margin:0;padding:0}
+.rows li{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:4px 12px;align-items:baseline;padding:12px 0;border-top:1px solid var(--line)}
+.dot{width:14px;height:14px;border-radius:50%;align-self:center}
+.rows .n{font-weight:700}.rows .v{text-align:right;font-weight:700;white-space:nowrap}
+.rows .v small{display:block;font-weight:500;color:var(--mut);font-size:14px}
+.rows .p{grid-column:2/4;font-size:14px;color:var(--mut)}
+.rows .p em{font-style:normal;color:var(--ink)}
+.note{margin-top:14px;font-size:14px;color:var(--mut);background:var(--soft);border-radius:12px;padding:10px 12px}
+.note b{color:var(--ink)}
+.toast{font-size:14px;color:var(--mut);min-height:20px;margin-top:8px}.toast:empty{min-height:0;margin:0}
+.soon{margin-top:26px;padding:16px 18px;border-radius:14px;background:var(--soft);color:var(--ink);font-size:15px}
+.ck{font-size:14px;font-weight:700;color:var(--blueInk);margin:0 0 8px}.ctabs{margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line)}.tabs button[disabled]{opacity:.55;cursor:default}
+.src{font-size:13px;color:var(--mut);margin:-14px 0 20px}.src a{color:var(--blueInk)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+.tabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 16px;font:600 15px Figtree,Arial,sans-serif;min-height:44px;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.sw{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;margin:0 0 16px;cursor:pointer;min-height:44px}.sw input{width:20px;height:20px;min-height:0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:0 0 16px}
+.box h3{font-size:18px;margin:0 0 10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:0 0 16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.kpi small{display:block;color:var(--mut);font-size:13px}.kpi b{font-size:22px;white-space:nowrap}.kpi span{display:block;font-size:13px;color:var(--mut)}
+.up{color:#c0392b}.down{color:#0b7a3b}
+.cat{margin:0 0 14px}.cat h4{margin:0 0 6px;font-size:14px;color:var(--mut);font-weight:600}
+.it{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--line)}.it b{white-space:nowrap;color:var(--blueInk)}.it span small{display:block;color:var(--mut);font-size:13px}
+.al{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:4px 12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.al .tr{grid-column:1/3;height:8px;border-radius:9px;background:var(--line);overflow:hidden}.al .tr i{display:block;height:100%;background:var(--blue)}
+.al b{text-align:right}.al p{grid-column:1/3;margin:0;font-size:14px;color:var(--mut)}
+.txt{white-space:pre-wrap;font-size:15px;margin:10px 0 0}
+details summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.fd{border-top:1px solid var(--line);padding:12px 0}
+.fd>summary{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center;list-style:none}
+.fd>summary::-webkit-details-marker{display:none}
+.w{font-size:20px;font-weight:800;color:var(--blueInk)}.fd .nm small{display:block;font-weight:500;color:var(--mut);font-size:13px}
+.fd .r{text-align:right;white-space:nowrap}.fd .r small{display:block;font-weight:500;color:var(--mut);font-size:13px}
+.dl2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px 14px;margin:10px 0 0 66px;font-size:14px}.dl2 div small{display:block;color:var(--mut)}
+.fd .cm{margin:10px 0 0 66px;font-size:15px}.fd .actions{margin:10px 0 0 66px}
+.fine{font-size:13px;color:var(--mut);margin-top:14px}.fine a,.src a{overflow-wrap:anywhere}
+a.btn{text-decoration:none}
+@media(max-width:600px){.dl2,.fd .cm,.fd .actions{margin-left:0}}
+@media(min-width:761px){.work.atw{grid-template-columns:minmax(0,1fr) minmax(0,260px)}}
+@media(max-width:760px){.work{grid-template-columns:minmax(0,1fr)}.tile.main{grid-column:auto}}
+</style></head><body>
+<main class="band">
+<header><span class="logo"><img src="logo.png" alt="Vulture Capital e XP"></span><button class="back" id="back" hidden>← Voltar ao início</button></header>
+
+<section id="home">
+<h1>Olá, assessor! Como posso te ajudar?</h1>
+<p class="lead">Escolha o que você precisa hoje. Novas funções vão entrar aqui aos poucos.</p>
+<div class="menu">
+ <button class="tile main" data-go="carteira"><span class="tag">1</span><b>Recomendação de carteira</b><span>Monte um plano de investimento para um novo cliente e gere o PDF.</span></button>
+ <button class="tile" data-go="atalhos"><span class="tag">2</span><b>Atalhos de atendimento</b><span>Mensagens prontas para WhatsApp: senha, cartão, troca de assessor, endereço…</span></button>
+ <button class="tile" data-go="links"><span class="tag">3</span><b>Link personalizado de abertura de conta</b><span>O link de cadastro na XP já com o seu código de assessor.</span></button>
+ <button class="tile" data-go="curadoria"><span class="tag">4</span><b>Curadoria de produtos</b><span>Renda fixa, fundos, previdência e renda variável recomendados pelo escritório.</span></button>
+ <button class="tile" data-go="kit"><span class="tag">5</span><b>Kit do Assessor</b><span>Sua assinatura de e-mail, cartão de visita, cartão digital e contato para WhatsApp.</span></button>
+</div>
+</section>
+
+<section id="carteira" hidden>
+<h1>Recomendação de carteira</h1>
+<p class="lead">Preencha os dados do cliente. O plano aparece ao lado e o PDF sai só com as classes de ativos, sem nomes de produtos.</p>
+<div class="work">
+<form id="frm" autocomplete="off">
+ <div class="f"><label for="ass">Assessor</label><select id="ass"></select></div>
+ <div class="f"><label for="cli">Nome do cliente</label><input id="cli" placeholder="Ex.: Ana Souza"></div>
+ <div class="f"><label for="val">Valor para montar a carteira (R$)</label><input id="val" inputmode="numeric" placeholder="Ex.: 300.000"></div>
+ <div class="f"><label>Perfil do cliente</label><div class="seg" id="perfil"><button type="button" data-v="Conservador">Conservador</button><button type="button" data-v="Moderado" aria-pressed="true">Moderado</button><button type="button" data-v="Agressivo">Agressivo</button></div><p class="hint">Renda variável só entra para moderado e agressivo.</p></div>
+ <div class="f"><label for="obj">Objetivo</label><input id="obj" value="Preservação e crescimento do patrimônio"></div>
+ <div class="f"><label for="obs">Observação (opcional)</label><textarea id="obs" placeholder="Algo específico deste cliente"></textarea></div>
+ <div class="f"><div class="lh"><label for="prev">Tem estrutura de renda para benefício fiscal (PGBL)?</label><button type="button" class="qm" id="pgq" aria-expanded="false" aria-controls="pgh" title="Como saber?">?</button></div>
+ <div class="help" id="pgh" hidden>
+  <p><b>Pergunte ao cliente, nesta ordem.</b> Se todas forem "sim", ele tem estrutura e vale recomendar PGBL.</p>
+  <ol>
+   <li><b>Você tem renda tributável?</b> Salário (CLT), pró-labore, aluguel, aposentadoria do INSS ou trabalho autônomo. Dividendos e rendimentos isentos não contam.</li>
+   <li><b>Sua renda tributável passa de R$ 5 mil por mês?</b> Desde 2026, quem ganha até R$ 5 mil não paga IR, então o PGBL não traz ganho fiscal. Entre R$ 5 mil e R$ 7.350 o ganho é pequeno; acima de R$ 7.350 é cheio.</li>
+   <li><b>Você contribui para o INSS ou para regime próprio (servidor público)?</b> É obrigatório para deduzir. Aposentado também pode.</li>
+   <li><b>Você faz a declaração completa do IR?</b> A dedução só vale no modelo completo. Costuma compensar quando as deduções (INSS, saúde, educação, dependentes, o próprio PGBL) passam de R$ 16.754,34 no ano, o limite do desconto simplificado.</li>
+  </ol>
+  <p><b>Quanto recomendar:</b> sempre 12% da renda bruta tributável anual. É o máximo que pode ser deduzido; o que passar disso não tem benefício. Marcando "Sim", essa observação entra no plano e no PDF.</p>
+  <p><b>Para explicar ao cliente:</b> o aporte reduz a base de cálculo do IR do ano, o que diminui o imposto a pagar ou aumenta a restituição (até 27,5% do valor aportado, conforme a faixa). O imposto é pago lá na frente, no resgate, sobre o valor total.</p>
+  <p class="hint">Atenção a empresários: quem tira quase tudo em dividendos e pró-labore baixo costuma ter pouca renda tributável.</p>
+  <p><b>Para mostrar ao cliente:</b> mande o <a href="#atalhos" style="color:var(--blueInk)">Simulador de benefício fiscal</a>, que está nos Atalhos de atendimento.</p>
+ </div>
+ <select id="prev"><option value="">Não informar</option><option>Sim</option><option>Não</option></select></div>
+
+</form>
+<div class="plan" id="plan"></div>
+</div>
+<div class="soon"><b>Próximo passo:</b> o PDF hoje mostra só as classes. Quando a fonte dos produtos estiver definida, o plano passa a sugerir os produtos do dia.</div>
+</section>
+<nav class="ctabs" id="ctabs" hidden><p class="ck">Curadoria de produtos</p><div class="tabs"><button type="button" data-go="renda-fixa">Renda fixa</button><button type="button" data-go="fundos">Fundos</button><button type="button" data-go="previdencia">Previdência</button><button type="button" disabled title="Em breve">Renda variável · em breve</button></div></nav>
+<section id="renda-fixa" hidden></section>
+<section id="fundos" hidden></section>
+<section id="previdencia" hidden></section>
+<section id="atalhos" hidden></section>
+<section id="links" hidden></section>
+<section id="kit" hidden></section>
+</main>
+<script src="jspdf.umd.min.js"></script>
+<script>
+{
+/* ===== Regras da carteira (editar aqui) ===== */
+const CLS={
+ liq:{n:'Liquidez',c:'#1aa35a',d:'Para emergências e oportunidades de investimento, é a parcela que você pode usufruir a qualquer momento, sem se preocupar com data de vencimento, carência, deságio ou momento de mercado, pois a alocação é feita em produtos conservadores que acompanham a taxa de mercado (exemplo: CDB 100% CDI, LCI, Tesouro Selic, fundo DI).'},
+ pre:{n:'Prefixados e inflação',c:'#e8a800',d:'Oportunidade para aproveitar o momento de taxa de juros alta e garantir uma taxa expressiva acima do mercado pelos próximos anos, já que a expectativa é de queda para os próximos meses.'},
+ fun:{n:'Fundos selecionados',c:'#1a00fe',d:'Através de estratégias diversificadas, é possível proteger e rentabilizar o patrimônio independente da situação política e econômica do Brasil e do mundo. Muitos fundos sem liquidez imediata ainda têm alta liquidez, entre 12 e 60 dias após o pedido de resgate.'},
+ rv:{n:'Renda variável',c:'#f07c1b',d:'São ativos mais voláteis, mas podem acelerar o acúmulo de patrimônio a longo prazo, e existem opções com 100% de proteção do capital investido.'},
+ rvg:{n:'Renda variável sem desembolso',c:'#f07c1b',d:'Estratégia de renda variável feita com as garantias da própria carteira (títulos públicos e/ou ações), sem desembolso de caixa. São operações mais voláteis, que podem acelerar o acúmulo de patrimônio a longo prazo.'}
+};
+const MOD=[
+ {ate:500000,ref:'R$ 300 mil',it:[
+  {c:'liq',p:20,prod:'Tesouro Selic (LFT) · liquidez D+1'},
+  {c:'fun',p:50,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'},
+  {c:'pre',p:30,prod:'CDB mercado secundário, conforme a oferta do dia'}],
+  rv:{p:10,de:1,cls:'rv',prod:'Estratégias e produtos de renda variável'}},
+ {ate:1000000,ref:'R$ 500 mil',it:[
+  {c:'liq',p:30,prod:'Tesouro Selic (LFT) · liquidez D+1'},
+  {c:'fun',p:40,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'},
+  {c:'pre',p:30,prod:'CDB mercado secundário, conforme a oferta do dia'}],
+  rv:{p:10,garantia:true,cls:'rvg',prod:'Long & Short, sem desembolso de caixa'}},
+ {ate:Infinity,ref:'R$ 1 milhão',it:[
+  {c:'liq',p:20,prod:'Tesouro Selic (LFT) · liquidez D+1'},
+  {c:'fun',p:20,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'},
+  {c:'fun',p:30,prod:'Fundo de renda fixa Solis · liquidez D+60'},
+  {c:'pre',p:30,prod:'CDB mercado secundário, conforme a oferta do dia'}],
+  rv:{p:10,garantia:true,cls:'rvg',prod:'Long & Short, sem desembolso de caixa'}}
+];
+const ASS=[["Ailton Alves Evangelista","(37) 99922-2220","Assessor"],["Bruno Sé Braga","(61) 98134-6025","Assessor"],["Daniel Zawader","(11) 98152-5270","Assessor"],["Éderson Oliveira Teixeira","(61) 98102-1699","Assessor"],["Evandro Eid Filho","(17) 98124-5021","Assessor"],["Fausto Vargas Boldrini","(11) 97592-6945","Assessor"],["Fernando Simon Tempel","(11) 99765-7136","Assessor"],["Ivan Marra Silveira","(61) 99150-0434","Assessor"],["Marc Landesmann Frey","(11) 98624-5020","Assessor"],["Marina Maria Elias Luz","(11) 97575-4719","Assessora"]];
+const DISC='A Vulture Capital AI Ltda é uma empresa de Assessoria de Investimento devidamente registrada na Comissão de Valores Mobiliários na forma da Resolução CVM 178/23. A Vulture Capital AI Ltda atua no mercado financeiro credenciada à XP Investimentos CCTVM S/A, o que pode ser verificado através do site da CVM (www.cvm.gov.br) em central de Sistemas ou através do site da ANCORD para escritórios credenciados a partir de outubro de 2012 (www.ancord.org.br) ou através do site da própria XP Investimentos CCTVM S/A (www.xpi.com.br). Na forma da legislação da CVM, o Assessor de Investimentos não pode administrar ou gerir o patrimônio de investidores. O Assessor de Investimentos é um intermediário e depende da autorização prévia do cliente para realizar operações no mercado financeiro. Este plano é uma simulação de alocação e não constitui oferta de compra ou venda de qualquer ativo. O investimento em ações é um investimento de risco e rentabilidade passada não é garantia de rentabilidade futura. Na realização de operações com derivativos existe a possibilidade de perdas superiores aos valores investidos, podendo resultar em significativas perdas patrimoniais. Para informações e dúvidas, favor contatar seu Assessor de Investimentos. Para reclamações, favor contatar a Ouvidoria da XP Investimentos no telefone nº 0800 722 3730.';
+const SEG='Ativo securitário é muito importante para proteger o patrimônio conquistado e o padrão de vida e educação dos filhos em caso de doença grave ou ausência do provedor principal. Além disso, uma vantagem de começar um plano securitário o quanto antes, mesmo que com valor pequeno, é a possibilidade de congelar a idade de risco. Agende uma conversa com o especialista do escritório!';
+
+/* ===== Cálculo ===== */
+const $=id=>document.getElementById(id);
+const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const num=s=>{const d=String(s).split(',')[0].replace(/\D/g,'');return d?+d:0};
+const plano=(v,perfil)=>{
+ const m=MOD.find(x=>v<x.ate);
+ const it=m.it.map(x=>({...x}));let rv=null;
+ if(perfil!=='Conservador'&&m.rv){
+  rv={...m.rv,v:v*m.rv.p/100};
+  if(!m.rv.garantia){it[m.rv.de].p-=m.rv.p;it.push({c:m.rv.cls,p:m.rv.p,prod:m.rv.prod})}
+ }
+ it.forEach(x=>x.v=v*x.p/100);
+ const cls=[];it.forEach(x=>{let g=cls.find(c=>c.c===x.c);if(!g){g={c:x.c,p:0,v:0,prods:[]};cls.push(g)}g.p+=x.p;g.v+=x.v;g.prods.push(x.prod)});
+ return{m,it,cls,rv:rv&&rv.garantia?rv:null};
+};
+
+/* ===== Tela ===== */
+const st={perfil:'Moderado'};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const CODS=["A34323","A26043","A28241","A36987","A40171","A38728","A43877","A32870","A74490","A27602"];
+const assSel=id=>{const v=store.get('vc-ass')||'';return `<select id="${id}" data-ass><option value="">Selecione</option>${ASS.map((a,i)=>`<option value="${i}" ${String(i)===v?'selected':''}>${a[0]}</option>`).join('')}</select>`};
+$('ass').innerHTML='<option value="">Selecione</option>'+ASS.map((a,i)=>`<option value="${i}">${a[0]}</option>`).join('');
+const sv=store.get('vc-ass');if(sv!==null)$('ass').value=sv;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cur=null;
+const draw=()=>{
+ const v=num($('val').value),nome=$('cli').value.trim();
+ if(!v){cur=null;$('plan').innerHTML='<div class="empty"><p><b>O plano aparece aqui.</b><br>Digite o nome do cliente e o valor da carteira.</p></div>';return}
+ const P=plano(v,st.perfil),pv=$('prev').value;cur={P,v,nome,pv};
+ $('plan').innerHTML=`<p class="who">${nome?'Plano para <b>'+esc(nome)+'</b>':'Plano'} · perfil ${st.perfil.toLowerCase()} · modelo ${P.m.ref}</p>
+ <div class="total">${brl(v)}</div>
+ <div class="bar" aria-hidden="true">${P.cls.map(c=>`<i style="width:${c.p}%;background:${CLS[c.c].c}"></i>`).join('')}</div>
+ <ul class="rows">${P.cls.map(c=>`<li><span class="dot" style="background:${CLS[c.c].c}"></span><span class="n">${CLS[c.c].n}</span><span class="v">${c.p}%<small>${brl(c.v)}</small></span><span class="p">Para você (não vai no PDF): <em>${c.prods.join(' + ')}</em></span></li>`).join('')}
+ ${P.rv?`<li><span class="dot" style="background:${CLS.rvg.c}"></span><span class="n">${CLS.rvg.n}</span><span class="v">+${P.rv.p}% do PL<small>${brl(P.rv.v)} em garantia</small></span><span class="p">Para você (não vai no PDF): <em>${P.rv.prod}</em></span></li>`:''}</ul>
+ ${st.perfil==='Conservador'?'<p class="note">Perfil conservador: a parcela de renda variável ficou de fora.</p>':''}
+ ${pv==='Sim'?'<p class="note"><b>Observação no plano:</b> aplicar 12% da renda bruta tributável anual em fundo PGBL, para benefício fiscal. Vai explicado no PDF.</p>':''}
+ <div class="actions"><button class="btn" id="pdf" type="button">Baixar PDF</button><button class="btn ghost" id="cp" type="button">Copiar para WhatsApp</button><button class="btn ghost" id="nova" type="button">Nova simulação</button></div>
+ <p class="toast" id="toast" role="status"></p>`;
+};
+const fmtVal=()=>{const v=num($('val').value);if(v)$('val').value=v.toLocaleString('pt-BR')};
+['cli','val','obj','obs','prev','ass'].forEach(id=>$(id).addEventListener('input',draw));
+$('prev').addEventListener('change',draw);
+$('pgq').addEventListener('click',()=>{const h=$('pgh');h.hidden=!h.hidden;$('pgq').setAttribute('aria-expanded',!h.hidden)});
+$('val').addEventListener('blur',fmtVal);
+$('ass').addEventListener('change',()=>store.set('vc-ass',$('ass').value));
+$('perfil').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st.perfil=b.dataset.v;$('perfil').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()});
+$('frm').addEventListener('submit',e=>e.preventDefault());
+const toast=t=>{const el=$('toast');if(el)el.textContent=t};
+
+/* ===== Texto WhatsApp (com produtos, para o assessor) ===== */
+const zap=()=>{
+ const{P,v,nome}=cur,em={liq:'🟢',fun:'🔵',pre:'🟡',rv:'🟠',rvg:'🟠'};
+ let t=`💰 *Plano de investimento${nome?' para '+nome:''}*\n*Patrimônio aproximado: ${brl(v)}*\n\n`;
+ P.it.forEach(x=>t+=`${em[x.c]}*(${x.p}%) ${brl(x.v)}* ${x.prod}\n`);
+ if(P.rv)t+=`${em.rvg}*(${P.rv.p}% do PL)* ${P.rv.prod}\n**Exclusivo para cliente com perfil moderado ou agressivo\n`;
+ if(cur.pv==='Sim')t+=`\n🟣*Observação:* aplicar 12% da renda bruta tributável anual em fundo PGBL, para benefício fiscal\n`;
+ return t.trim();
+};
+
+/* ===== PDF (só classes) ===== */
+let logo=null;
+fetch('logo.png').then(r=>r.blob()).then(b=>new Promise(res=>{const f=new FileReader();f.onload=()=>res(f.result);f.readAsDataURL(b)})).then(d=>logo=d).catch(()=>{});
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const makePdf=()=>{
+ const{P,v,nome}=cur,J=window.jspdf.jsPDF,doc=new J({unit:'mm',format:'a4'}),W=210,L=18,R=W-18,CW=R-L;
+ let y=15;
+ const need=h=>{if(y+h>283){doc.addPage();y=20}};
+ const para=(t,sz,col,st2,gap)=>{doc.setFont('helvetica',st2||'normal');doc.setFontSize(sz);doc.setTextColor(...(col||[40,40,60]));const ls=doc.splitTextToSize(t,CW);const lh=sz*.42;need(ls.length*lh);doc.text(ls,L,y+lh*.8);y+=ls.length*lh+(gap||0)};
+ if(logo)doc.addImage(logo,'PNG',L,y,40,40*298/900);
+ doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(26,0,254);doc.text('PLANO DE INVESTIMENTO',R,y+5,{align:'right'});
+ doc.setFont('helvetica','normal');doc.setTextColor(110,110,130);doc.text(new Date().toLocaleDateString('pt-BR'),R,y+10.5,{align:'right'});
+ y+=17;doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=6;
+ para('Cliente: '+(nome||'—'),16,[20,20,43],'bold',3);
+ para('Preparamos um Plano de Investimento 100% personalizado para você.',12,[26,0,254],'bold',2);
+ para('A ideia do plano de investimentos não é ser algo para ser seguido à risca, mas sim uma espécie de mapa em direção ao seu objetivo principal.',10,[60,60,80],'normal',5);
+ const bx=y;doc.setFillColor(240,239,255);doc.roundedRect(L,bx,CW,22,3,3,'F');
+ doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(90,90,115);doc.text('Patrimônio aproximado',L+5,bx+7);doc.text('Objetivo',L+70,bx+7);
+ doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(26,0,254);doc.text(brl(v),L+5,bx+15.5);
+ doc.setFontSize(10.5);doc.setTextColor(20,20,43);doc.text(doc.splitTextToSize($('obj').value.trim()||'Preservação e crescimento do patrimônio',CW-72),L+70,bx+13);
+ y=bx+27;
+ const obs=$('obs').value.trim();if(obs){para('Observação: '+obs,10.5,[40,40,60],'normal',5)}
+ let x=L;P.cls.forEach(c=>{const w=CW*c.p/100;doc.setFillColor(...hex(CLS[c.c].c));doc.rect(x,y,w,6,'F');x+=w});y+=12;
+ const row=(cls,lab,val,desc)=>{
+  doc.setFontSize(9.5);const ls=doc.splitTextToSize(desc,CW-8);need(8+ls.length*4.2);
+  doc.setFillColor(...hex(CLS[cls].c));doc.circle(L+2,y+1.8,2,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(20,20,43);doc.text(lab,L+7,y+3);
+  doc.text(val,R,y+3,{align:'right'});y+=7;
+  doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(70,70,90);doc.text(ls,L+7,y+3);y+=ls.length*4.1+4.5;
+ };
+ P.cls.forEach(c=>row(c.c,`${c.p}%  ${CLS[c.c].n}`,brl(c.v),CLS[c.c].d));
+ if(P.rv)row('rvg',`+${P.rv.p}% do patrimônio  ${CLS.rvg.n}`,brl(P.rv.v),CLS.rvg.d+' Exclusivo para perfil moderado ou agressivo.');
+ const pv=$('prev').value;if(pv==='Sim'){y+=1;para('Previdência PGBL (benefício fiscal)',11,[20,20,43],'bold',1.5);para('Observação: aplicar 12% da sua renda bruta tributável anual em um fundo de previdência PGBL. Quem faz a declaração completa do Imposto de Renda e contribui para o INSS ou regime próprio pode deduzir esses aportes da base de cálculo do imposto, até o limite de 12% da renda bruta tributável. Na prática, isso reduz o imposto a pagar ou aumenta a restituição do ano. O imposto sobre o PGBL é pago lá na frente, no resgate, sobre o valor total. Esse aporte é separado do valor da carteira acima.',9.5,[70,70,90],'normal',5)}else if(pv==='Não'){y+=1;para('Fundos previdenciários: possui estrutura de renda para benefício fiscal? NÃO',10.5,[20,20,43],'bold',5)}
+ para('Proteção do patrimônio',11,[20,20,43],'bold',1.5);para(SEG,9.5,[70,70,90],'normal',5);
+ const a=ASS[$('ass').value];if(a){need(16);doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=5;para(`${a[2]} de investimentos: ${a[0]}  ·  Celular/WhatsApp: ${a[1]}`,10,[26,0,254],'bold',4)}
+ doc.setFont('helvetica','normal');doc.setFontSize(6.2);const dl2=doc.splitTextToSize(DISC,CW),dh=dl2.length*2.6;if(y+dh>284){doc.addPage();y=20}const dy=Math.max(y,284-dh);doc.setTextColor(130,130,145);doc.text(dl2,L,dy+2);
+ const n=doc.getNumberOfPages();for(let i=1;i<=n;i++){doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(150,150,165);doc.text('Vulture Capital AI Ltda - Assessoria de Investimentos credenciada à XP Investimentos',L,290);doc.text(`${i}/${n}`,R,290,{align:'right'})}
+ return doc;
+};
+const saveBlob=(blob,fn)=>{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)};
+$('plan').addEventListener('click',async e=>{
+ const b=e.target.closest('button');if(!b||!cur)return;
+ if(b.id==='nova'){$('cli').value='';$('val').value='';$('obs').value='';$('prev').value='';draw();$('cli').focus();return}
+ if(b.id==='cp'){try{await navigator.clipboard.writeText(zap());toast('Texto copiado. É só colar no WhatsApp.')}catch(x){toast('Não deu para copiar neste aparelho.')}return}
+ if(b.id==='pdf'){
+  const lab=b.textContent;b.textContent='Gerando…';
+  try{
+   if(!window.jspdf)throw new Error('lib');
+   const blob=makePdf().output('blob');
+   const fn='Plano de Investimento - '+(cur.nome||'cliente').replace(/[\\/:*?"<>|]/g,'')+'.pdf';
+   saveBlob(blob,fn);b.classList.add('ok');b.textContent='PDF pronto';toast('')
+  }catch(x){if(x&&x.code==='declined'){b.textContent=lab;return}b.classList.add('err');b.textContent='Não baixou';toast('Não foi possível baixar aqui. Tente pelo computador ou avise a Marina.')}
+  setTimeout(()=>{b.textContent=lab;b.classList.remove('ok','err')},2800);
+ }
+});
+
+/* ===== Curadoria (dados copiados de vulturecapital.github.io) ===== */
+const SITE='https://vulturecapital.github.io/';
+const DATA={};
+const getJ=n=>DATA[n]?Promise.resolve(DATA[n]):fetch('../'+n+'.json?t='+Date.now()).then(r=>r.json()).then(j=>DATA[n]=j);
+const nf=(x,d=2)=>x==null?'—':Number(x).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const wz=s=>esc(s).replace(/\*([^*\n]+)\*/g,'<b>$1</b>');
+const copyBtn=(id,label)=>`<button class="btn ghost" type="button" data-copy="${id}">${label||'Copiar para WhatsApp'}</button>`;
+const CP={};
+const cv={rf:{perfil:1},fundos:{perfil:'Moderado',q:false},previdencia:{perfil:'Moderado',q:false}};
+const head=(t,sub,url)=>`<h1>${t}</h1><p class="lead">${sub}</p><p class="src">Fonte: <a href="${url}" target="_blank" rel="noopener">${url.replace('https://','')}</a></p>`;
+
+const rf=async()=>{
+ const el=$('renda-fixa'),d=await getJ('dados');const A=d.alocacao,pi=cv.rf.perfil;
+ const dt=new Date(d.atualizado_em).toLocaleDateString('pt-BR');
+ CP.apl='*Aplicações da semana – Vulture Capital*\n'+d.aplicacoes.map(c=>`\n*${c.categoria}*\n`+c.itens.map(i=>`▪️ ${i.nome}: *${i.taxa}*${i.detalhe?' ('+i.detalhe+')':''}`).join('\n')).join('\n')+'\n\n_Taxas sujeitas a alteração e à disponibilidade de estoque._';
+ CP.com=d.comentario;CP.res=d.resumo;
+ el.innerHTML=head('Renda fixa da semana',`Semana de ${esc(d.semana)} · atualizado em ${dt}.`,SITE)+
+ `
+ <div class="box"><h3>Aplicações da semana</h3>${d.aplicacoes.map(c=>`<div class="cat"><h4>${esc(c.categoria)}</h4>${c.itens.map(i=>`<div class="it"><span>${esc(i.nome)}${i.detalhe?`<small>${esc(i.detalhe)}</small>`:''}</span><b>${esc(i.taxa)}</b></div>`).join('')}</div>`).join('')}<div class="actions">${copyBtn('apl')}</div><p class="toast" data-t="apl"></p></div>
+ <div class="box"><h3>Alocação sugerida em renda fixa</h3><div class="tabs" data-rfp>${A.perfis.map((p,i)=>`<button type="button" data-i="${i}" aria-pressed="${i===pi}">${p}</button>`).join('')}</div>
+ ${A.classes.filter(c=>c.pesos[pi]>0).map(c=>`<div class="al"><span>${esc(c.classe)}</span><b>${c.pesos[pi]}%</b><span class="tr"><i style="width:${c.pesos[pi]}%"></i></span><p>${esc(c.porque)}</p></div>`).join('')}</div>
+ <div class="box"><details><summary>Comentário da semana</summary><div class="txt">${wz(d.comentario)}</div><div class="actions">${copyBtn('com')}</div><p class="toast" data-t="com"></p></details></div>
+ <div class="box"><details><summary>Resumo do mercado</summary><div class="txt">${wz(d.resumo)}</div><div class="actions">${copyBtn('res')}</div><p class="toast" data-t="res"></p></details></div>
+ ${d.focus?`<div class="box"><details><summary>Focus (${esc(d.focus.data)})</summary>${d.focus.linhas.map(l=>`<div class="it"><span>${l[0]} ${l[1]}<small>há 4 semanas ${nf(l[2])}% · há 1 semana ${nf(l[3])}%</small></span><b>${nf(l[4])}%</b></div>`).join('')}</details></div>`:''}
+ ${d.aviso?`<p class="fine">${esc(d.aviso)}</p>`:''}`;
+};
+
+const fundCard=(f,w,key)=>{
+ const pc=f.isento&&f.pct_cdi_bruto?f.pct_cdi_bruto:f.pct_cdi;
+ const liq=[f.cotizacao&&'cotização '+f.cotizacao,f.liquidacao&&'pagamento '+f.liquidacao].filter(Boolean).join(' + ');
+ CP[key]=`*${f.nome}*\n${f.comentario}\n\n▪️ Gestora: ${f.gestora}\n▪️ Categoria: ${f.bloco}${f.isento?' (isento de IR para pessoa física)':''}\n▪️ Últimos 3 anos: ${nf(f.ann)}% a.a. (${nf(pc,0)}% do CDI${f.isento?', equivalente bruto':''})\n▪️ Resgate: ${liq}\n▪️ Aplicação mínima: ${brl(f.aplic_min)}\n▪️ Taxa de administração: ${nf(f.tx_adm)}% a.a.${f.tx_perf?' · performance '+nf(f.tx_perf,0)+'%':''}${f.publico==='Qualificado'?'\n▪️ Exclusivo para investidor qualificado':''}\n\n_Rentabilidade passada não é garantia de rentabilidade futura. Fundos não contam com garantia do FGC._`;
+ return `<details class="fd"><summary><span class="w">${w}%</span><span class="nm"><b>${esc(f.nome)}</b><small>${esc(f.gestora)} · ${esc(f.bloco)}${f.publico==='Qualificado'?' · qualificado':''}</small></span><span class="r"><b>${nf(f.ann)}%</b><small>${nf(pc,0)}% CDI${f.isento?' bruto':''}</small></span></summary>
+ <p class="cm">${esc(f.comentario)}</p>
+ <div class="dl2"><div><small>Resgate</small>${esc(liq)}</div><div><small>Aplicação mínima</small>${brl(f.aplic_min)}</div><div><small>Taxa adm. / perf.</small>${nf(f.tx_adm)}% / ${nf(f.tx_perf,0)}%</div><div><small>Volatilidade</small>${nf(f.vol)}% a.a.</div><div><small>Maior queda</small>${nf(f.mdd)}%</div><div><small>CNPJ</small>${f.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5')}</div></div>
+ <div class="actions">${copyBtn(key)}</div><p class="toast" data-t="${key}"></p></details>`;
+};
+const fund=async name=>{
+ const el=$(name),J=await getJ(name),st2=cv[name];
+ const perf=Object.keys(J.pesos),p=st2.perfil;
+ const qOk=J.qualificado&&J.qualificado.pesos[p];
+ const useQ=st2.q&&qOk;
+ const pes=useQ?J.qualificado.pesos[p]:J.pesos[p];
+ const C=useQ?J.qualificado.carteira[p]:J.carteira[p];
+ const byC={};J.funds.forEach(f=>byC[f.cnpj]=f);
+ const list=Object.entries(pes).sort((a,b)=>b[1]-a[1]);
+ const igual=J.igual_a&&J.igual_a[p]?`<p class="note">A carteira ${p.toLowerCase()} é igual à ${J.igual_a[p].toLowerCase()}.</p>`:'';
+ CP[name+'-cart']=`*${J.titulo} – perfil ${p}${useQ?' (investidor qualificado)':''}*\n\n`+list.map(([c,w])=>`▪️ ${w}% ${byC[c].nome}`).join('\n')+`\n\nÚltimos 3 anos: ${nf(C.ann)}% a.a. (${nf(C.pct_cdi,0)}% do CDI)\n\n_Rentabilidade passada não é garantia de rentabilidade futura._`;
+ el.innerHTML=head(J.titulo,`Data-base ${esc(J.data_base)} · atualizado em ${esc(J.atualizado_em)}. Rentabilidade líquida de taxas e bruta de IR, de ${esc(J.janela_carteira)}.`,SITE+name+'.html')+
+ `<div class="tabs" data-fp="${name}">${perf.map(x=>`<button type="button" data-p="${x}" aria-pressed="${x===p}">${x}</button>`).join('')}</div>
+ ${J.qualificado?`<label class="sw"><input type="checkbox" data-q="${name}" ${st2.q?'checked':''} ${qOk?'':'disabled'}> Cliente é investidor qualificado${qOk?'':' (sem versão para este perfil)'}</label>`:''}
+ ${igual}
+ <div class="box"><h3>Fundos da carteira (${list.length})</h3>${list.map(([c,w],i)=>fundCard(byC[c],w,name+'-'+i)).join('')}<div class="actions">${copyBtn(name+'-cart','Copiar a carteira para WhatsApp')}</div><p class="toast" data-t="${name}-cart"></p></div>
+ <p class="fine">Rentabilidade passada não é garantia de rentabilidade futura. Fundos de investimento não contam com garantia do administrador, do gestor ou do FGC. Confirme a adequação ao perfil do cliente (suitability) antes de recomendar.</p>`;
+};
+const VIEWS={'renda-fixa':rf,fundos:()=>fund('fundos'),previdencia:()=>fund('previdencia')};
+const show=v=>VIEWS[v]().catch(()=>{$(v).innerHTML='<p class="empty">Não consegui carregar os dados agora. Tente de novo em instantes.</p>'});
+document.addEventListener('click',async e=>{
+ const c=e.target.closest('[data-copy]');if(c){const k=c.dataset.copy,t=document.querySelector(`[data-t="${k}"]`);try{await navigator.clipboard.writeText(CP[k]);if(t)t.textContent='Copiado. É só colar no WhatsApp.'}catch(x){if(t)t.textContent='Não deu para copiar neste aparelho.'}return}
+ const r=e.target.closest('[data-rfp] button');if(r){cv.rf.perfil=+r.dataset.i;show('renda-fixa');return}
+ const f=e.target.closest('[data-fp] button');if(f){const n=f.parentElement.dataset.fp;cv[n].perfil=f.dataset.p;show(n)}
+});
+document.addEventListener('change',e=>{const q=e.target.closest('[data-q]');if(q){cv[q.dataset.q].q=q.checked;show(q.dataset.q)}});
+
+/* ===== Atalhos de atendimento (textos prontos para WhatsApp) ===== */
+const XPW='+55 11 4935-2720';
+const AT=[
+ {t:'Simulador de benefício fiscal (PGBL)',k:'pgbl simulador imposto restituicao previdencia beneficio fiscal economia',src:'https://claude.ai/artifact/4PxS6xFV6iHZNCfLZwXfKV',m:c=>`Olá! Preparei um simulador para você ver quanto pode *economizar de imposto* aplicando em previdência *PGBL*:
+
+https://claude.ai/artifact/4PxS6xFV6iHZNCfLZwXfKV${c?'#'+c.toLowerCase():''}
+
+É só responder as perguntas e colocar sua renda mensal. Ele mostra a estimativa de restituição maior (ou imposto menor) e como fica o imposto lá na frente, no resgate.
+
+Depois me conta o resultado que a gente monta o plano!`},
+ {t:'Esqueci minha senha de acesso',k:'senha login entrar acesso bloqueada',src:'https://atendimento.xpi.com.br/artigo/1434-como-em-alterar-em-o-e-em-mail-em-cadastrado-em-minha-conta-xp',m:c=>`Olá! Para recuperar a *senha de acesso* da XP:
+
+1. Abra o app XP e toque em *Acesse sua conta*
+2. Informe seu CPF ou código de cliente
+3. Toque em *Esqueceu sua senha?*
+4. Preencha os dados pedidos e toque em *Continuar*
+5. A nova senha chega por SMS no celular cadastrado
+
+⚠️ Essa senha é *provisória e vale por 48 horas*. Assim que entrar, troque por uma senha nova.
+
+Se o celular cadastrado estiver desatualizado, me avise que eu te ajudo.`},
+ {t:'Esqueci a assinatura eletrônica',k:'assinatura eletronica 8 digitos autorizar resgate aplicação',src:'https://www.reclameaqui.com.br/xp-investimentos/assinatura-eletronica_nCXO-Im3_IrZoqLr/',m:c=>`Olá! A *assinatura eletrônica* é diferente da senha de acesso: são *8 números* usados para autorizar aplicações, resgates e transferências.
+
+*Esqueceu?* Na tela em que ela for pedida, toque em *Esqueceu sua assinatura eletrônica?* e siga as instruções.
+
+*Quer trocar por outra?*
+• No site: clique no seu nome (canto superior direito) > *Dados cadastrais* > *Assinatura eletrônica*
+• No app: toque no seu nome > *Dados cadastrais* > *Assinatura eletrônica*
+
+Qualquer dificuldade, me chama aqui.`},
+ {t:'Problema com o cartão XP',k:'cartao credito debito bloqueado fatura compra nao reconhecida limite',src:'https://atendimento.xpi.com.br/categoria/conta-digital-e-cartoes/bloqueio-de-conta-e-cartao',m:c=>`Olá! Para resolver problemas com o *cartão XP*, fale direto com a central de cartões:
+
+📱 *WhatsApp XP:* ${XPW}
+👉 https://wa.me/551149352720
+No menu, escolha *Atendimento Cartão XP*.
+
+☎️ *Telefone:* 4003-3710 (capitais) ou 0800 880 3710 (demais localidades)
+
+*Perdeu o cartão ou foi roubado?* Faça o bloqueio temporário na hora pelo site ou app da XP, ou pelos canais acima.
+
+⚠️ A XP nunca pede senha nem assinatura eletrônica por telefone ou mensagem. Na dúvida, desligue e fale comigo.`},
+ {t:'Perdi o celular / fui roubado',k:'roubo furto celular bloquear conta seguranca golpe',src:'https://conteudos.xpi.com.br/aprenda-a-investir/relatorios/celular-roubado-conta-xp/',m:c=>`Olá! Sinto muito. Vamos proteger sua conta agora:
+
+1. Acesse *portal.xpi.com.br* em outro aparelho
+2. Clique em *Preciso bloquear a minha conta* e siga até a confirmação
+3. Bloqueie também o *cartão XP* (físico, virtual e adicionais)
+
+Se não lembrar a senha, ligue *4003-3710* e escolha a *opção 1* para bloquear a conta.
+
+⚠️ Use só os números oficiais da XP. Depois me avise para eu acompanhar com você.`},
+ {t:'Como trocar de assessor (vir para a Vulture)',k:'troca assessor assessoria transferir codigo vulture',src:'https://www.reclameaqui.com.br/xp-investimentos/troca-de-assessor_5vjsab3AdLK-l9pU/',m:c=>`Olá! Para vincular sua conta XP à minha assessoria na *Vulture Capital*:
+
+1. Entre na sua conta pelo *site* xpi.com.br (essa opção fica no site, não no app)
+2. Clique em *Atendimento*
+3. Selecione *Troque de Assessor*
+4. Clique em *Alterar*
+5. Informe o código do assessor: *${c||'(seu código)'}*
+6. Confirme com sua *assinatura eletrônica*
+
+A troca é concluída em até *3 dias úteis*. Qualquer dúvida, é só me chamar.`},
+ {t:'Alterar endereço',k:'endereco mudanca cadastro residencia comprovante',src:'https://montebravo.zendesk.com/hc/pt-br/articles/25751976471319-Como-alterar-meu-endere%C3%A7o-cadastrado-em-minha-Conta-XP',m:c=>`Olá! Para atualizar seu *endereço* na XP:
+
+*Pelo app*
+1. Toque em *Ver seu perfil* (seu nome, no topo)
+2. *Dados cadastrais* > *Informações pessoais*
+3. Desça até *Endereço*, faça a alteração e toque em *Salvar informações*
+
+*Pelo site*
+1. Clique no seu nome (canto superior direito) > *Dados cadastrais*
+2. Em *Dados residenciais*, atualize e confirme com a *assinatura eletrônica*
+
+Se pedir comprovante, envie um recente no seu nome.`},
+ {t:'Alterar e-mail ou celular',k:'email e-mail telefone celular cadastro atualizar',src:'https://atendimento.xpi.com.br/artigo/1434-como-em-alterar-em-o-e-em-mail-em-cadastrado-em-minha-conta-xp',m:c=>`Olá! Para alterar seu *e-mail* (ou celular) na XP:
+
+1. Abra o app XP e entre na sua conta
+2. Na aba *Início*, toque no *seu nome*
+3. Em *Acesso rápido*, escolha *Dados cadastrais*
+4. Atualize o dado e finalize com a *biometria facial*
+
+Se você estiver sem acesso à conta, primeiro recupere a senha em *Esqueceu sua senha?* na tela de login.`},
+ {t:'Informe de rendimentos (IR)',k:'imposto de renda informe declaracao ir documento',src:'https://atendimento.xpi.com.br/artigo/4511-como-o-cliente-acessa-o-informe-de-rendimentos',m:c=>`Olá! Seu *informe de rendimentos* da XP fica assim:
+
+*Pelo app*
+1. Toque no seu nome (canto superior esquerdo)
+2. *Mais informações* > *Imposto de Renda*
+3. Escolha o *ano*
+4. *Informe de Rendimentos* e/ou *Relatórios Auxiliares* > *Baixar*
+
+*Pelo site*
+*Minha Conta* > *Imposto de Renda* > ano > *Informe de Rendimentos* > *Download*
+
+Ações, FIIs e ETFs têm informe próprio, enviado pela empresa ou administradora. Se precisar, te ajudo a localizar.`},
+ {t:'Trazer investimentos de outro banco (portabilidade)',k:'portabilidade transferir custodia trazer outra instituicao banco corretora',src:'https://atendimento.xpi.com.br/artigo/4249-como-trazer-investimentos-de-renda-fixa',m:c=>`Olá! Para *trazer seus investimentos* de outra instituição para a XP:
+
+1. Entre no *portal XP* (site)
+2. No menu superior: *Produtos* > *Portabilidade de Investimentos*
+3. Em *Trazer investimentos para a XP*, informe a instituição de origem e o seu *código de investidor* de lá
+4. Selecione os ativos (ou *Trazer todos os ativos*) e revise
+5. *Aprove o pedido na instituição de origem em até 4 horas*
+
+Prazos máximos: CDB/LCI/LCA, ações, FIIs e ETFs em até 2 dias úteis; Tesouro, CRI, CRA e debêntures em até 5; fundos em até 9.
+
+O código de investidor aparece na área logada da instituição de origem ou no site da B3.`},
+ {t:'Refazer o perfil de investidor',k:'suitability perfil investidor questionario agressivo moderado conservador',src:'https://www.reclameaqui.com.br/xp-investimentos/perfil-de-investidor_nO98otUX7MAWLKXX/',m:c=>`Olá! Para *refazer seu perfil de investidor* (suitability):
+
+1. Entre no app XP
+2. Toque no *seu nome* no topo da tela
+3. Escolha *Perfil de Investidor*
+4. Toque em *Continuar* e responda o questionário
+5. Confirme com a *assinatura eletrônica*
+
+As respostas são pessoais: responda de acordo com seus objetivos e sua tolerância a risco. Depois me conta o resultado para ajustarmos a carteira.`},
+ {t:'Virar investidor qualificado',k:'investidor qualificado profissional 1 milhao qualificacao',src:'https://atendimento.xpi.com.br/artigo/1583-como-me-tornar-investidor-qualificado-ou-profissional',m:c=>`Olá! Para pedir a *qualificação de investidor* na XP:
+
+1. No app ou no portal, abra seu perfil > *Dados cadastrais*
+2. Toque em *Qualificação do investidor* > *Solicitar qualificação*
+3. Escolha *Investidor qualificado* (ou *profissional*) com valor
+4. Leia e aceite o termo
+
+A aprovação é automática quando os requisitos são atendidos.`},
+ {t:'Canais oficiais da XP',k:'sac ouvidoria telefone contato atendimento whatsapp oficial',src:'https://atendimento.xpi.com.br/',m:c=>`Olá! Estes são os *canais oficiais da XP*:
+
+📱 WhatsApp: ${XPW} (https://wa.me/551149352720)
+☎️ Capitais: 4003-3710 · Demais localidades: 0800 880 3710
+🎧 SAC (todos os dias, 8h às 20h): 0800 772 0202
+📣 Ouvidoria (seg. a sex., 9h às 18h): 0800 722 3730
+🌎 Do exterior: +55 11 4935-2701
+
+E pode contar comigo sempre que precisar!`}
+];
+const atv={q:''};
+const atalhos=()=>{
+ const el=$('atalhos');
+ if(!el.dataset.ok){
+  el.dataset.ok=1;
+  el.innerHTML=`<h1>Atalhos de atendimento</h1><p class="lead">Respostas prontas para as dúvidas mais comuns dos clientes. Copie e cole no WhatsApp, ou abra direto no WhatsApp e escolha o contato.</p><p class="src">Passo a passo tirado da Central de Atendimento XP e de respostas oficiais da XP, em nov/2026. Cada atalho mostra a fonte. As telas do app mudam: se algo não bater, avise a Marina.</p>
+  <div class="work atw"><div class="f"><label for="atq">Buscar</label><input id="atq" placeholder="Ex.: senha, cartão, endereço"></div><div class="f"><label for="atc">Assessor</label>${assSel('atc')}<p class="hint">O código do assessor entra na mensagem de troca de assessor.</p></div></div>
+  <div id="atl"></div>`;
+  $('atq').addEventListener('input',e=>{atv.q=e.target.value;atalhos()});
+  $('atc').addEventListener('change',e=>{store.set('vc-ass',e.target.value);atalhos()});
+ }
+ const n=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+ const q=n(atv.q.trim()),ai=$('atc').value,c=ai===''?'':CODS[+ai];
+ const L=AT.map((a,i)=>({...a,i})).filter(a=>!q||n(a.t+' '+a.k).includes(q));
+ L.forEach(a=>CP['at'+a.i]=a.m(c));
+ $('atl').innerHTML=L.length?L.map(a=>`<details class="box"><summary>${esc(a.t)}</summary><div class="txt">${wz(CP['at'+a.i])}</div><div class="actions">${copyBtn('at'+a.i,'Copiar mensagem')}<a class="btn ghost" href="https://wa.me/?text=${encodeURIComponent(CP['at'+a.i])}" target="_blank" rel="noopener">Abrir no WhatsApp</a></div><p class="toast" data-t="at${a.i}"></p><p class="fine">Fonte: <a href="${a.src}" target="_blank" rel="noopener">${a.src.replace('https://','')}</a></p></details>`).join(''):'<p class="empty">Nenhum atalho com essa palavra.</p>';
+};
+VIEWS.atalhos=async()=>{const x=$('atc');if(x)x.value=store.get('vc-ass')||'';atalhos()};
+
+/* ===== Link de abertura de conta ===== */
+const CAD='https://cadastro.xpi.com.br/desktop/step/1?assessor=';
+const lkMsg=(a,url)=>`Olá! Para abrir sua conta na XP já vinculada à minha assessoria na *Vulture Capital*, é só acessar este link e seguir o cadastro:\n\n${url}\n\nQualquer dúvida no caminho, me chama aqui.\n\n${a[0]}\n${a[2]} de investimentos | Vulture Capital`;
+const links=()=>{
+ const el=$('links');
+ if(!el.dataset.ok){el.dataset.ok=1;
+  el.innerHTML=`<h1>Link de abertura de conta</h1><p class="lead">Escolha o assessor e mande o link para o cliente. Quem abre a conta por ele já fica vinculado ao código desse assessor.</p>
+  <div class="box"><div class="f"><label for="lka">Assessor</label>${assSel('lka')}</div><div id="lko"></div></div>`;
+  $('lka').addEventListener('change',e=>{store.set('vc-ass',e.target.value);links()});
+ }
+ $('lka').value=store.get('vc-ass')||'';
+ const v=$('lka').value;
+ if(v===''){$('lko').innerHTML='<p class="hint">Selecione um assessor para ver o link.</p>';return}
+ const a=ASS[+v],u=CAD+CODS[+v];CP.lk=u;CP.lm=lkMsg(a,u);
+ $('lko').innerHTML=`<p class="who" style="margin:4px 0 6px">Código <b>${CODS[+v]}</b></p><p class="cm" style="margin:0;overflow-wrap:anywhere"><a href="${u}" target="_blank" rel="noopener">${u.replace('https://','')}</a></p>
+ <div class="note" style="white-space:pre-wrap">${wz(CP.lm)}</div>
+ <div class="actions">${copyBtn('lk','Copiar link')}${copyBtn('lm','Copiar mensagem')}<a class="btn ghost" href="https://wa.me/?text=${encodeURIComponent(CP.lm)}" target="_blank" rel="noopener">Abrir no WhatsApp</a></div><p class="toast" data-t="lk"></p><p class="toast" data-t="lm"></p>`;
+};
+VIEWS.links=async()=>links();
+
+/* ===== Kit do Assessor ===== */
+const SLUG=['ailton-alves-evangelista','bruno-se-braga','daniel-zawader','ederson-oliveira-teixeira','evandro-eid-filho','fausto-vargas-boldrini','fernando-simon-tempel','ivan-marra-silveira','marc-landesmann-frey','marina-maria-elias-luz'];
+const DRIVE='https://drive.google.com/drive/folders/1UO0McBE9Xxh5WCBxZSWQxr1b3UEsRkqD';
+let SIG=null;
+const kitSave=async(b)=>{
+ const lab=b.textContent;
+ try{const r=await fetch(b.dataset.f);saveBlob(await r.blob(),b.dataset.fn);b.textContent='Baixado';b.classList.add('ok')}
+ catch(e){if(e&&e.code==='declined'){b.textContent=lab;return}b.textContent='Não baixou: use o Drive';b.classList.add('err')}
+ setTimeout(()=>{b.textContent=lab;b.classList.remove('ok','err')},2800);
+};
+const sigCopy=async(i,b)=>{
+ const h=SIG.D[i].h;let ok=false;
+ try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([SIG.D[i].n],{type:'text/plain'})})]);ok=true}catch(e){}
+ if(!ok){try{const t=document.createElement('div');t.innerHTML=h;t.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(t);const r=document.createRange();r.selectNodeContents(t);const s=getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand('copy');s.removeAllRanges();t.remove()}catch(e){}}
+ b.textContent=ok?'Copiada!':'Não deu para copiar aqui';b.classList.toggle('ok',ok);setTimeout(()=>{b.textContent='Copiar assinatura';b.classList.remove('ok')},2500);
+};
+const kit=async()=>{
+ const el=$('kit');
+ if(!el.dataset.ok){el.dataset.ok=1;
+  el.innerHTML=`<h1>Kit do Assessor</h1><p class="lead">Seu material pessoal: assinatura de e-mail, cartão de visita para impressão, cartão digital e o contato para mandar no WhatsApp.</p><div class="box"><div class="f" style="margin:0"><label for="kta">Assessor</label>${assSel('kta')}</div></div><div id="kto"></div>`;
+  $('kta').addEventListener('change',e=>{store.set('vc-ass',e.target.value);kit()});
+  el.addEventListener('click',e=>{const s=e.target.closest('[data-sig]');if(s){sigCopy(+s.dataset.sig,s);return}const d=e.target.closest('[data-f]');if(d)kitSave(d)});
+ }
+ $('kta').value=store.get('vc-ass')||'';
+ const v=$('kta').value,o=$('kto');
+ if(v===''){o.innerHTML='<p class="hint">Selecione o assessor para ver o kit.</p>';return}
+ if(!SIG)SIG=await fetch('sig.json').then(r=>r.json());
+ const i=+v,s=SLUG[i],a=ASS[i],nm=a[0];
+ const prev=h=>h.split(SIG.VU).join(SIG.VD).split(SIG.XU).join(SIG.XD);
+ o.innerHTML=`
+ <div class="box"><h3>Assinatura de e-mail</h3><div style="background:#fff;color:#111;border-radius:10px;padding:14px;overflow-x:auto">${prev(SIG.D[i].h)}</div>
+  <div class="actions"><button class="btn" type="button" data-sig="${i}">Copiar assinatura</button></div>
+  <p class="fine">Para instalar, use o computador: copie aqui e cole no campo de assinatura do Outlook ou do Gmail. O app do celular só aceita assinatura em texto simples.</p></div>
+ <div class="box"><h3>Cartão de visita · versão impressão</h3><img src="kit/prev/${s}-qr.png" alt="Verso do cartão de ${esc(nm)}" style="width:100%;max-width:420px;border-radius:10px;box-shadow:0 8px 24px rgba(20,20,60,.12)"><p class="fine" style="margin-top:8px">PDF com frente e verso, pronto para a gráfica. A frente é igual para todos.</p>
+  <div class="actions"><button class="btn" type="button" data-f="kit/impressao/${s}.pdf" data-fn="Cartao de Visitas - ${esc(nm)}.pdf">Baixar PDF</button><a class="btn ghost" href="${DRIVE}" target="_blank" rel="noopener">Abrir no Google Drive</a></div></div>
+ <div class="box"><h3>Cartão digital</h3><img src="kit/digital/${s}.png" alt="Cartão digital de ${esc(nm)}" style="width:100%;max-width:240px;border-radius:10px;box-shadow:0 8px 24px rgba(20,20,60,.12)"><p class="fine" style="margin-top:8px">Imagem com QR Code: o cliente aponta a câmera e salva seu contato. Boa para mandar no WhatsApp ou mostrar na tela.</p>
+  <div class="actions"><button class="btn" type="button" data-f="kit/digital/${s}.png" data-fn="Cartao digital - ${esc(nm)}.png">Baixar imagem</button><a class="btn ghost" href="${DRIVE}" target="_blank" rel="noopener">Abrir no Google Drive</a></div></div>
+ <div class="box"><h3>Contato para WhatsApp (arquivo .vcf)</h3><p style="margin:0 0 8px">É o arquivo de contato: você manda no WhatsApp e o cliente toca em <b>Salvar contato</b>.</p>
+  <ol style="margin:0 0 4px;padding-left:20px"><li>Abra a pasta no Google Drive e entre em <b>3 Contatos</b></li><li>Toque no arquivo com o seu nome</li><li>Toque em ⋮ > <b>Enviar uma cópia</b> (ou Compartilhar) > WhatsApp</li></ol>
+  <div class="actions"><a class="btn" href="${DRIVE}" target="_blank" rel="noopener">Abrir pasta de contatos</a></div></div>`;
+};
+VIEWS.kit=kit;
+
+/* ===== Navegação ===== */
+const SECS=['home','carteira','renda-fixa','fundos','previdencia','atalhos','links','kit'];
+const CUR=['renda-fixa','fundos','previdencia'];
+const route=()=>{let h=location.hash.slice(1);if(h==='curadoria')h='renda-fixa';if(!SECS.includes(h))h='home';SECS.forEach(x=>$(x).hidden=x!==h);$('back').hidden=h==='home';$('ctabs').hidden=!CUR.includes(h);$('ctabs').querySelectorAll('[data-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===h));if(h==='carteira'){const v=store.get('vc-ass');if(v!==null)$('ass').value=v;draw()}if(VIEWS[h])show(h);window.scrollTo(0,0)};
+document.addEventListener('click',e=>{const t=e.target.closest('.menu [data-go], .ctabs [data-go]');if(t)location.hash=t.dataset.go});
+$('back').addEventListener('click',()=>{location.hash=''});
+addEventListener('hashchange',route);route();
+}
+</script></body></html>
