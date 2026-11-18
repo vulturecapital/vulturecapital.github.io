@@ -87,6 +87,7 @@ details summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;alig
 .fd{border-top:1px solid var(--line);padding:12px 0}
 .fd>summary{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center;list-style:none}
 .fd>summary::-webkit-details-marker{display:none}
+.fd.nw>summary{grid-template-columns:minmax(0,1fr) auto}.fd.nw .dl2,.fd.nw .cm,.fd.nw .actions{margin-left:0}
 .w{font-size:20px;font-weight:800;color:var(--blueInk)}.fd .nm small{display:block;font-weight:500;color:var(--mut);font-size:13px}
 .fd .r{text-align:right;white-space:nowrap}.fd .r small{display:block;font-weight:500;color:var(--mut);font-size:13px}
 .dl2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px 14px;margin:10px 0 0 66px;font-size:14px}.dl2 div small{display:block;color:var(--mut)}
@@ -331,28 +332,21 @@ const fundCard=(f,w,key)=>{
  const pc=f.isento&&f.pct_cdi_bruto?f.pct_cdi_bruto:f.pct_cdi;
  const liq=[f.cotizacao&&'cotização '+f.cotizacao,f.liquidacao&&'pagamento '+f.liquidacao].filter(Boolean).join(' + ');
  CP[key]=`*${f.nome}*\n${f.comentario}\n\n▪️ Gestora: ${f.gestora}\n▪️ Categoria: ${f.bloco}${f.isento?' (isento de IR para pessoa física)':''}\n▪️ Últimos 3 anos: ${nf(f.ann)}% a.a. (${nf(pc,0)}% do CDI${f.isento?', equivalente bruto':''})\n▪️ Resgate: ${liq}\n▪️ Aplicação mínima: ${brl(f.aplic_min)}\n▪️ Taxa de administração: ${nf(f.tx_adm)}% a.a.${f.tx_perf?' · performance '+nf(f.tx_perf,0)+'%':''}${f.publico==='Qualificado'?'\n▪️ Exclusivo para investidor qualificado':''}\n\n_Rentabilidade passada não é garantia de rentabilidade futura. Fundos não contam com garantia do FGC._`;
- return `<details class="fd"><summary><span class="w">${w}%</span><span class="nm"><b>${esc(f.nome)}</b><small>${esc(f.gestora)} · ${esc(f.bloco)}${f.publico==='Qualificado'?' · qualificado':''}</small></span><span class="r"><b>${nf(f.ann)}%</b><small>${nf(pc,0)}% CDI${f.isento?' bruto':''}</small></span></summary>
+ return `<details class="fd${w==null?' nw':''}"><summary>${w==null?'':`<span class="w">${w}%</span>`}<span class="nm"><b>${esc(f.nome)}</b><small>${esc(f.gestora)} · ${esc(f.bloco)}${f.publico==='Qualificado'?' · qualificado':''}</small></span><span class="r"><b>${nf(f.ann)}%</b><small>${nf(pc,0)}% CDI${f.isento?' bruto':''}</small></span></summary>
  <p class="cm">${esc(f.comentario)}</p>
  <div class="dl2"><div><small>Resgate</small>${esc(liq)}</div><div><small>Aplicação mínima</small>${brl(f.aplic_min)}</div><div><small>Taxa adm. / perf.</small>${nf(f.tx_adm)}% / ${nf(f.tx_perf,0)}%</div><div><small>Volatilidade</small>${nf(f.vol)}% a.a.</div><div><small>Maior queda</small>${nf(f.mdd)}%</div><div><small>CNPJ</small>${f.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5')}</div></div>
  <div class="actions">${copyBtn(key)}</div><p class="toast" data-t="${key}"></p></details>`;
 };
+const CATS=[['Renda fixa',['Caixa','Pós-fixado (caixa do plano)']],['Crédito privado',['Crédito High Grade','Crédito High Yield','Crédito Privado','Incentivados (isentos de IR)']],['Multimercado',['Multimercado','Multimercado Macro']],['Renda variável',['Renda Variável']],['Internacional',['Internacional','Multimercado Internacional']]];
+const catOf=b=>{const c=CATS.find(x=>x[1].includes(b));return c?c[0]:'Outros'};
 const fund=async name=>{
- const el=$(name),J=await getJ(name),st2=cv[name];
- const perf=Object.keys(J.pesos),p=st2.perfil;
- const qOk=J.qualificado&&J.qualificado.pesos[p];
- const useQ=st2.q&&qOk;
- const pes=useQ?J.qualificado.pesos[p]:J.pesos[p];
- const C=useQ?J.qualificado.carteira[p]:J.carteira[p];
- const byC={};J.funds.forEach(f=>byC[f.cnpj]=f);
- const list=Object.entries(pes).sort((a,b)=>b[1]-a[1]);
- const igual=J.igual_a&&J.igual_a[p]?`<p class="note">A carteira ${p.toLowerCase()} é igual à ${J.igual_a[p].toLowerCase()}.</p>`:'';
- CP[name+'-cart']=`*${J.titulo} – perfil ${p}${useQ?' (investidor qualificado)':''}*\n\n`+list.map(([c,w])=>`▪️ ${w}% ${byC[c].nome}`).join('\n')+`\n\nÚltimos 3 anos: ${nf(C.ann)}% a.a. (${nf(C.pct_cdi,0)}% do CDI)\n\n_Rentabilidade passada não é garantia de rentabilidade futura._`;
- el.innerHTML=head(J.titulo,`Data-base ${esc(J.data_base)} · atualizado em ${esc(J.atualizado_em)}. Rentabilidade líquida de taxas e bruta de IR, de ${esc(J.janela_carteira)}.`,SITE+name+'.html')+
- `<div class="tabs" data-fp="${name}">${perf.map(x=>`<button type="button" data-p="${x}" aria-pressed="${x===p}">${x}</button>`).join('')}</div>
- ${J.qualificado?`<label class="sw"><input type="checkbox" data-q="${name}" ${st2.q?'checked':''} ${qOk?'':'disabled'}> Cliente é investidor qualificado${qOk?'':' (sem versão para este perfil)'}</label>`:''}
- ${igual}
- <div class="box"><h3>Fundos da carteira (${list.length})</h3>${list.map(([c,w],i)=>fundCard(byC[c],w,name+'-'+i)).join('')}<div class="actions">${copyBtn(name+'-cart','Copiar a carteira para WhatsApp')}</div><p class="toast" data-t="${name}-cart"></p></div>
- <p class="fine">Rentabilidade passada não é garantia de rentabilidade futura. Fundos de investimento não contam com garantia do administrador, do gestor ou do FGC. Confirme a adequação ao perfil do cliente (suitability) antes de recomendar.</p>`;
+ const el=$(name),J=await getJ(name);
+ const groups=[...CATS.map(c=>c[0]),'Outros'].map(c=>({c,f:J.funds.filter(f=>catOf(f.bloco)===c)})).filter(g=>g.f.length);
+ let k=0;
+ el.innerHTML=head(J.titulo.replace('Carteira Recomendada de','Curadoria de'),`${J.funds.length} ${name==='fundos'?'fundos':'fundos de previdência'} acompanhados pelo escritório, por categoria. Atualizado em ${esc(J.atualizado_em)}. Rentabilidade dos últimos 3 anos (${esc(J.janela_carteira)}), líquida de taxas e bruta de IR.`,SITE+name+'.html')+
+ `<div class="tabs">${groups.map(g=>`<a class="btn ghost" style="min-height:40px;padding:8px 14px" href="#${name}" data-jump="${name}-${g.c.replace(/\W/g,'')}">${g.c} (${g.f.length})</a>`).join('')}</div>`+
+ groups.map(g=>`<div class="box" id="${name}-${g.c.replace(/\W/g,'')}"><h3>${g.c}</h3>${g.f.map(f=>fundCard(f,null,name+'-'+(k++))).join('')}</div>`).join('')+
+ `<p class="fine">Rentabilidade passada não é garantia de rentabilidade futura. Fundos de investimento não contam com garantia do administrador, do gestor ou do FGC. Confirme a adequação ao perfil do cliente (suitability) antes de recomendar.</p>`;
 };
 const VIEWS={'renda-fixa':rf,fundos:()=>fund('fundos'),previdencia:()=>fund('previdencia')};
 const show=v=>VIEWS[v]().catch(()=>{$(v).innerHTML='<p class="empty">Não consegui carregar os dados agora. Tente de novo em instantes.</p>'});
@@ -361,6 +355,7 @@ document.addEventListener('click',async e=>{
  const r=e.target.closest('[data-rfp] button');if(r){cv.rf.perfil=+r.dataset.i;show('renda-fixa');return}
  const f=e.target.closest('[data-fp] button');if(f){const n=f.parentElement.dataset.fp;cv[n].perfil=f.dataset.p;show(n)}
 });
+document.addEventListener('click',e=>{const j=e.target.closest('[data-jump]');if(j){e.preventDefault();document.getElementById(j.dataset.jump)?.scrollIntoView({behavior:'smooth'})}});
 document.addEventListener('change',e=>{const q=e.target.closest('[data-q]');if(q){cv[q.dataset.q].q=q.checked;show(q.dataset.q)}});
 
 /* ===== Atalhos de atendimento (textos prontos para WhatsApp) ===== */
