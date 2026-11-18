@@ -539,7 +539,7 @@ let SIG=null;
 const kitSave=async(b)=>{
  const lab=b.textContent;
  try{const r=await fetch(b.dataset.f);saveBlob(await r.blob(),b.dataset.fn);b.textContent='Baixado';b.classList.add('ok')}
- catch(e){if(e&&e.code==='declined'){b.textContent=lab;return}b.textContent='Não baixou: use o Drive';b.classList.add('err')}
+ catch(e){if(e&&e.code==='declined'){b.textContent=lab;return}b.textContent='Não baixou';b.classList.add('err')}
  setTimeout(()=>{b.textContent=lab;b.classList.remove('ok','err')},2800);
 };
 const sigCopy=async(i,b)=>{
@@ -566,9 +566,9 @@ const kit=async()=>{
   <div class="actions"><button class="btn" type="button" data-sig="${i}">Copiar assinatura</button></div>
   <p class="fine">Para instalar, use o computador: copie aqui e cole no campo de assinatura do Outlook ou do Gmail. O app do celular só aceita assinatura em texto simples.</p></div>
  <div class="box"><h3>Cartão de visita · versão impressão</h3><img src="kit/prev/${s}-qr.png" alt="Verso do cartão de ${esc(nm)}" style="width:100%;max-width:420px;border-radius:10px;box-shadow:0 8px 24px rgba(20,20,60,.12)"><p class="fine" style="margin-top:8px">PDF com frente e verso, pronto para a gráfica. A frente é igual para todos.</p>
-  <div class="actions"><button class="btn" type="button" data-f="kit/impressao/${s}.pdf" data-fn="Cartao de Visitas - ${esc(nm)}.pdf">Baixar PDF</button><a class="btn ghost" href="${DRIVE}" target="_blank" rel="noopener">Abrir no Google Drive</a></div></div>
+  <div class="actions"><button class="btn" type="button" data-f="kit/impressao/${s}.pdf" data-fn="Cartao de Visitas - ${esc(nm)}.pdf">Baixar PDF</button></div></div>
  <div class="box"><h3>Cartão digital</h3><img src="kit/digital/${s}.png" alt="Cartão digital de ${esc(nm)}" style="width:100%;max-width:240px;border-radius:10px;box-shadow:0 8px 24px rgba(20,20,60,.12)"><p class="fine" style="margin-top:8px">Imagem com QR Code: o cliente aponta a câmera e salva seu contato. Boa para mandar no WhatsApp ou mostrar na tela.</p>
-  <div class="actions"><button class="btn" type="button" data-f="kit/digital/${s}.png" data-fn="Cartao digital - ${esc(nm)}.png">Baixar imagem</button><a class="btn ghost" href="${DRIVE}" target="_blank" rel="noopener">Abrir no Google Drive</a></div></div>
+  <div class="actions"><button class="btn" type="button" data-f="kit/digital/${s}.png" data-fn="Cartao digital - ${esc(nm)}.png">Baixar imagem</button></div></div>
  <div class="box"><h3>Contato para WhatsApp (arquivo .vcf)</h3><p style="margin:0 0 8px">É o arquivo de contato: você manda no WhatsApp e o cliente toca em <b>Salvar contato</b>.</p>
   <ol style="margin:0 0 4px;padding-left:20px"><li>Abra a pasta no Google Drive e entre em <b>3 Contatos</b></li><li>Toque no arquivo com o seu nome</li><li>Toque em ⋮ > <b>Enviar uma cópia</b> (ou Compartilhar) > WhatsApp</li></ol>
   <div class="actions"><a class="btn" href="${DRIVE}" target="_blank" rel="noopener">Abrir pasta de contatos</a></div></div>`;
