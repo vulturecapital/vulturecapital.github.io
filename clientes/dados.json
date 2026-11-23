@@ -1,6 +1,6 @@
 {
  "semana": "16/11 a 19/11/2026",
- "atualizado_em": "2026-11-23T01:09:59.000Z",
+ "atualizado_em": "2026-11-23T12:40:39.000Z",
  "indicadores": [
   {
    "rotulo": "Selic",
@@ -39,8 +39,8 @@
   },
   {
    "rotulo": "Selic fim de 2027 (Focus)",
-   "valor": "12,75%",
-   "detalhe": "Mediana de 16/11; era 12,50% uma semana antes",
+   "valor": "13,00%",
+   "detalhe": "Mediana de 23/11; era 12,75% uma semana antes",
    "variacao": "+0,25 p.p.",
    "direcao": "up"
   }
@@ -92,7 +92,7 @@
   ]
  },
  "focus": {
-  "data": "16/11/2026",
+  "data": "23/11/2026",
   "linhas": [
    [
     "Selic",
@@ -104,30 +104,30 @@
    [
     "Selic",
     2027,
-    12,
-    12.5,
-    12.75
+    11.75,
+    12.75,
+    13
    ],
    [
     "Selic",
     2028,
-    10.5,
+    10,
     11,
     11
    ],
    [
     "IPCA",
     2026,
-    5.22,
-    5.22,
-    5.11
+    5.19,
+    5.11,
+    5.15
    ],
    [
     "IPCA",
     2027,
-    4.32,
-    4.9,
-    5
+    4.34,
+    5,
+    5.12
    ],
    [
     "IPCA",
@@ -139,16 +139,16 @@
    [
     "PIB",
     2026,
-    1.83,
-    1.75,
-    1.72
+    1.8,
+    1.72,
+    1.7
    ],
    [
     "PIB",
     2027,
-    1.32,
-    1.15,
-    1.02
+    1.31,
+    1.02,
+    1
    ]
   ]
  },
@@ -170,5 +170,5 @@
    "url": "https://www.anbima.com.br/informacoes/est-termo/CZ.asp"
   }
  ],
- "fontes": "ANBIMA (ETTJ de 19/11/2026), Banco Central – Boletim Focus (16/11/2026), XP Research (câmbio de 19/11/2026)."
+ "fontes": "ANBIMA (ETTJ de 19/11/2026), Banco Central – Boletim Focus (23/11/2026), XP Research (câmbio de 19/11/2026)."
 }
