@@ -121,7 +121,7 @@ a.btn{text-decoration:none}
  <div class="f"><label for="ass">Assessor</label><select id="ass"></select></div>
  <div class="f"><label for="cli">Nome do cliente</label><input id="cli" placeholder="Ex.: Ana Souza"></div>
  <div class="f"><label for="val">Valor para montar a carteira (R$)</label><input id="val" inputmode="numeric" placeholder="Ex.: 300.000"></div>
- <div class="f"><label>Perfil do cliente</label><div class="seg" id="perfil"><button type="button" data-v="Conservador">Conservador</button><button type="button" data-v="Moderado" aria-pressed="true">Moderado</button><button type="button" data-v="Agressivo">Agressivo</button></div><p class="hint">Renda variável só entra para moderado e agressivo.</p></div>
+ <div class="f"><label>Perfil do cliente</label><div class="seg" id="perfil"><button type="button" data-v="Conservador">Conservador</button><button type="button" data-v="Moderado" aria-pressed="true">Moderado</button><button type="button" data-v="Agressivo">Agressivo</button></div><p class="hint">O perfil orienta a escolha dos fundos: quanto mais arrojado, mais fundos de renda variável.</p></div>
  <div class="f"><label for="obj">Objetivo</label><input id="obj" value="Preservação e crescimento do patrimônio"></div>
  <div class="f"><label for="obs">Observação (opcional)</label><textarea id="obs" placeholder="Algo específico deste cliente"></textarea></div>
  <div class="f"><div class="lh"><label for="prev">Tem estrutura de renda para benefício fiscal (PGBL)?</label><button type="button" class="qm" id="pgq" aria-expanded="false" aria-controls="pgh" title="Como saber?">?</button></div>
@@ -159,30 +159,29 @@ a.btn{text-decoration:none}
 /* ===== Regras da carteira (editar aqui) ===== */
 const CLS={
  liq:{n:'Liquidez',c:'#1aa35a',d:'Reserva para emergências e oportunidades. É a parcela que você pode resgatar a qualquer momento, sem se preocupar com vencimento, carência ou momento de mercado, em aplicações conservadoras que acompanham a taxa de juros (por exemplo: CDB com liquidez diária, Tesouro Selic, fundo DI).'},
- pre:{n:'Prefixados e inflação',c:'#e8a800',d:'Títulos com a taxa definida no momento da compra: prefixados ou atrelados à inflação (IPCA+). Permitem travar os juros atuais por mais tempo, o que tende a favorecer a carteira se as taxas caírem nos próximos anos. Levados até o vencimento, rendem a taxa contratada; se vendidos antes, o valor pode oscilar.'},
- fun:{n:'Fundos e previdência',c:'#1a00fe',d:'Fundos escolhidos pela curadoria do escritório, com gestão profissional e estratégias diversificadas, que ampliam a diversificação da carteira além dos títulos individuais. Muitos fundos sem liquidez diária têm resgate entre 12 e 60 dias após o pedido. Esta parcela é dividida entre fundos de investimento e fundos de previdência; a proporção é definida em conversa com você, de acordo com seus objetivos.',pgbl:' Na previdência, o indicado para você é o PGBL: os aportes de até 12% da renda bruta tributável podem ser deduzidos na declaração completa do IR; o que passar desse limite vale mais a pena em VGBL.',vgbl:' Na previdência, o indicado para você é o VGBL, em que o imposto de renda incide só sobre o rendimento, no resgate.'},
- rv:{n:'Renda variável',c:'#f07c1b',d:'São ativos mais voláteis, que podem acelerar o acúmulo de patrimônio no longo prazo. Também existem estruturas com proteção do capital investido, como o COE com capital protegido.'},
- rvg:{n:'Renda variável sem desembolso',c:'#f07c1b',d:'Estratégia de renda variável feita com as garantias da própria carteira (títulos públicos e/ou ações), sem desembolso de caixa. São operações mais voláteis, que podem acelerar o acúmulo de patrimônio a longo prazo.'}
+ pre:{n:'Prefixados e CDBs com vencimento',c:'#e8a800',d:'Títulos com a taxa definida no momento da compra, como CDBs com vencimento, prefixados ou atrelados à inflação (IPCA+). Permitem travar os juros atuais por mais tempo, o que tende a favorecer a carteira se as taxas caírem nos próximos anos. Levados até o vencimento, rendem a taxa contratada; se vendidos antes, o valor pode oscilar.'},
+ fun:{n:'Fundos e previdência',c:'#1a00fe',d:'Fundos escolhidos pela curadoria do escritório, com gestão profissional e estratégias diversificadas, que ampliam a diversificação da carteira além dos títulos individuais. Muitos fundos sem liquidez diária têm resgate entre 12 e 60 dias após o pedido. Esta parcela é dividida entre fundos de investimento e fundos de previdência; a proporção é definida em conversa com você, de acordo com seus objetivos.',pgbl:' Na previdência, o indicado para você é o PGBL: os aportes de até 12% da renda bruta tributável podem ser deduzidos na declaração completa do IR; o que passar desse limite vale mais a pena em VGBL.',vgbl:' Na previdência, o indicado para você é o VGBL, em que o imposto de renda incide só sobre o rendimento, no resgate.'}
 };
+const PERF_FUN={Conservador:' Para o seu perfil, a seleção prioriza fundos de renda fixa.',Moderado:' Para o seu perfil, a seleção combina fundos de renda fixa e multimercado.',Agressivo:' Para o seu perfil, a seleção inclui uma parcela maior de fundos de renda variável.'};
 const PREV_VANT='Vantagens da previdência: não tem come-cotas; o IR cai até 10% para recursos aplicados há mais de 10 anos (tabela regressiva); dá para trocar de fundo (portabilidade) sem pagar IR; e, na sucessão, o valor vai direto aos beneficiários indicados, sem passar por inventário.';
-/* Ordem: liquidez, prefixados, fundos e previdência. A divisão entre fundos e previdência (PGBL se tem benefício fiscal, senão VGBL) é decidida com o cliente. */
+/* Só 3 classes: liquidez, prefixados/CDBs e fundos e previdência (sem renda variável direta).
+   Liquidez 20% até R$ 500 mil e 10% acima; prefixados 50%; o restante em fundos e previdência.
+   A divisão entre fundos e previdência (PGBL se tem benefício fiscal, senão VGBL) é decidida com o cliente;
+   no perfil agressivo, os fundos puxam para renda variável. */
 const MOD=[
- {ate:500000,ref:'R$ 300 mil',it:[
+ {ate:500000,ref:'até R$ 500 mil',it:[
   {c:'liq',p:20,prod:'Tesouro Selic (LFT) · liquidez D+1'},
-  {c:'pre',p:30,prod:'CDB mercado secundário, conforme a oferta do dia'},
-  {c:'fun',p:50,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'}],
-  rv:{p:10,cls:'rv',prod:'Estratégias e produtos de renda variável'}},
- {ate:1000000,ref:'R$ 500 mil',it:[
-  {c:'liq',p:30,prod:'Tesouro Selic (LFT) · liquidez D+1'},
-  {c:'pre',p:30,prod:'CDB mercado secundário, conforme a oferta do dia'},
-  {c:'fun',p:40,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'}],
-  rv:{p:10,garantia:true,cls:'rvg',prod:'Long & Short, sem desembolso de caixa'}},
- {ate:Infinity,ref:'R$ 1 milhão',it:[
-  {c:'liq',p:20,prod:'Tesouro Selic (LFT) · liquidez D+1'},
-  {c:'pre',p:30,prod:'CDB mercado secundário, conforme a oferta do dia'},
+  {c:'pre',p:50,prod:'CDB mercado secundário, conforme a oferta do dia'},
+  {c:'fun',p:30,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'}]},
+ {ate:1000000,ref:'acima de R$ 500 mil',it:[
+  {c:'liq',p:10,prod:'Tesouro Selic (LFT) · liquidez D+1'},
+  {c:'pre',p:50,prod:'CDB mercado secundário, conforme a oferta do dia'},
+  {c:'fun',p:40,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'}]},
+ {ate:Infinity,ref:'acima de R$ 1 milhão',it:[
+  {c:'liq',p:10,prod:'Tesouro Selic (LFT) · liquidez D+1'},
+  {c:'pre',p:50,prod:'CDB mercado secundário, conforme a oferta do dia'},
   {c:'fun',p:20,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'},
-  {c:'fun',p:30,prod:'Fundo de renda fixa Solis · liquidez D+60'}],
-  rv:{p:10,garantia:true,cls:'rvg',prod:'Long & Short, sem desembolso de caixa'}}
+  {c:'fun',p:20,prod:'Fundo de renda fixa Solis · liquidez D+60'}]}
 ];
 const ASS=[["Ailton Alves Evangelista","(37) 99922-2220","Assessor"],["Bruno Sé Braga","(61) 98134-6025","Assessor"],["Daniel Zawader","(11) 98152-5270","Assessor"],["Éderson Oliveira Teixeira","(61) 98102-1699","Assessor"],["Evandro Eid Filho","(17) 98124-5021","Assessor"],["Fausto Vargas Boldrini","(11) 97592-6945","Assessor"],["Fernando Simon Tempel","(11) 99765-7136","Assessor"],["Ivan Marra Silveira","(61) 99150-0434","Assessor"],["Marc Landesmann Frey","(11) 98624-5020","Assessor"],["Marina Maria Elias Luz","(11) 97575-4719","Assessora"]];
 const DISC='A Vulture Capital AI Ltda é uma empresa de Assessoria de Investimento devidamente registrada na Comissão de Valores Mobiliários na forma da Resolução CVM 178/23. A Vulture Capital AI Ltda atua no mercado financeiro credenciada à XP Investimentos CCTVM S/A, o que pode ser verificado através do site da CVM (www.cvm.gov.br) em central de Sistemas ou através do site da ANCORD para escritórios credenciados a partir de outubro de 2012 (www.ancord.org.br) ou através do site da própria XP Investimentos CCTVM S/A (www.xpi.com.br). Na forma da legislação da CVM, o Assessor de Investimentos não pode administrar ou gerir o patrimônio de investidores. O Assessor de Investimentos é um intermediário e depende da autorização prévia do cliente para realizar operações no mercado financeiro. Este plano é uma simulação de alocação e não constitui oferta de compra ou venda de qualquer ativo. O investimento em ações é um investimento de risco e rentabilidade passada não é garantia de rentabilidade futura. Na realização de operações com derivativos existe a possibilidade de perdas superiores aos valores investidos, podendo resultar em significativas perdas patrimoniais. Para informações e dúvidas, favor contatar seu Assessor de Investimentos. Para reclamações, favor contatar a Ouvidoria da XP Investimentos no telefone nº 0800 722 3730.';
@@ -195,19 +194,15 @@ const num=s=>{const d=String(s).split(',')[0].replace(/\D/g,'');return d?+d:0};
 const tipoPrev=pv=>pv==='Sim'?'PGBL':'VGBL';
 const plano=(v,perfil,pv)=>{
  const m=MOD.find(x=>v<x.ate);
- const it=m.it.map(x=>({...x}));let rv=null;
- if(perfil!=='Conservador'&&m.rv){
-  rv={...m.rv,v:v*m.rv.p/100};
-  if(!m.rv.garantia){it.find(x=>x.c==='fun').p-=m.rv.p;it.push({c:m.rv.cls,p:m.rv.p,prod:m.rv.prod})}
- }
+ const it=m.it.map(x=>({...x}));
  let last=-1;it.forEach((x,i)=>{if(x.c==='fun')last=i});
- if(last>=0)it[last].prod+=' + previdência '+tipoPrev(pv)+' (dividir conforme a conversa com o cliente)';
+ if(last>=0)it[last].prod+=' + previdência '+tipoPrev(pv)+' (dividir conforme a conversa com o cliente)'+(perfil==='Agressivo'?' · perfil agressivo: priorizar fundos de renda variável':'');
  it.forEach(x=>x.v=v*x.p/100);
  const cls=[];it.forEach(x=>{let g=cls.find(c=>c.c===x.c);if(!g){g={c:x.c,p:0,v:0,prods:[]};cls.push(g)}g.p+=x.p;g.v+=x.v;g.prods.push(x.prod)});
- return{m,it,cls,rv:rv&&rv.garantia?rv:null};
+ return{m,it,cls};
 };
 const NM=(c,pv)=>CLS[c].n;
-const DS=(c,pv)=>c==='fun'?CLS.fun.d+(pv==='Sim'?CLS.fun.pgbl:CLS.fun.vgbl):CLS[c].d;
+const DS=(c,pv)=>c==='fun'?CLS.fun.d+(PERF_FUN[st.perfil]||'')+(pv==='Sim'?CLS.fun.pgbl:CLS.fun.vgbl):CLS[c].d;
 
 /* ===== Tela ===== */
 const st={perfil:'Moderado'};
@@ -226,8 +221,7 @@ const draw=()=>{
  <div class="total">${brl(v)}</div>
  <div class="bar" aria-hidden="true">${P.cls.map(c=>`<i style="width:${c.p}%;background:${CLS[c.c].c}"></i>`).join('')}</div>
  <ul class="rows">${P.cls.map(c=>`<li><span class="dot" style="background:${CLS[c.c].c}"></span><span class="n">${NM(c.c,pv)}</span><span class="v">${c.p}%<small>${brl(c.v)}</small></span><span class="p">Para você (não vai no PDF): <em>${c.prods.join(' + ')}</em></span>${c.c==='fun'?`<span class="p">${PREV_VANT}</span>`:''}</li>`).join('')}
- ${P.rv?`<li><span class="dot" style="background:${CLS.rvg.c}"></span><span class="n">${CLS.rvg.n}</span><span class="v">+${P.rv.p}% do PL<small>${brl(P.rv.v)} em garantia</small></span><span class="p">Para você (não vai no PDF): <em>${P.rv.prod}</em></span></li>`:''}</ul>
- ${st.perfil==='Conservador'?'<p class="note">Perfil conservador: a parcela de renda variável ficou de fora.</p>':''}
+ </ul>
  ${pv==='Sim'?'<p class="note"><b>Observação no plano:</b> aplicar 12% da renda bruta tributável anual em fundo PGBL, para benefício fiscal. Vai explicado no PDF.</p>':''}
  <div class="actions"><button class="btn" id="pdf" type="button">Baixar PDF</button><button class="btn ghost" id="cp" type="button">Copiar para WhatsApp</button><button class="btn ghost" id="nova" type="button">Nova simulação</button></div>
  <p class="toast" id="toast" role="status"></p>`;
@@ -244,10 +238,9 @@ const toast=t=>{const el=$('toast');if(el)el.textContent=t};
 
 /* ===== Texto WhatsApp (com produtos, para o assessor) ===== */
 const zap=()=>{
- const{P,v,nome}=cur,em={liq:'🟢',fun:'🔵',prv:'🟣',pre:'🟡',rv:'🟠',rvg:'🟠'};
+ const{P,v,nome}=cur,em={liq:'🟢',fun:'🔵',pre:'🟡'};
  let t=`💰 *Plano de investimento${nome?' para '+nome:''}*\n*Patrimônio aproximado: ${brl(v)}*\n\n`;
  P.it.forEach(x=>t+=`${em[x.c]}*(${x.p}%) ${brl(x.v)}* ${x.prod}\n`);
- if(P.rv)t+=`${em.rvg}*(${P.rv.p}% do PL)* ${P.rv.prod}\n**Exclusivo para cliente com perfil moderado ou agressivo\n`;
  if(cur.pv==='Sim')t+=`\n📌*Observação:* aplicar 12% da renda bruta tributável anual em fundo PGBL, para benefício fiscal\n`;
  return t.trim();
 };
@@ -283,7 +276,6 @@ const makePdf=()=>{
   doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(70,70,90);doc.text(ls,L+7,y+3);y+=ls.length*4.1+4.5;
  };
  P.cls.forEach(c=>row(c.c,`${c.p}%  ${NM(c.c,cpv)}`,brl(c.v),DS(c.c,cpv)+(c.c==='fun'?'\n'+PREV_VANT:'')));
- if(P.rv)row('rvg',`+${P.rv.p}% do patrimônio  ${CLS.rvg.n}`,brl(P.rv.v),CLS.rvg.d+' Exclusivo para perfil moderado ou agressivo.');
  const pv=$('prev').value;if(pv==='Sim'){y+=1;para('Previdência PGBL (benefício fiscal)',11,[20,20,43],'bold',1.5);para('Observação: aplicar 12% da sua renda bruta tributável anual em um fundo de previdência PGBL. Quem faz a declaração completa do Imposto de Renda e contribui para o INSS ou regime próprio pode deduzir esses aportes da base de cálculo do imposto, até o limite de 12% da renda bruta tributável. Na prática, isso reduz o imposto a pagar ou aumenta a restituição do ano. O imposto sobre o PGBL é pago lá na frente, no resgate, sobre o valor total.',9.5,[70,70,90],'normal',5)}
  para('Proteção do patrimônio',11,[20,20,43],'bold',1.5);para(SEG,9.5,[70,70,90],'normal',5);
  const a=ASS[$('ass').value];if(a){need(16);doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=5;para(`${a[2]} de investimentos: ${a[0]}  ·  Celular/WhatsApp: ${a[1]}`,10,[26,0,254],'bold',4)}
