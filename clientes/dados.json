@@ -1,6 +1,6 @@
 {
- "semana": "09/11 a 13/11/2026",
- "atualizado_em": "2026-11-16T13:41:56.991Z",
+ "semana": "16/11 a 19/11/2026",
+ "atualizado_em": "2026-11-23T01:09:59.000Z",
  "indicadores": [
   {
    "rotulo": "Selic",
@@ -11,42 +11,42 @@
   },
   {
    "rotulo": "Taxa prefixada 3 anos",
-   "valor": "15,02%",
+   "valor": "15,58%",
    "detalhe": "ANBIMA – 756 dias úteis",
-   "variacao": "+0,04 p.p. na semana",
+   "variacao": "+0,56 p.p. na semana",
    "direcao": "up"
   },
   {
    "rotulo": "Juro real 3 anos",
-   "valor": "IPCA + 7,66%",
+   "valor": "IPCA + 7,83%",
    "detalhe": "ANBIMA – 756 dias úteis",
-   "variacao": "-0,10 p.p. na semana",
-   "direcao": "down"
-  },
-  {
-   "rotulo": "Inflação implícita 3 anos",
-   "valor": "6,83%",
-   "detalhe": "ANBIMA – 756 dias úteis",
-   "variacao": "+0,14 p.p. na semana",
+   "variacao": "+0,17 p.p. na semana",
    "direcao": "up"
   },
   {
-   "rotulo": "IPCA de outubro",
-   "valor": "0,14%",
-   "detalhe": "IBGE – variação mensal",
-   "variacao": "",
-   "direcao": "="
+   "rotulo": "Inflação implícita 3 anos",
+   "valor": "7,19%",
+   "detalhe": "ANBIMA – 756 dias úteis",
+   "variacao": "+0,36 p.p. na semana",
+   "direcao": "up"
+  },
+  {
+   "rotulo": "Dólar",
+   "valor": "R$ 5,94",
+   "detalhe": "Fechamento de 19/11/2026",
+   "variacao": "+4,9% na semana",
+   "direcao": "up"
   },
   {
    "rotulo": "Selic fim de 2027 (Focus)",
    "valor": "12,75%",
-   "detalhe": "Mediana; era 12,50% há 1 semana",
+   "detalhe": "Mediana de 16/11; era 12,50% uma semana antes",
    "variacao": "+0,25 p.p.",
    "direcao": "up"
   }
  ],
  "curva": {
-  "data": "13/11/2026",
+  "data": "19/11/2026",
   "prazos": [
    "1 ano",
    "2 anos",
@@ -59,34 +59,34 @@
    [
     "Prefixada",
     [
-     14.12,
-     14.68,
-     15.02,
-     15.21,
+     14.66,
      15.3,
-     15.3
+     15.58,
+     15.7,
+     15.74,
+     15.57
     ]
    ],
    [
     "Juro real (IPCA+)",
     [
-     6.03,
-     7.34,
-     7.66,
-     7.74,
-     7.75,
-     7.68
+     6.06,
+     7.48,
+     7.83,
+     7.93,
+     7.95,
+     7.84
     ]
    ],
    [
     "Inflação implícita",
     [
-     7.63,
-     6.83,
-     6.83,
-     6.93,
-     7.01,
-     7.08
+     8.11,
+     7.27,
+     7.19,
+     7.2,
+     7.22,
+     7.17
     ]
    ]
   ]
@@ -154,8 +154,8 @@
  },
  "relatorios": [
   {
-   "titulo": "A Semana na Renda Fixa (09/11 a 13/11/2026) – XP Research",
-   "url": "https://conteudos.xpi.com.br/renda-fixa/relatorios/a-semana-na-renda-fixa-09-11-26-a-13-11-26/"
+   "titulo": "A Semana na Renda Fixa (16/11 a 19/11/2026) – XP Research",
+   "url": "https://conteudos.xpi.com.br/renda-fixa/relatorios/a-semana-na-renda-fixa-16-11-26-a-19-11-26/"
   },
   {
    "titulo": "Relatórios de Renda Fixa – XP Research",
@@ -170,5 +170,5 @@
    "url": "https://www.anbima.com.br/informacoes/est-termo/CZ.asp"
   }
  ],
- "fontes": "ANBIMA (ETTJ de 13/11/2026), Banco Central – Boletim Focus (16/11/2026), IBGE (IPCA de outubro/2026)."
+ "fontes": "ANBIMA (ETTJ de 19/11/2026), Banco Central – Boletim Focus (16/11/2026), XP Research (câmbio de 19/11/2026)."
 }
