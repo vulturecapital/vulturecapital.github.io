@@ -159,13 +159,13 @@ a.btn{text-decoration:none}
 /* ===== Regras da carteira (editar aqui) ===== */
 const CLS={
  liq:{n:'Liquidez',c:'#1aa35a',d:'Reserva para emergências e oportunidades. É a parcela que você pode resgatar a qualquer momento, sem se preocupar com vencimento, carência ou momento de mercado, em aplicações conservadoras que acompanham a taxa de juros (por exemplo: CDB com liquidez diária, Tesouro Selic, fundo DI).'},
- pre:{n:'Prefixados e CDBs com vencimento',c:'#e8a800',d:'Títulos com a taxa definida no momento da compra, como CDBs com vencimento, prefixados ou atrelados à inflação (IPCA+). Permitem travar os juros atuais por mais tempo, o que tende a favorecer a carteira se as taxas caírem nos próximos anos. Levados até o vencimento, rendem a taxa contratada; se vendidos antes, o valor pode oscilar.'},
+ pre:{n:'Renda fixa com vencimento',c:'#e8a800',d:'Títulos com a taxa definida no momento da compra, como CDBs com vencimento, prefixados ou atrelados à inflação (IPCA+). Permitem travar os juros atuais por mais tempo, o que tende a favorecer a carteira se as taxas caírem nos próximos anos. Levados até o vencimento, rendem a taxa contratada; se vendidos antes, o valor pode oscilar.'},
  fun:{n:'Fundos e previdência',c:'#1a00fe',d:'Fundos escolhidos pela curadoria do escritório, com gestão profissional e estratégias diversificadas, que ampliam a diversificação da carteira além dos títulos individuais. Muitos fundos sem liquidez diária têm resgate entre 12 e 60 dias após o pedido. Esta parcela é dividida entre fundos de investimento e fundos de previdência; a proporção é definida em conversa com você, de acordo com seus objetivos.',pgbl:' Na previdência, o indicado para você é o PGBL: os aportes de até 12% da renda bruta tributável podem ser deduzidos na declaração completa do IR; o que passar desse limite vale mais a pena em VGBL.',vgbl:' Na previdência, o indicado para você é o VGBL, em que o imposto de renda incide só sobre o rendimento, no resgate.'}
 };
 const PERF_FUN={Conservador:' Para o seu perfil, a seleção prioriza fundos de renda fixa.',Moderado:' Para o seu perfil, a seleção combina fundos de renda fixa e multimercado.',Agressivo:' Para o seu perfil, a seleção inclui uma parcela maior de fundos de renda variável.'};
 const PREV_VANT='Vantagens da previdência: não tem come-cotas; o IR cai até 10% para recursos aplicados há mais de 10 anos (tabela regressiva); dá para trocar de fundo (portabilidade) sem pagar IR; e, na sucessão, o valor vai direto aos beneficiários indicados, sem passar por inventário.';
-/* Só 3 classes: liquidez, prefixados/CDBs e fundos e previdência (sem renda variável direta).
-   Liquidez 20% até R$ 500 mil e 10% acima; prefixados 50%; o restante em fundos e previdência.
+/* Só 3 classes: liquidez, renda fixa com vencimento e fundos e previdência (sem renda variável direta).
+   Liquidez 20% até R$ 500 mil e 10% acima; renda fixa com vencimento 50%; o restante em fundos e previdência.
    A divisão entre fundos e previdência (PGBL se tem benefício fiscal, senão VGBL) é decidida com o cliente;
    no perfil agressivo, os fundos puxam para renda variável. */
 const MOD=[
