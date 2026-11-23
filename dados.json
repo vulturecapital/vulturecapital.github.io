@@ -1,5 +1,5 @@
 {
- "atualizado_em": "2026-11-23T13:44:53.527Z",
+ "atualizado_em": "2026-11-23T15:50:50.403Z",
  "semana": "16/11 a 19/11/2026",
  "titulo": "Recomendação semanal – Renda Fixa",
  "contato": {
@@ -130,14 +130,9 @@
    "categoria": "Título bancário prefixado – sem liquidez (a partir de 2 anos)",
    "itens": [
     {
-     "nome": "CDB Original - Nov/2029",
-     "taxa": "15,76%",
-     "detalhe": "Rating A (S&P)"
-    },
-    {
-     "nome": "CDB CLOUDWALK INFINITEPAY - Nov/2029",
-     "taxa": "15,61%",
-     "detalhe": "AA (Fitch)"
+     "nome": "LCA BANCO BV S/A - MAI/2029",
+     "taxa": "15,87% (Gross-Up)",
+     "detalhe": "Rating AAA (S&P)"
     }
    ]
   },
