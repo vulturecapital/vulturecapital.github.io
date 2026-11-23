@@ -123,7 +123,6 @@ a.btn{text-decoration:none}
  <div class="f"><label for="val">Valor para montar a carteira (R$)</label><input id="val" inputmode="numeric" placeholder="Ex.: 300.000"></div>
  <div class="f"><label>Perfil do cliente</label><div class="seg" id="perfil"><button type="button" data-v="Conservador">Conservador</button><button type="button" data-v="Moderado" aria-pressed="true">Moderado</button><button type="button" data-v="Agressivo">Agressivo</button></div><p class="hint">O perfil orienta a escolha dos fundos: quanto mais arrojado, mais fundos de renda variável.</p></div>
  <div class="f"><label for="obj">Objetivo</label><input id="obj" value="Preservação e crescimento do patrimônio"></div>
- <div class="f"><label for="obs">Observação (opcional)</label><textarea id="obs" placeholder="Algo específico deste cliente"></textarea></div>
  <div class="f"><div class="lh"><label for="prev">Tem estrutura de renda para benefício fiscal (PGBL)?</label><button type="button" class="qm" id="pgq" aria-expanded="false" aria-controls="pgh" title="Como saber?">?</button></div>
  <div class="help" id="pgh" hidden>
   <p><b>Pergunte ao cliente, nesta ordem.</b> Se todas forem "sim", ele tem estrutura e vale recomendar PGBL.</p>
@@ -133,7 +132,7 @@ a.btn{text-decoration:none}
    <li><b>Você contribui para o INSS ou para regime próprio (servidor público)?</b> É obrigatório para deduzir. Aposentado também pode.</li>
    <li><b>Você faz a declaração completa do IR?</b> A dedução só vale no modelo completo. Costuma compensar quando as deduções (INSS, saúde, educação, dependentes, o próprio PGBL) passam de R$ 16.754,34 no ano, o limite do desconto simplificado.</li>
   </ol>
-  <p><b>Quanto recomendar:</b> sempre 12% da renda bruta tributável anual. É o máximo que pode ser deduzido; o que passar disso não tem benefício. Marcando "Sim", essa observação entra no plano e no PDF.</p>
+  <p><b>Quanto aplicar:</b> até 12% da renda bruta tributável anual. É o máximo que pode ser deduzido; o que passar disso não tem benefício fiscal. Marcando "Sim", esse alerta entra no plano e no PDF.</p>
   <p><b>Para explicar ao cliente:</b> o aporte reduz a base de cálculo do IR do ano, o que diminui o imposto a pagar ou aumenta a restituição (até 27,5% do valor aportado, conforme a faixa). O imposto é pago lá na frente, no resgate, sobre o valor total.</p>
   <p class="hint">Atenção a empresários: quem tira quase tudo em dividendos e pró-labore baixo costuma ter pouca renda tributável.</p>
   <p><b>Para mostrar ao cliente:</b> mande o <a href="#atalhos" style="color:var(--blueInk)">Simulador de benefício fiscal</a>, que está nos Atalhos de atendimento.</p>
@@ -223,12 +222,12 @@ const draw=()=>{
  <div class="bar" aria-hidden="true">${P.cls.map(c=>`<i style="width:${c.p}%;background:${CLS[c.c].c}"></i>`).join('')}</div>
  <ul class="rows">${P.cls.map(c=>`<li><span class="dot" style="background:${CLS[c.c].c}"></span><span class="n">${NM(c.c,pv)}</span><span class="v">${c.p}%<small>${brl(c.v)}</small></span><span class="p">Para você (não vai no PDF): <em>${c.prods.join(' + ')}</em>${c.nota?' · '+c.nota:''}</span>${c.c==='fun'?`<span class="p">${PREV_VANT}</span>`:''}</li>`).join('')}
  </ul>
- ${pv==='Sim'?'<p class="note"><b>Observação no plano:</b> aplicar 12% da renda bruta tributável anual em fundo PGBL, para benefício fiscal. Vai explicado no PDF.</p>':''}
+ ${pv==='Sim'?'<p class="note"><b>Alerta no plano:</b> o cliente pode ter benefício fiscal aplicando até 12% da renda bruta tributável anual em PGBL. Vai explicado no PDF.</p>':''}
  <div class="actions"><button class="btn" id="pdf" type="button">Baixar PDF</button><button class="btn ghost" id="cp" type="button">Copiar para WhatsApp</button><button class="btn ghost" id="nova" type="button">Nova simulação</button></div>
  <p class="toast" id="toast" role="status"></p>`;
 };
 const fmtVal=()=>{const v=num($('val').value);if(v)$('val').value=v.toLocaleString('pt-BR')};
-['cli','val','obj','obs','prev','ass'].forEach(id=>$(id).addEventListener('input',draw));
+['cli','val','obj','prev','ass'].forEach(id=>$(id).addEventListener('input',draw));
 $('prev').addEventListener('change',draw);
 $('pgq').addEventListener('click',()=>{const h=$('pgh');h.hidden=!h.hidden;$('pgq').setAttribute('aria-expanded',!h.hidden)});
 $('val').addEventListener('blur',fmtVal);
@@ -242,7 +241,7 @@ const zap=()=>{
  const{P,v,nome}=cur,em={liq:'🟢',fun:'🔵',pre:'🟡'};
  let t=`💰 *Plano de investimento${nome?' para '+nome:''}*\n*Patrimônio aproximado: ${brl(v)}*\n\n`;
  P.it.forEach(x=>t+=`${em[x.c]}*(${x.p}%) ${brl(x.v)}* ${x.prod}\n`);
- if(cur.pv==='Sim')t+=`\n📌*Observação:* aplicar 12% da renda bruta tributável anual em fundo PGBL, para benefício fiscal\n`;
+ if(cur.pv==='Sim')t+=`\n📌*Benefício fiscal:* você pode reduzir o imposto de renda aplicando até 12% da sua renda bruta tributável anual em previdência PGBL\n`;
  t+=`\n🛡️ *E se o imprevisto acontecer?* Me pergunta sobre seguro de vida: em uma conversa rápida, te mostro quanto custaria proteger você e sua família.\n`;
  return t.trim();
 };
@@ -268,7 +267,6 @@ const makePdf=()=>{
  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(26,0,254);doc.text(brl(v),L+5,bx+15.5);
  doc.setFontSize(10.5);doc.setTextColor(20,20,43);doc.text(doc.splitTextToSize($('obj').value.trim()||'Preservação e crescimento do patrimônio',CW-72),L+70,bx+13);
  y=bx+27;
- const obs=$('obs').value.trim();if(obs){para('Observação: '+obs,10.5,[40,40,60],'normal',5)}
  let x=L;P.cls.forEach(c=>{const w=CW*c.p/100;doc.setFillColor(...hex(CLS[c.c].c));doc.rect(x,y,w,6,'F');x+=w});y+=12;
  const row=(cls,lab,val,desc)=>{
   doc.setFontSize(9.5);const ls=doc.splitTextToSize(desc,CW-8);need(8+ls.length*4.2);
@@ -278,7 +276,7 @@ const makePdf=()=>{
   doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(70,70,90);doc.text(ls,L+7,y+3);y+=ls.length*4.1+4.5;
  };
  P.cls.forEach(c=>row(c.c,`${c.p}%  ${NM(c.c,cpv)}`,brl(c.v),DS(c.c,cpv)+(c.c==='fun'?'\n'+PREV_VANT:'')));
- const pv=$('prev').value;if(pv==='Sim'){y+=1;para('Previdência PGBL (benefício fiscal)',11,[20,20,43],'bold',1.5);para('Observação: aplicar 12% da sua renda bruta tributável anual em um fundo de previdência PGBL. Quem faz a declaração completa do Imposto de Renda e contribui para o INSS ou regime próprio pode deduzir esses aportes da base de cálculo do imposto, até o limite de 12% da renda bruta tributável. Na prática, isso reduz o imposto a pagar ou aumenta a restituição do ano. O imposto sobre o PGBL é pago lá na frente, no resgate, sobre o valor total.',9.5,[70,70,90],'normal',5)}
+ const pv=$('prev').value;if(pv==='Sim'){y+=1;para('Previdência PGBL (benefício fiscal)',11,[20,20,43],'bold',1.5);para('Você pode ter benefício fiscal com a previdência PGBL, aplicando até 12% da sua renda bruta tributável anual. Quem faz a declaração completa do Imposto de Renda e contribui para o INSS ou regime próprio pode deduzir esses aportes da base de cálculo do imposto, até esse limite de 12%. Na prática, isso reduz o imposto a pagar ou aumenta a restituição do ano. O imposto sobre o PGBL é pago lá na frente, no resgate, sobre o valor total.',9.5,[70,70,90],'normal',5)}
  para(SEG_T,11,[20,20,43],'bold',1.5);para(SEG,9.5,[70,70,90],'normal',5);
  const a=ASS[$('ass').value];if(a){need(16);doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=5;para(`${a[2]} de investimentos: ${a[0]}  ·  Celular/WhatsApp: ${a[1]}`,10,[26,0,254],'bold',4)}
  doc.setFont('helvetica','normal');doc.setFontSize(6.2);const dl2=doc.splitTextToSize(DISC,CW),dh=dl2.length*2.6;if(y+dh>284){doc.addPage();y=20}const dy=Math.max(y,284-dh);doc.setTextColor(130,130,145);doc.text(dl2,L,dy+2);
@@ -288,7 +286,7 @@ const makePdf=()=>{
 const saveBlob=(blob,fn)=>{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)};
 $('plan').addEventListener('click',async e=>{
  const b=e.target.closest('button');if(!b||!cur)return;
- if(b.id==='nova'){$('cli').value='';$('val').value='';$('obs').value='';$('prev').value='';draw();$('cli').focus();return}
+ if(b.id==='nova'){$('cli').value='';$('val').value='';$('prev').value='';draw();$('cli').focus();return}
  if(b.id==='cp'){try{await navigator.clipboard.writeText(zap());toast('Texto copiado. É só colar no WhatsApp.')}catch(x){toast('Não deu para copiar neste aparelho.')}return}
  if(b.id==='pdf'){
   const lab=b.textContent;b.textContent='Gerando…';
