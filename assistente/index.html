@@ -110,6 +110,7 @@ a.btn{text-decoration:none}
  <button class="tile" data-go="links"><span class="tag">3</span><b>Link personalizado de abertura de conta</b><span>O link de cadastro na XP já com o seu código de assessor.</span></button>
  <button class="tile" data-go="curadoria"><span class="tag">4</span><b>Curadoria de produtos</b><span>Renda fixa, fundos, previdência e renda variável recomendados pelo escritório.</span></button>
  <button class="tile" data-go="kit"><span class="tag">5</span><b>Kit do Assessor</b><span>Sua assinatura de e-mail, cartão de visita, cartão digital e contato para WhatsApp.</span></button>
+ <button class="tile" data-go="simuladores"><span class="tag">6</span><b>Simuladores</b><span>Previdência (PGBL) e Tesouro Direto, para usar com o cliente.</span></button>
 </div>
 </section>
 
@@ -151,6 +152,14 @@ a.btn{text-decoration:none}
 <section id="atalhos" hidden></section>
 <section id="links" hidden></section>
 <section id="kit" hidden></section>
+<section id="simuladores" hidden>
+<h1>Simuladores</h1>
+<p class="lead">Abra o simulador e use junto com o cliente. São simulações ilustrativas, sem garantia de rentabilidade.</p>
+<div class="menu">
+ <a class="tile" href="simuladores/previdencia/" style="text-decoration:none"><b>Simulador de previdência</b><span>Quanto o cliente economiza de imposto de renda aplicando em PGBL.</span></a>
+ <a class="tile" href="simuladores/tesouro-direto/" style="text-decoration:none"><b>Simulador de Tesouro Direto</b><span>Venda antecipada de títulos como o Tesouro IPCA+ (NTN-B), com as taxas do dia.</span></a>
+</div>
+</section>
 </main>
 <script src="jspdf.umd.min.js"></script>
 <script>
@@ -597,7 +606,7 @@ const kit=async()=>{
 VIEWS.kit=kit;
 
 /* ===== Navegação ===== */
-const SECS=['home','carteira','renda-fixa','fundos','previdencia','atalhos','links','kit'];
+const SECS=['home','carteira','renda-fixa','fundos','previdencia','atalhos','links','kit','simuladores'];
 const CUR=['renda-fixa','fundos','previdencia'];
 const route=()=>{let h=location.hash.slice(1);if(h==='curadoria')h='renda-fixa';if(!SECS.includes(h))h='home';SECS.forEach(x=>$(x).hidden=x!==h);$('back').hidden=h==='home';$('ctabs').hidden=!CUR.includes(h);$('ctabs').querySelectorAll('[data-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===h));if(h==='carteira'){const v=store.get('vc-ass');if(v!==null)$('ass').value=v;draw()}if(VIEWS[h])show(h);window.scrollTo(0,0)};
 document.addEventListener('click',e=>{const t=e.target.closest('.menu [data-go], .ctabs [data-go]');if(t)location.hash=t.dataset.go});
