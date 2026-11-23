@@ -160,13 +160,12 @@ a.btn{text-decoration:none}
 const CLS={
  liq:{n:'Liquidez',c:'#1aa35a',d:'Reserva para emergências e oportunidades. É a parcela que você pode resgatar a qualquer momento, sem se preocupar com vencimento, carência ou momento de mercado, em aplicações conservadoras que acompanham a taxa de juros (por exemplo: CDB com liquidez diária, Tesouro Selic, fundo DI).'},
  pre:{n:'Prefixados e inflação',c:'#e8a800',d:'Títulos com a taxa definida no momento da compra: prefixados ou atrelados à inflação (IPCA+). Permitem travar os juros atuais por mais tempo, o que tende a favorecer a carteira se as taxas caírem nos próximos anos. Levados até o vencimento, rendem a taxa contratada; se vendidos antes, o valor pode oscilar.'},
- fun:{n:'Fundos selecionados',c:'#1a00fe',d:'Fundos escolhidos pela curadoria do escritório, com gestão profissional e estratégias diversificadas, que ampliam a diversificação da carteira além dos títulos individuais. Muitos fundos sem liquidez diária têm resgate entre 12 e 60 dias após o pedido.'},
- prv:{n:'Fundos de previdência',c:'#7b3fb8',d:'Fundos de previdência escolhidos pela curadoria do escritório, para o longo prazo.',pgbl:' No PGBL, os aportes de até 12% da renda bruta tributável podem ser deduzidos na declaração completa do IR; o que passar desse limite vale mais a pena em VGBL.',vgbl:' No VGBL, o imposto de renda incide só sobre o rendimento, no resgate.'},
+ fun:{n:'Fundos e previdência',c:'#1a00fe',d:'Fundos escolhidos pela curadoria do escritório, com gestão profissional e estratégias diversificadas, que ampliam a diversificação da carteira além dos títulos individuais. Muitos fundos sem liquidez diária têm resgate entre 12 e 60 dias após o pedido. Esta parcela é dividida entre fundos de investimento e fundos de previdência; a proporção é definida em conversa com você, de acordo com seus objetivos.',pgbl:' Na previdência, o indicado para você é o PGBL: os aportes de até 12% da renda bruta tributável podem ser deduzidos na declaração completa do IR; o que passar desse limite vale mais a pena em VGBL.',vgbl:' Na previdência, o indicado para você é o VGBL, em que o imposto de renda incide só sobre o rendimento, no resgate.'},
  rv:{n:'Renda variável',c:'#f07c1b',d:'São ativos mais voláteis, que podem acelerar o acúmulo de patrimônio no longo prazo. Também existem estruturas com proteção do capital investido, como o COE com capital protegido.'},
  rvg:{n:'Renda variável sem desembolso',c:'#f07c1b',d:'Estratégia de renda variável feita com as garantias da própria carteira (títulos públicos e/ou ações), sem desembolso de caixa. São operações mais voláteis, que podem acelerar o acúmulo de patrimônio a longo prazo.'}
 };
 const PREV_VANT='Vantagens da previdência: não tem come-cotas; o IR cai até 10% para recursos aplicados há mais de 10 anos (tabela regressiva); dá para trocar de fundo (portabilidade) sem pagar IR; e, na sucessão, o valor vai direto aos beneficiários indicados, sem passar por inventário.';
-/* Ordem: liquidez, prefixados, fundos. A parcela de fundos é dividida 50/50 com fundos de previdência (PGBL se tem benefício fiscal, senão VGBL). */
+/* Ordem: liquidez, prefixados, fundos e previdência. A divisão entre fundos e previdência (PGBL se tem benefício fiscal, senão VGBL) é decidida com o cliente. */
 const MOD=[
  {ate:500000,ref:'R$ 300 mil',it:[
   {c:'liq',p:20,prod:'Tesouro Selic (LFT) · liquidez D+1'},
@@ -201,14 +200,14 @@ const plano=(v,perfil,pv)=>{
   rv={...m.rv,v:v*m.rv.p/100};
   if(!m.rv.garantia){it.find(x=>x.c==='fun').p-=m.rv.p;it.push({c:m.rv.cls,p:m.rv.p,prod:m.rv.prod})}
  }
- let pp=0,last=-1;it.forEach((x,i)=>{if(x.c==='fun'){const h=x.p/2;x.p-=h;pp+=h;last=i}});
- if(pp)it.splice(last+1,0,{c:'prv',p:pp,prod:'Fundos de previdência '+tipoPrev(pv)+' da curadoria do escritório'});
+ let last=-1;it.forEach((x,i)=>{if(x.c==='fun')last=i});
+ if(last>=0)it[last].prod+=' + previdência '+tipoPrev(pv)+' (dividir conforme a conversa com o cliente)';
  it.forEach(x=>x.v=v*x.p/100);
  const cls=[];it.forEach(x=>{let g=cls.find(c=>c.c===x.c);if(!g){g={c:x.c,p:0,v:0,prods:[]};cls.push(g)}g.p+=x.p;g.v+=x.v;g.prods.push(x.prod)});
  return{m,it,cls,rv:rv&&rv.garantia?rv:null};
 };
-const NM=(c,pv)=>c==='prv'?CLS.prv.n+' ('+tipoPrev(pv)+')':CLS[c].n;
-const DS=(c,pv)=>c==='prv'?CLS.prv.d+(pv==='Sim'?CLS.prv.pgbl:CLS.prv.vgbl):CLS[c].d;
+const NM=(c,pv)=>CLS[c].n;
+const DS=(c,pv)=>c==='fun'?CLS.fun.d+(pv==='Sim'?CLS.fun.pgbl:CLS.fun.vgbl):CLS[c].d;
 
 /* ===== Tela ===== */
 const st={perfil:'Moderado'};
@@ -226,7 +225,7 @@ const draw=()=>{
  $('plan').innerHTML=`<p class="who">${nome?'Plano para <b>'+esc(nome)+'</b>':'Plano'} · perfil ${st.perfil.toLowerCase()} · modelo ${P.m.ref}</p>
  <div class="total">${brl(v)}</div>
  <div class="bar" aria-hidden="true">${P.cls.map(c=>`<i style="width:${c.p}%;background:${CLS[c.c].c}"></i>`).join('')}</div>
- <ul class="rows">${P.cls.map(c=>`<li><span class="dot" style="background:${CLS[c.c].c}"></span><span class="n">${NM(c.c,pv)}</span><span class="v">${c.p}%<small>${brl(c.v)}</small></span><span class="p">Para você (não vai no PDF): <em>${c.prods.join(' + ')}</em></span>${c.c==='prv'?`<span class="p">${PREV_VANT}</span>`:''}</li>`).join('')}
+ <ul class="rows">${P.cls.map(c=>`<li><span class="dot" style="background:${CLS[c.c].c}"></span><span class="n">${NM(c.c,pv)}</span><span class="v">${c.p}%<small>${brl(c.v)}</small></span><span class="p">Para você (não vai no PDF): <em>${c.prods.join(' + ')}</em></span>${c.c==='fun'?`<span class="p">${PREV_VANT}</span>`:''}</li>`).join('')}
  ${P.rv?`<li><span class="dot" style="background:${CLS.rvg.c}"></span><span class="n">${CLS.rvg.n}</span><span class="v">+${P.rv.p}% do PL<small>${brl(P.rv.v)} em garantia</small></span><span class="p">Para você (não vai no PDF): <em>${P.rv.prod}</em></span></li>`:''}</ul>
  ${st.perfil==='Conservador'?'<p class="note">Perfil conservador: a parcela de renda variável ficou de fora.</p>':''}
  ${pv==='Sim'?'<p class="note"><b>Observação no plano:</b> aplicar 12% da renda bruta tributável anual em fundo PGBL, para benefício fiscal. Vai explicado no PDF.</p>':''}
@@ -283,7 +282,7 @@ const makePdf=()=>{
   doc.text(val,R,y+3,{align:'right'});y+=7;
   doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(70,70,90);doc.text(ls,L+7,y+3);y+=ls.length*4.1+4.5;
  };
- P.cls.forEach(c=>row(c.c,`${c.p}%  ${NM(c.c,cpv)}`,brl(c.v),DS(c.c,cpv)+(c.c==='prv'?'\n'+PREV_VANT:'')));
+ P.cls.forEach(c=>row(c.c,`${c.p}%  ${NM(c.c,cpv)}`,brl(c.v),DS(c.c,cpv)+(c.c==='fun'?'\n'+PREV_VANT:'')));
  if(P.rv)row('rvg',`+${P.rv.p}% do patrimônio  ${CLS.rvg.n}`,brl(P.rv.v),CLS.rvg.d+' Exclusivo para perfil moderado ou agressivo.');
  const pv=$('prev').value;if(pv==='Sim'){y+=1;para('Previdência PGBL (benefício fiscal)',11,[20,20,43],'bold',1.5);para('Observação: aplicar 12% da sua renda bruta tributável anual em um fundo de previdência PGBL. Quem faz a declaração completa do Imposto de Renda e contribui para o INSS ou regime próprio pode deduzir esses aportes da base de cálculo do imposto, até o limite de 12% da renda bruta tributável. Na prática, isso reduz o imposto a pagar ou aumenta a restituição do ano. O imposto sobre o PGBL é pago lá na frente, no resgate, sobre o valor total.',9.5,[70,70,90],'normal',5)}
  para('Proteção do patrimônio',11,[20,20,43],'bold',1.5);para(SEG,9.5,[70,70,90],'normal',5);
