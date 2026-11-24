@@ -168,7 +168,7 @@ a.btn{text-decoration:none}
 const CLS={
  liq:{n:'Liquidez',c:'#1aa35a',d:'Reserva para emergências e oportunidades. É a parcela que você pode resgatar a qualquer momento, sem se preocupar com vencimento, carência ou momento de mercado, em aplicações conservadoras que acompanham a taxa de juros (por exemplo: CDB com liquidez diária, Tesouro Selic, fundo DI).'},
  pre:{n:'Renda fixa com vencimento',c:'#e8a800',d:'Títulos com a taxa definida no momento da compra, como CDBs com vencimento, prefixados ou atrelados à inflação (IPCA+). Permitem travar os juros atuais por mais tempo, o que tende a favorecer a carteira se as taxas caírem nos próximos anos. Levados até o vencimento, rendem a taxa contratada; se vendidos antes, o valor pode oscilar.'},
- fun:{n:'Fundos e previdência',c:'#1a00fe',d:'Fundos escolhidos pela curadoria do escritório, com gestão profissional e estratégias diversificadas, que ampliam a diversificação da carteira além dos títulos individuais. Muitos fundos sem liquidez diária têm resgate entre 12 e 60 dias após o pedido. Esta parcela é dividida entre fundos de investimento e fundos de previdência; a proporção é definida em conversa com você, de acordo com seus objetivos.',pgbl:' Na previdência, o indicado para você é o PGBL: os aportes de até 12% da renda bruta tributável podem ser deduzidos na declaração completa do IR; o que passar desse limite vale mais a pena em VGBL.',vgbl:' Na previdência, o indicado para você é o VGBL, em que o imposto de renda incide só sobre o rendimento, no resgate.'}
+ fun:{n:'Fundos e previdência',c:'#1a00fe',d:'Fundos escolhidos pela curadoria do escritório, com gestão profissional e estratégias diversificadas, que ampliam a diversificação da carteira além dos títulos individuais. Muitos fundos sem liquidez diária têm resgate entre 12 e 60 dias após o pedido. Esta parcela é dividida entre fundos de investimento e fundos de previdência; a proporção é definida em conversa com você, de acordo com seus objetivos.',pgbl:' Na previdência, o indicado para você é o PGBL (veja o benefício fiscal abaixo); o que passar de 12% da renda vale mais a pena em VGBL.',vgbl:' Na previdência, o indicado para você é o VGBL, em que o imposto de renda incide só sobre o rendimento, no resgate.'}
 };
 const PERF_FUN={Conservador:' Para o seu perfil, a seleção prioriza fundos de renda fixa.',Moderado:' Para o seu perfil, a seleção combina fundos de renda fixa e multimercado.',Agressivo:' Para o seu perfil, a seleção inclui uma parcela maior de fundos de renda variável.'};
 const PREV_VANT='Vantagens da previdência: não tem come-cotas; o IR cai até 10% para recursos aplicados há mais de 10 anos (tabela regressiva); dá para trocar de fundo (portabilidade) sem pagar IR; e, na sucessão, o valor vai direto aos beneficiários indicados, sem passar por inventário.';
@@ -194,7 +194,7 @@ const MOD=[
 const ASS=[["Ailton Alves Evangelista","(37) 99922-2220","Assessor"],["Bruno Sé Braga","(61) 98134-6025","Assessor"],["Daniel Zawader","(11) 98152-5270","Assessor"],["Éderson Oliveira Teixeira","(61) 98102-1699","Assessor"],["Evandro Eid Filho","(17) 98124-5021","Assessor"],["Fausto Vargas Boldrini","(11) 97592-6945","Assessor"],["Fernando Simon Tempel","(11) 99765-7136","Assessor"],["Ivan Marra Silveira","(61) 99150-0434","Assessor"],["Marc Landesmann Frey","(11) 98624-5020","Assessor"],["Marina Maria Elias Luz","(11) 97575-4719","Assessora"]];
 const DISC='A Vulture Capital AI Ltda é uma empresa de Assessoria de Investimento devidamente registrada na Comissão de Valores Mobiliários na forma da Resolução CVM 178/23. A Vulture Capital AI Ltda atua no mercado financeiro credenciada à XP Investimentos CCTVM S/A, o que pode ser verificado através do site da CVM (www.cvm.gov.br) em central de Sistemas ou através do site da ANCORD para escritórios credenciados a partir de outubro de 2012 (www.ancord.org.br) ou através do site da própria XP Investimentos CCTVM S/A (www.xpi.com.br). Na forma da legislação da CVM, o Assessor de Investimentos não pode administrar ou gerir o patrimônio de investidores. O Assessor de Investimentos é um intermediário e depende da autorização prévia do cliente para realizar operações no mercado financeiro. Este plano é uma simulação de alocação e não constitui oferta de compra ou venda de qualquer ativo. O investimento em ações é um investimento de risco e rentabilidade passada não é garantia de rentabilidade futura. Na realização de operações com derivativos existe a possibilidade de perdas superiores aos valores investidos, podendo resultar em significativas perdas patrimoniais. Para informações e dúvidas, favor contatar seu Assessor de Investimentos. Para reclamações, favor contatar a Ouvidoria da XP Investimentos no telefone nº 0800 722 3730.';
 const SEG_T='E se o imprevisto acontecer?';
-const SEG='Se você ficasse meses sem poder trabalhar por uma doença grave, ou faltasse amanhã, como ficaria o padrão de vida da sua família? Os investimentos precisariam ser resgatados às pressas para pagar as contas, ou ficariam parados num inventário? Um seguro de vida bem montado resolve isso: garante uma renda em caso de doença ou invalidez, protege a educação dos filhos e entrega o dinheiro direto aos beneficiários, sem inventário, para cobrir os custos da sucessão sem mexer na carteira. E quanto mais cedo você contrata, menor tende a ser o custo. Pergunte ao seu assessor: em uma conversa rápida, mostramos quanto custaria a proteção ideal para você.';
+const SEG='Se você ficasse meses sem poder trabalhar, ou faltasse amanhã, como ficaria o padrão de vida da sua família? Um seguro de vida bem montado garante uma renda em caso de doença ou invalidez e entrega o dinheiro direto aos beneficiários, sem inventário e sem mexer na carteira. Pergunte ao seu assessor: em uma conversa rápida, mostramos quanto custaria a proteção ideal para você.';
 
 /* ===== Cálculo ===== */
 const $=id=>document.getElementById(id);
@@ -205,7 +205,7 @@ const plano=(v,perfil,pv)=>{
  const m=MOD.find(x=>v<x.ate);
  const it=m.it.map(x=>({...x}));
  let last=-1;it.forEach((x,i)=>{if(x.c==='fun')last=i});
- if(last>=0){it[last].prod+=' + previdência '+tipoPrev(pv);it[last].nota='Dividir entre fundos e previdência conforme a conversa com o cliente'+(perfil==='Agressivo'?'; perfil agressivo: priorizar fundos de renda variável':'')+'.'}
+ if(last>=0){it[last].prod+=' + previdência '+tipoPrev(pv);it[last].nota='Dividir entre fundos e previdência '+tipoPrev(pv)+' conforme a conversa com o cliente'+(perfil==='Agressivo'?'; perfil agressivo: priorizar fundos de renda variável':'')+'.'}
  it.forEach(x=>x.v=v*x.p/100);
  const cls=[];it.forEach(x=>{let g=cls.find(c=>c.c===x.c);if(!g){g={c:x.c,p:0,v:0,prods:[]};cls.push(g)}g.p+=x.p;g.v+=x.v;g.prods.push(x.prod);if(x.nota)g.nota=x.nota});
  return{m,it,cls};
@@ -229,7 +229,7 @@ const draw=()=>{
  $('plan').innerHTML=`<p class="who">${nome?'Plano para <b>'+esc(nome)+'</b>':'Plano'} · perfil ${st.perfil.toLowerCase()} · modelo ${P.m.ref}</p>
  <div class="total">${brl(v)}</div>
  <div class="bar" aria-hidden="true">${P.cls.map(c=>`<i style="width:${c.p}%;background:${CLS[c.c].c}"></i>`).join('')}</div>
- <ul class="rows">${P.cls.map(c=>`<li><span class="dot" style="background:${CLS[c.c].c}"></span><span class="n">${NM(c.c,pv)}</span><span class="v">${c.p}%<small>${brl(c.v)}</small></span><span class="p">Para você (não vai no PDF): <em>${c.prods.join(' + ')}</em>${c.nota?' · '+c.nota:''}</span>${c.c==='fun'?`<span class="p">${PREV_VANT}</span>`:''}</li>`).join('')}
+ <ul class="rows">${P.cls.map(c=>`<li><span class="dot" style="background:${CLS[c.c].c}"></span><span class="n">${NM(c.c,pv)}</span><span class="v">${c.p}%<small>${brl(c.v)}</small></span>${c.nota?`<span class="p">Para você (não vai no PDF): ${c.nota}</span>`:''}${c.c==='fun'?`<span class="p">${PREV_VANT}</span>`:''}</li>`).join('')}
  </ul>
  ${pv==='Sim'?'<p class="note"><b>Alerta no plano:</b> o cliente pode ter benefício fiscal aplicando até 12% da renda bruta tributável anual em PGBL. Vai explicado no PDF.</p>':''}
  <div class="actions"><button class="btn" id="pdf" type="button">Baixar PDF</button><button class="btn ghost" id="cp" type="button">Copiar para WhatsApp</button><button class="btn ghost" id="nova" type="button">Nova simulação</button></div>
@@ -267,27 +267,27 @@ const makePdf=()=>{
  if(logo)doc.addImage(logo,'PNG',L,y,40,40*298/900);
  doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(26,0,254);doc.text('PLANO DE INVESTIMENTO',R,y+5,{align:'right'});
  doc.setFont('helvetica','normal');doc.setTextColor(110,110,130);doc.text(new Date().toLocaleDateString('pt-BR'),R,y+10.5,{align:'right'});
- y+=17;doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=6;
- para('Cliente: '+(nome||'—'),16,[20,20,43],'bold',3);
+ y+=16;doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=5;
+ para('Cliente: '+(nome||'—'),16,[20,20,43],'bold',2);
  para('Preparamos um Plano de Investimento pensado para você.',12,[26,0,254],'bold',2);
- para('Este é um primeiro desenho da sua carteira: não é algo para ser seguido à risca, mas uma espécie de mapa em direção ao seu objetivo principal. Conforme a gente conversar sobre suas dúvidas, prioridades e planos, vamos ajustando juntos.',10,[60,60,80],'normal',5);
+ para('Este é um primeiro desenho da sua carteira: não é algo para ser seguido à risca, mas uma espécie de mapa em direção ao seu objetivo principal. Conforme a gente conversar sobre suas dúvidas, prioridades e planos, vamos ajustando juntos.',10,[60,60,80],'normal',4);
  const bx=y;doc.setFillColor(240,239,255);doc.roundedRect(L,bx,CW,22,3,3,'F');
  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(90,90,115);doc.text('Patrimônio aproximado',L+5,bx+7);doc.text('Objetivo',L+70,bx+7);
  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(26,0,254);doc.text(brl(v),L+5,bx+15.5);
  doc.setFontSize(10.5);doc.setTextColor(20,20,43);doc.text(doc.splitTextToSize($('obj').value.trim()||'Preservação e crescimento do patrimônio',CW-72),L+70,bx+13);
- y=bx+27;
- let x=L;P.cls.forEach(c=>{const w=CW*c.p/100;doc.setFillColor(...hex(CLS[c.c].c));doc.rect(x,y,w,6,'F');x+=w});y+=12;
+ y=bx+26;
+ let x=L;P.cls.forEach(c=>{const w=CW*c.p/100;doc.setFillColor(...hex(CLS[c.c].c));doc.rect(x,y,w,6,'F');x+=w});y+=10;
  const row=(cls,lab,val,desc)=>{
   doc.setFontSize(9.5);const ls=doc.splitTextToSize(desc,CW-8);need(8+ls.length*4.2);
   doc.setFillColor(...hex(CLS[cls].c));doc.circle(L+2,y+1.8,2,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(20,20,43);doc.text(lab,L+7,y+3);
   doc.text(val,R,y+3,{align:'right'});y+=7;
-  doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(70,70,90);doc.text(ls,L+7,y+3);y+=ls.length*4.1+4.5;
+  doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(70,70,90);doc.text(ls,L+7,y+3);y+=ls.length*4.1+3.5;
  };
  P.cls.forEach(c=>row(c.c,`${c.p}%  ${NM(c.c,cpv)}`,brl(c.v),DS(c.c,cpv)+(c.c==='fun'?'\n'+PREV_VANT:'')));
- const pv=$('prev').value;if(pv==='Sim'){y+=1;para('Previdência PGBL (benefício fiscal)',11,[20,20,43],'bold',1.5);para('Você pode ter benefício fiscal com a previdência PGBL, aplicando até 12% da sua renda bruta tributável anual. Quem faz a declaração completa do Imposto de Renda e contribui para o INSS ou regime próprio pode deduzir esses aportes da base de cálculo do imposto, até esse limite de 12%. Na prática, isso reduz o imposto a pagar ou aumenta a restituição do ano. O imposto sobre o PGBL é pago lá na frente, no resgate, sobre o valor total.',9.5,[70,70,90],'normal',5)}
- para(SEG_T,11,[20,20,43],'bold',1.5);para(SEG,9.5,[70,70,90],'normal',5);
- const a=ASS[$('ass').value];if(a){need(16);doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=5;para(`${a[2]} de investimentos: ${a[0]}  ·  Celular/WhatsApp: ${a[1]}`,10,[26,0,254],'bold',4)}
+ const pv=$('prev').value;if(pv==='Sim'){y+=1;para('Previdência PGBL (benefício fiscal)',11,[20,20,43],'bold',1.5);para('Quem faz a declaração completa do Imposto de Renda e contribui para o INSS (ou regime próprio) pode deduzir os aportes em PGBL da base de cálculo do imposto, até 12% da renda bruta tributável anual. Isso reduz o imposto a pagar ou aumenta a restituição; o imposto do PGBL é pago lá na frente, no resgate, sobre o valor total.',9.5,[70,70,90],'normal',4)}
+ para(SEG_T,11,[20,20,43],'bold',1.5);para(SEG,9.5,[70,70,90],'normal',4);
+ const a=ASS[$('ass').value];if(a){need(12);doc.setDrawColor(220,220,234);doc.line(L,y,R,y);y+=3;para(`${a[2]} de investimentos: ${a[0]}  ·  Celular/WhatsApp: ${a[1]}`,10,[26,0,254],'bold',2)}
  doc.setFont('helvetica','normal');doc.setFontSize(6.2);const dl2=doc.splitTextToSize(DISC,CW),dh=dl2.length*2.6;if(y+dh>284){doc.addPage();y=20}const dy=Math.max(y,284-dh);doc.setTextColor(130,130,145);doc.text(dl2,L,dy+2);
  const n=doc.getNumberOfPages();for(let i=1;i<=n;i++){doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(150,150,165);doc.text('Vulture Capital AI Ltda - Assessoria de Investimentos credenciada à XP Investimentos',L,290);doc.text(`${i}/${n}`,R,290,{align:'right'})}
  return doc;
