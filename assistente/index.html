@@ -245,11 +245,11 @@ $('perfil').addEventListener('click',e=>{const b=e.target.closest('button');if(!
 $('frm').addEventListener('submit',e=>e.preventDefault());
 const toast=t=>{const el=$('toast');if(el)el.textContent=t};
 
-/* ===== Texto WhatsApp (com produtos, para o assessor) ===== */
+/* ===== Texto WhatsApp (só classes, como o PDF) ===== */
 const zap=()=>{
  const{P,v,nome}=cur,em={liq:'🟢',fun:'🔵',pre:'🟡'};
  let t=`💰 *Plano de investimento${nome?' para '+nome:''}*\n*Patrimônio aproximado: ${brl(v)}*\n\n`;
- P.it.forEach(x=>t+=`${em[x.c]}*(${x.p}%) ${brl(x.v)}* ${x.prod}\n`);
+ P.cls.forEach(c=>t+=`${em[c.c]}*(${c.p}%) ${brl(c.v)}* ${NM(c.c,cur.pv)}\n`);
  if(cur.pv==='Sim')t+=`\n📌*Benefício fiscal:* você pode reduzir o imposto de renda aplicando até 12% da sua renda bruta tributável anual em previdência PGBL\n`;
  t+=`\n🛡️ *E se o imprevisto acontecer?* Me pergunta sobre seguro de vida: em uma conversa rápida, te mostro quanto custaria proteger você e sua família.\n`;
  return t.trim();
@@ -303,7 +303,12 @@ $('plan').addEventListener('click',async e=>{
    if(!window.jspdf)throw new Error('lib');
    const blob=makePdf().output('blob');
    const fn='Plano de Investimento - '+(cur.nome||'cliente').replace(/[\\/:*?"<>|]/g,'')+'.pdf';
-   saveBlob(blob,fn);b.classList.add('ok');b.textContent='PDF pronto';toast('')
+   const file=new File([blob],fn,{type:'application/pdf'});
+   const mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform));
+   if(mob&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:fn})}catch(e){if(e&&e.name==='AbortError'){b.textContent=lab;return}saveBlob(blob,fn)}
+   }else saveBlob(blob,fn);
+   b.classList.add('ok');b.textContent='PDF pronto';toast('')
   }catch(x){if(x&&x.code==='declined'){b.textContent=lab;return}b.classList.add('err');b.textContent='Não baixou';toast('Não foi possível baixar aqui. Tente pelo computador ou avise a Marina.')}
   setTimeout(()=>{b.textContent=lab;b.classList.remove('ok','err')},2800);
  }
