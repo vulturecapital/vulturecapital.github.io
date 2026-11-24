@@ -97,13 +97,17 @@ a.btn{text-decoration:none}
 @media(max-width:600px){.dl2,.fd .cm,.fd .actions{margin-left:0}}
 @media(min-width:761px){.work.atw{grid-template-columns:minmax(0,1fr) minmax(0,260px)}}
 @media(max-width:760px){.work{grid-template-columns:minmax(0,1fr)}.tile.main{grid-column:auto}}
+.hi-sub{color:var(--mut);margin:0 0 18px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}.hi-sub b{color:var(--ink)}.linkbtn{background:none;border:0;padding:0;color:var(--blueInk);font:600 15px Figtree,Arial,sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:32px}
+.today{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:0 0 22px}.today .box{margin:0;display:flex;flex-direction:column}.today .k{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--blueInk);margin:0 0 6px}.today .v{font-size:17px;font-weight:600;margin:0;overflow-wrap:anywhere}.today .s{font-size:14px;color:var(--mut);margin:4px 0 0}.today .actions{margin-top:auto;padding-top:14px}
+.who-pick{max-width:460px;margin:0 0 22px}
 </style></head><body><div style="background:#e8a800;color:#16143D;text-align:center;font:700 13px/1.3 system-ui,sans-serif;padding:7px 12px">VERSÃO DE TESTE · o que muda aqui não aparece para os assessores</div>
 <main class="band">
 <header><span class="logo"><img src="logo.png" alt="Vulture Capital e XP"></span><button class="back" id="back" hidden>← Voltar ao início</button></header>
 
 <section id="home">
-<h1>Olá, assessor! Como posso te ajudar?</h1>
+<div id="hello"><h1>Olá, assessor! Como posso te ajudar?</h1>
 <p class="lead">Escolha o que você precisa hoje. Novas funções vão entrar aqui aos poucos.</p>
+</div>
 <div class="menu">
  <button class="tile main" data-go="carteira"><span class="tag">1</span><b>Recomendação de carteira</b><span>Monte um plano de investimento para um novo cliente e gere o PDF.</span></button>
  <button class="tile" data-go="atalhos"><span class="tag">2</span><b>Atalhos de atendimento</b><span>Mensagens prontas para WhatsApp: senha, cartão, troca de assessor, endereço…</span></button>
@@ -631,7 +635,26 @@ VIEWS.kit=kit;
 /* ===== Navegação ===== */
 const SECS=['home','carteira','renda-fixa','fundos','previdencia','atalhos','links','kit','simuladores'];
 const CUR=['renda-fixa','fundos','previdencia'];
-const route=()=>{let h=location.hash.slice(1);if(h==='curadoria')h='renda-fixa';if(!SECS.includes(h))h='home';SECS.forEach(x=>$(x).hidden=x!==h);$('back').hidden=h==='home';$('ctabs').hidden=!CUR.includes(h);$('ctabs').querySelectorAll('[data-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===h));if(h==='carteira'){const v=getAss();if(v!==null)$('ass').value=v;draw()}if(VIEWS[h])show(h);window.scrollTo(0,0)};
+/* ===== Home personalizada: sem login, usa o assessor escolhido neste aparelho ===== */
+const saud=()=>{const h=new Date().getHours();return h>=5&&h<12?'Bom dia':h>=12&&h<18?'Boa tarde':'Boa noite'};
+const hello=async()=>{
+ const el=$('hello'),v=getAss();
+ if(v===null||v===''){
+  el.innerHTML=`<h1>${saud()}! Como posso te ajudar?</h1><p class="lead">Escolha o que você precisa hoje. Novas funções vão entrar aqui aos poucos.</p>
+  <div class="box who-pick"><label for="hia">Quem é você?</label>${assSel('hia')}<p class="hint">Escolha seu nome uma vez. Daí em diante o assistente abre com ele neste aparelho, sem login nem senha.</p></div>`;
+  $('hia').addEventListener('change',e=>{setAss(e.target.value);hello()});return}
+ const a=ASSESSORES[+v],pn=a.nome.split(' ')[0],url=CAD+a.cod;CP.hlk=url;CP.hlm=lkMsg(ASS[+v],url);
+ el.innerHTML=`<h1>${saud()}, ${esc(pn)}!</h1><p class="hi-sub"><span>Código <b>${a.cod}</b></span><button type="button" class="linkbtn" id="hitr">Não é você? Trocar</button></p>
+ <div class="today">
+  <div class="box"><p class="k">Seu link de abertura de conta</p><p class="v">${esc(url.replace('https://',''))}</p><p class="s">Quem abre a conta por ele já fica vinculado a você.</p><div class="actions">${copyBtn('hlk','Copiar link')}<a class="btn ghost" href="https://wa.me/?text=${encodeURIComponent(CP.hlm)}" target="_blank" rel="noopener">Mandar no WhatsApp</a></div><p class="toast" data-t="hlk"></p></div>
+  <div class="box" id="hirf"><p class="k">Curadoria da semana</p><p class="s">Carregando…</p></div>
+ </div>`;
+ $('hitr').addEventListener('click',()=>{store.set('vc-ass','');hello()});
+ try{const d=await getJ('dados');const dt=new Date(d.atualizado_em).toLocaleDateString('pt-BR');
+  $('hirf').innerHTML=`<p class="k">Curadoria da semana</p><p class="v">Renda fixa · ${esc(d.semana)}</p><p class="s">Aplicações recomendadas, atualizadas em ${dt}.</p><div class="actions"><a class="btn ghost" href="#renda-fixa">Ver aplicações</a></div>`}
+ catch(e){const b=$('hirf');if(b)b.remove()}
+};
+const route=()=>{let h=location.hash.slice(1);if(h==='curadoria')h='renda-fixa';if(!SECS.includes(h))h='home';SECS.forEach(x=>$(x).hidden=x!==h);if(h==='home')hello();$('back').hidden=h==='home';$('ctabs').hidden=!CUR.includes(h);$('ctabs').querySelectorAll('[data-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===h));if(h==='carteira'){const v=getAss();if(v!==null)$('ass').value=v;draw()}if(VIEWS[h])show(h);window.scrollTo(0,0)};
 document.addEventListener('click',e=>{const t=e.target.closest('.menu [data-go], .ctabs [data-go]');if(t)location.hash=t.dataset.go});
 $('back').addEventListener('click',()=>{location.hash=''});
 addEventListener('hashchange',route);route();
