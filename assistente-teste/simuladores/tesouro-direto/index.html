@@ -10,7 +10,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
 /* Layout: uma coluna mobile-first; escolha do título, números do título, gráfico, simulador, cenários, premissas. */
 :root {
@@ -150,9 +150,18 @@ ul.prem b { color: var(--ink); font-weight: 600; }
 .foot { font-size: 12px; color: var(--muted); }
 </style>
 
+<style>
+/* Identidade Vulture: mesma paleta, fonte e logo do assistente (azul #1a00fe, Figtree) */
+:root{--bg:#f3f3f8;--surface:#ffffff;--ink:#14142b;--muted:#5b5b72;--line:#dcdcea;--accent:#1a00fe;--accent-soft:#ecebff;--good:#0b7a3b;--band:rgba(26,0,254,.10);--font-display:"Figtree","Segoe UI",system-ui,sans-serif;--font-body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0d0d18;--surface:#171728;--ink:#ececf5;--muted:#a7a7bf;--line:#2b2b44;--accent:#9d93ff;--accent-soft:#1d1b3d;--good:#4ade80;--band:rgba(157,147,255,.16)}}
+:root[data-theme="dark"]{--bg:#0d0d18;--surface:#171728;--ink:#ececf5;--muted:#a7a7bf;--line:#2b2b44;--accent:#9d93ff;--accent-soft:#1d1b3d;--good:#4ade80;--band:rgba(157,147,255,.16)}
+.vc-logo{background:#fff;border-radius:12px;padding:8px 12px;display:inline-flex;align-self:flex-start;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.vc-logo img{height:30px;display:block}
+</style>
 </head>
 <body>
 <div class="wrap">
+  <span class="vc-logo"><img src="../../logo.png" alt="Vulture Capital e XP"></span>
   <style>
   .tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px; align-self: flex-start; max-width: 100%; overflow-x: auto; margin-bottom: -4px; }
   .tabs a { font-size: 14px; font-weight: 600; color: var(--muted); text-decoration: none; padding: 7px 14px; border-radius: 999px; white-space: nowrap; }

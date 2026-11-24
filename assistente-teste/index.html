@@ -191,7 +191,24 @@ const MOD=[
   {c:'fun',p:20,prod:'Fundo de renda fixa V8 Cash Platinum · liquidez D+12'},
   {c:'fun',p:20,prod:'Fundo de renda fixa Solis · liquidez D+60'}]}
 ];
-const ASS=[["Ailton Alves Evangelista","(37) 99922-2220","Assessor"],["Bruno Sé Braga","(61) 98134-6025","Assessor"],["Daniel Zawader","(11) 98152-5270","Assessor"],["Éderson Oliveira Teixeira","(61) 98102-1699","Assessor"],["Evandro Eid Filho","(17) 98124-5021","Assessor"],["Fausto Vargas Boldrini","(11) 97592-6945","Assessor"],["Fernando Simon Tempel","(11) 99765-7136","Assessor"],["Ivan Marra Silveira","(61) 99150-0434","Assessor"],["Marc Landesmann Frey","(11) 98624-5020","Assessor"],["Marina Maria Elias Luz","(11) 97575-4719","Assessora"]];
+/* ===== Cadastro único dos assessores =====
+   Para incluir, mudar ou tirar um assessor, mexa SÓ nesta lista: cada linha tem tudo da pessoa.
+   cod = código XP (vai no link de abertura de conta e na mensagem de troca de assessor)
+   slug = nome dos arquivos do Kit (kit/impressao/<slug>.pdf, kit/digital/<slug>.png, kit/prev/<slug>-qr.png)
+   A assinatura de e-mail vem do sig.json, ligada pelo nome. */
+const ASSESSORES=[
+ {nome:"Ailton Alves Evangelista",cel:"(37) 99922-2220",cargo:"Assessor",cod:"A34323",slug:"ailton-alves-evangelista"},
+ {nome:"Bruno Sé Braga",cel:"(61) 98134-6025",cargo:"Assessor",cod:"A26043",slug:"bruno-se-braga"},
+ {nome:"Daniel Zawader",cel:"(11) 98152-5270",cargo:"Assessor",cod:"A28241",slug:"daniel-zawader"},
+ {nome:"Éderson Oliveira Teixeira",cel:"(61) 98102-1699",cargo:"Assessor",cod:"A36987",slug:"ederson-oliveira-teixeira"},
+ {nome:"Evandro Eid Filho",cel:"(17) 98124-5021",cargo:"Assessor",cod:"A40171",slug:"evandro-eid-filho"},
+ {nome:"Fausto Vargas Boldrini",cel:"(11) 97592-6945",cargo:"Assessor",cod:"A38728",slug:"fausto-vargas-boldrini"},
+ {nome:"Fernando Simon Tempel",cel:"(11) 99765-7136",cargo:"Assessor",cod:"A43877",slug:"fernando-simon-tempel"},
+ {nome:"Ivan Marra Silveira",cel:"(61) 99150-0434",cargo:"Assessor",cod:"A32870",slug:"ivan-marra-silveira"},
+ {nome:"Marc Landesmann Frey",cel:"(11) 98624-5020",cargo:"Assessor",cod:"A74490",slug:"marc-landesmann-frey"},
+ {nome:"Marina Maria Elias Luz",cel:"(11) 97575-4719",cargo:"Assessora",cod:"A27602",slug:"marina-maria-elias-luz"}
+];
+const ASS=ASSESSORES.map(a=>[a.nome,a.cel,a.cargo]),CODS=ASSESSORES.map(a=>a.cod),SLUG=ASSESSORES.map(a=>a.slug);
 const DISC='A Vulture Capital AI Ltda é uma empresa de Assessoria de Investimento devidamente registrada na Comissão de Valores Mobiliários na forma da Resolução CVM 178/23. A Vulture Capital AI Ltda atua no mercado financeiro credenciada à XP Investimentos CCTVM S/A, o que pode ser verificado através do site da CVM (www.cvm.gov.br) em central de Sistemas ou através do site da ANCORD para escritórios credenciados a partir de outubro de 2012 (www.ancord.org.br) ou através do site da própria XP Investimentos CCTVM S/A (www.xpi.com.br). Na forma da legislação da CVM, o Assessor de Investimentos não pode administrar ou gerir o patrimônio de investidores. O Assessor de Investimentos é um intermediário e depende da autorização prévia do cliente para realizar operações no mercado financeiro. Este plano é uma simulação de alocação e não constitui oferta de compra ou venda de qualquer ativo. O investimento em ações é um investimento de risco e rentabilidade passada não é garantia de rentabilidade futura. Na realização de operações com derivativos existe a possibilidade de perdas superiores aos valores investidos, podendo resultar em significativas perdas patrimoniais. Para informações e dúvidas, favor contatar seu Assessor de Investimentos. Para reclamações, favor contatar a Ouvidoria da XP Investimentos no telefone nº 0800 722 3730.';
 const SEG_T='E se o imprevisto acontecer?';
 const SEG='Se você ficasse meses sem poder trabalhar, ou faltasse amanhã, como ficaria o padrão de vida da sua família? Um seguro de vida bem montado garante uma renda em caso de doença ou invalidez e entrega o dinheiro direto aos beneficiários, sem inventário e sem mexer na carteira. Pergunte ao seu assessor: em uma conversa rápida, mostramos quanto custaria a proteção ideal para você.';
@@ -216,10 +233,11 @@ const DS=(c,pv)=>c==='fun'?CLS.fun.d+(PERF_FUN[st.perfil]||'')+(pv==='Sim'?CLS.f
 /* ===== Tela ===== */
 const st={perfil:'Moderado'};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const CODS=["A34323","A26043","A28241","A36987","A40171","A38728","A43877","A32870","A74490","A27602"];
-const assSel=id=>{const v=store.get('vc-ass')||'';return `<select id="${id}" data-ass><option value="">Selecione</option>${ASS.map((a,i)=>`<option value="${i}" ${String(i)===v?'selected':''}>${a[0]}</option>`).join('')}</select>`};
+const getAss=()=>{const c=store.get('vc-ass');if(c===null||c==='')return c;if(/^\d+$/.test(c))return c;const i=CODS.indexOf(c);return i<0?'':String(i)};
+const setAss=v=>store.set('vc-ass',v===''?'':CODS[+v]);
+const assSel=id=>{const v=getAss()||'';return `<select id="${id}" data-ass><option value="">Selecione</option>${ASS.map((a,i)=>`<option value="${i}" ${String(i)===v?'selected':''}>${a[0]}</option>`).join('')}</select>`};
 $('ass').innerHTML='<option value="">Selecione</option>'+ASS.map((a,i)=>`<option value="${i}">${a[0]}</option>`).join('');
-const sv=store.get('vc-ass');if(sv!==null)$('ass').value=sv;
+const sv=getAss();if(sv!==null)$('ass').value=sv;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let cur=null;
 const draw=()=>{
@@ -240,7 +258,7 @@ const fmtVal=()=>{const v=num($('val').value);if(v)$('val').value=v.toLocaleStri
 $('prev').addEventListener('change',draw);
 $('pgq').addEventListener('click',()=>{const h=$('pgh');h.hidden=!h.hidden;$('pgq').setAttribute('aria-expanded',!h.hidden)});
 $('val').addEventListener('blur',fmtVal);
-$('ass').addEventListener('change',()=>store.set('vc-ass',$('ass').value));
+$('ass').addEventListener('change',()=>setAss($('ass').value));
 $('perfil').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st.perfil=b.dataset.v;$('perfil').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()});
 $('frm').addEventListener('submit',e=>e.preventDefault());
 const toast=t=>{const el=$('toast');if(el)el.textContent=t};
@@ -537,7 +555,7 @@ const atalhos=()=>{
   <div class="work atw"><div class="f"><label for="atq">Buscar</label><input id="atq" placeholder="Ex.: senha, cartão, endereço"></div><div class="f"><label for="atc">Assessor</label>${assSel('atc')}<p class="hint">O código do assessor entra na mensagem de troca de assessor.</p></div></div>
   <div id="atl"></div>`;
   $('atq').addEventListener('input',e=>{atv.q=e.target.value;atalhos()});
-  $('atc').addEventListener('change',e=>{store.set('vc-ass',e.target.value);atalhos()});
+  $('atc').addEventListener('change',e=>{setAss(e.target.value);atalhos()});
  }
  const n=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
  const q=n(atv.q.trim()),ai=$('atc').value,c=ai===''?'':CODS[+ai];
@@ -545,7 +563,7 @@ const atalhos=()=>{
  L.forEach(a=>CP['at'+a.i]=a.m(c));
  $('atl').innerHTML=L.length?L.map(a=>`<details class="box"><summary>${esc(a.t)}</summary><div class="txt">${wz(CP['at'+a.i])}</div><div class="actions">${copyBtn('at'+a.i,'Copiar mensagem')}<a class="btn ghost" href="https://wa.me/?text=${encodeURIComponent(CP['at'+a.i])}" target="_blank" rel="noopener">Abrir no WhatsApp</a></div><p class="toast" data-t="at${a.i}"></p><p class="fine">Fonte: <a href="${a.src}" target="_blank" rel="noopener">${a.src.replace('https://','')}</a></p></details>`).join(''):'<p class="empty">Nenhum atalho com essa palavra.</p>';
 };
-VIEWS.atalhos=async()=>{const x=$('atc');if(x)x.value=store.get('vc-ass')||'';atalhos()};
+VIEWS.atalhos=async()=>{const x=$('atc');if(x)x.value=getAss()||'';atalhos()};
 
 /* ===== Link de abertura de conta ===== */
 const CAD='https://cadastro.xpi.com.br/desktop/step/1?assessor=';
@@ -555,9 +573,9 @@ const links=()=>{
  if(!el.dataset.ok){el.dataset.ok=1;
   el.innerHTML=`<h1>Link de abertura de conta</h1><p class="lead">Escolha o assessor e mande o link para o cliente. Quem abre a conta por ele já fica vinculado ao código desse assessor.</p>
   <div class="box"><div class="f"><label for="lka">Assessor</label>${assSel('lka')}</div><div id="lko"></div></div>`;
-  $('lka').addEventListener('change',e=>{store.set('vc-ass',e.target.value);links()});
+  $('lka').addEventListener('change',e=>{setAss(e.target.value);links()});
  }
- $('lka').value=store.get('vc-ass')||'';
+ $('lka').value=getAss()||'';
  const v=$('lka').value;
  if(v===''){$('lko').innerHTML='<p class="hint">Selecione um assessor para ver o link.</p>';return}
  const a=ASS[+v],u=CAD+CODS[+v];CP.lk=u;CP.lm=lkMsg(a,u);
@@ -568,7 +586,6 @@ const links=()=>{
 VIEWS.links=async()=>links();
 
 /* ===== Kit do Assessor ===== */
-const SLUG=['ailton-alves-evangelista','bruno-se-braga','daniel-zawader','ederson-oliveira-teixeira','evandro-eid-filho','fausto-vargas-boldrini','fernando-simon-tempel','ivan-marra-silveira','marc-landesmann-frey','marina-maria-elias-luz'];
 const DRIVE='https://drive.google.com/drive/folders/1UO0McBE9Xxh5WCBxZSWQxr1b3UEsRkqD';
 let SIG=null;
 const kitSave=async(b)=>{
@@ -577,9 +594,10 @@ const kitSave=async(b)=>{
  catch(e){if(e&&e.code==='declined'){b.textContent=lab;return}b.textContent='Não baixou';b.classList.add('err')}
  setTimeout(()=>{b.textContent=lab;b.classList.remove('ok','err')},2800);
 };
+const sigOf=i=>SIG.D.find(x=>x.n.split(',')[0].trim()===ASS[i][0])||{n:ASS[i][0],h:''};
 const sigCopy=async(i,b)=>{
- const h=SIG.D[i].h;let ok=false;
- try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([SIG.D[i].n],{type:'text/plain'})})]);ok=true}catch(e){}
+ const h=sigOf(i).h;let ok=false;
+ try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([sigOf(i).n],{type:'text/plain'})})]);ok=true}catch(e){}
  if(!ok){try{const t=document.createElement('div');t.innerHTML=h;t.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(t);const r=document.createRange();r.selectNodeContents(t);const s=getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand('copy');s.removeAllRanges();t.remove()}catch(e){}}
  b.textContent=ok?'Copiada!':'Não deu para copiar aqui';b.classList.toggle('ok',ok);setTimeout(()=>{b.textContent='Copiar assinatura';b.classList.remove('ok')},2500);
 };
@@ -587,17 +605,17 @@ const kit=async()=>{
  const el=$('kit');
  if(!el.dataset.ok){el.dataset.ok=1;
   el.innerHTML=`<h1>Kit do Assessor</h1><p class="lead">Seu material pessoal: assinatura de e-mail, cartão de visita para impressão, cartão digital e o contato para mandar no WhatsApp.</p><div class="box"><div class="f" style="margin:0"><label for="kta">Assessor</label>${assSel('kta')}</div></div><div id="kto"></div>`;
-  $('kta').addEventListener('change',e=>{store.set('vc-ass',e.target.value);kit()});
+  $('kta').addEventListener('change',e=>{setAss(e.target.value);kit()});
   el.addEventListener('click',e=>{const s=e.target.closest('[data-sig]');if(s){sigCopy(+s.dataset.sig,s);return}const d=e.target.closest('[data-f]');if(d)kitSave(d)});
  }
- $('kta').value=store.get('vc-ass')||'';
+ $('kta').value=getAss()||'';
  const v=$('kta').value,o=$('kto');
  if(v===''){o.innerHTML='<p class="hint">Selecione o assessor para ver o kit.</p>';return}
  if(!SIG)SIG=await fetch('sig.json').then(r=>r.json());
  const i=+v,s=SLUG[i],a=ASS[i],nm=a[0];
  const prev=h=>h.split(SIG.VU).join(SIG.VD).split(SIG.XU).join(SIG.XD);
  o.innerHTML=`
- <div class="box"><h3>Assinatura de e-mail</h3><div style="background:#fff;color:#111;border-radius:10px;padding:14px;overflow-x:auto">${prev(SIG.D[i].h)}</div>
+ <div class="box"><h3>Assinatura de e-mail</h3><div style="background:#fff;color:#111;border-radius:10px;padding:14px;overflow-x:auto">${prev(sigOf(i).h)}</div>
   <div class="actions"><button class="btn" type="button" data-sig="${i}">Copiar assinatura</button></div>
   <p class="fine">Para instalar, use o computador: copie aqui e cole no campo de assinatura do Outlook ou do Gmail. O app do celular só aceita assinatura em texto simples.</p></div>
  <div class="box"><h3>Cartão de visita · versão impressão</h3><img src="kit/prev/${s}-qr.png" alt="Verso do cartão de ${esc(nm)}" style="width:100%;max-width:420px;border-radius:10px;box-shadow:0 8px 24px rgba(20,20,60,.12)"><p class="fine" style="margin-top:8px">PDF com frente e verso, pronto para a gráfica. A frente é igual para todos.</p>
@@ -613,7 +631,7 @@ VIEWS.kit=kit;
 /* ===== Navegação ===== */
 const SECS=['home','carteira','renda-fixa','fundos','previdencia','atalhos','links','kit','simuladores'];
 const CUR=['renda-fixa','fundos','previdencia'];
-const route=()=>{let h=location.hash.slice(1);if(h==='curadoria')h='renda-fixa';if(!SECS.includes(h))h='home';SECS.forEach(x=>$(x).hidden=x!==h);$('back').hidden=h==='home';$('ctabs').hidden=!CUR.includes(h);$('ctabs').querySelectorAll('[data-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===h));if(h==='carteira'){const v=store.get('vc-ass');if(v!==null)$('ass').value=v;draw()}if(VIEWS[h])show(h);window.scrollTo(0,0)};
+const route=()=>{let h=location.hash.slice(1);if(h==='curadoria')h='renda-fixa';if(!SECS.includes(h))h='home';SECS.forEach(x=>$(x).hidden=x!==h);$('back').hidden=h==='home';$('ctabs').hidden=!CUR.includes(h);$('ctabs').querySelectorAll('[data-go]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===h));if(h==='carteira'){const v=getAss();if(v!==null)$('ass').value=v;draw()}if(VIEWS[h])show(h);window.scrollTo(0,0)};
 document.addEventListener('click',e=>{const t=e.target.closest('.menu [data-go], .ctabs [data-go]');if(t)location.hash=t.dataset.go});
 $('back').addEventListener('click',()=>{location.hash=''});
 addEventListener('hashchange',route);route();
